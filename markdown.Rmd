@@ -26,6 +26,5 @@ pl <- barplot(ages, main="Leeftijdscategorieën van respondenten", xaxt="n")
 labs <- paste(names(table(data$lftdcat)))
 text(cex=0.8, x=pl+0.25, y=-25, labels=labs, xpd=TRUE, srt=45, pos=2)
 
-# Test comment to see if stuff gets uploaded to Github
 ```
 
