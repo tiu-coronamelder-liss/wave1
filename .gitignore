@@ -2,5 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
-.sav
-.docx
+*.sav
+*.docx
