@@ -1,0 +1,29 @@
+---
+title: "CoronaMelder rapportage"
+author: "Nynke van der Laan, Nadine van der Waal, Jan de Wit"
+date: "11/11/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# For importing SPSS files
+library(foreign)
+
+# Load dataset (not included on Github)
+data <- read.spss('L_CoronaMelder_wave1_3p.sav', to.data.frame=TRUE)
+```
+
+## Demografische informatie
+
+Even een testje om wat demografische informatie weer te geven, in dit geval leeftijd in categorieën!
+
+```{r data, echo=FALSE}
+# Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+ages <- table(data$lftdcat)
+pl <- barplot(ages, main="Leeftijdscategorieën van respondenten", xaxt="n")
+labs <- paste(names(table(data$lftdcat)))
+text(cex=0.8, x=pl+0.25, y=-25, labels=labs, xpd=TRUE, srt=45, pos=2)
+```
+
