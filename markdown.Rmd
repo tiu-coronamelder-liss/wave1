@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(foreign)
 
 # Load dataset (not included on Github)
-data <- read.spss('L_CoronaMelder_wave1_3p.sav', to.data.frame=TRUE)
+data <- read.spss('L_CoronaMelder_wave1_3p.sav', to.data.frame=TRUE, use.missings=FALSE)
 ```
 
 ## Demografische informatie
