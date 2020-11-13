@@ -11,20 +11,55 @@ knitr::opts_chunk$set(echo = TRUE)
 # For importing SPSS files
 library(foreign)
 
+# For filtering
+library(dplyr)
+
 # Load dataset (not included on Github)
-data <- read.spss('L_CoronaMelder_wave1_3p.sav', to.data.frame=TRUE, use.missings=FALSE)
+data_in <- read.spss('L_CoronaMelder_wave1_3p.sav', to.data.frame=TRUE, use.missings=FALSE)
+
+# Filter out the ones that didn't complete the entire survey (N = 10)
+data <- data_in[!is.na(data_in$duur),]
 ```
 
-## Demografische informatie
+# Resultaten descriptieve statistiek
 
 Even een testje om wat demografische informatie weer te geven, in dit geval leeftijd in categorieën!
 
-```{r data, echo=FALSE}
+```{r demographics, echo=FALSE}
 # Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 ages <- table(data$lftdcat)
 pl <- barplot(ages, main="Leeftijdscategorieën van respondenten", xaxt="n")
 labs <- paste(names(table(data$lftdcat)))
 text(cex=0.8, x=pl+0.25, y=-25, labels=labs, xpd=TRUE, srt=45, pos=2)
 
+```
+
+## Meldingen en reacties op adviezen gegeven in de melding
+
+### Ontvangen meldingen en opvolging adviezen
+```{r meldingen, echo=FALSE}
+# Om onderstaande tekst wat duidelijker te maken zouden we ook hier variabelen kunnen aanmaken, en alleen die in de tekst terug laten komen, bv.
+num_users <- nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))
+
+
+# NB: hieronder doe ik een ingewikkelde filter over het krijgen van een melding, die is eigenlijk ook te doen met simpelweg notifications_1 == 'Ja', maar ik wilde even complexe filters demonstreren ;)
+```
+
+Van de `r nrow(data)` deelnemers, hadden er `r nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))` de app geïnstalleerd, en `r nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer'))` hadden hem nu niet meer geïnstalleerd, maar wel gehad. In totaal hebben `r nrow(filter(data, (Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment' | Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer') & (notifications_1 == 'Ja, 1 keer' | notifications_1 == 'Ja, al meerdere keren')))` deelnemers die de app nu gebruikten, of gebruikt hadden, minstens één melding gehad vanuit de app.
+
+
+```{r demographics, echo=FALSE}
+# Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+aware <- table(data$Awareness)
+plotaware <- barplot(aware, main="Bekendheid met CoronaMelder", xaxt="n")
+labs <- paste(names(table(data$Awareness)))
+text(cex=0.8, x=plotaware+0.25, y=-25, labels=labs, xpd=TRUE, srt=45, pos=2)
+
+```
+
+``` {r awaresplitssex, echo=FALSE}
+library(ggplot2)
+sex <- table(data$geslacht)
+ggplot(Data, aes(x=aware, y='n') + geom_point(bar) + facet_wrap(~sex)
 ```
 
