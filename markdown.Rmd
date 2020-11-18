@@ -47,7 +47,7 @@ num_users <- nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app
 
 Van de `r nrow(data)` deelnemers, hadden er `r nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))` de app geïnstalleerd, en `r nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer'))` hadden hem nu niet meer geïnstalleerd, maar wel gehad. In totaal hebben `r nrow(filter(data, (Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment' | Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer') & (notifications_1 == 'Ja, 1 keer' | notifications_1 == 'Ja, al meerdere keren')))` deelnemers die de app nu gebruikten, of gebruikt hadden, minstens één melding gehad vanuit de app.
 
-```{r demographics, echo=FALSE}
+```{r awareness, echo=FALSE}
 # Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 aware <- table(data$Awareness)
 plotaware <- barplot(aware, main="Bekendheid met CoronaMelder", xaxt="n")
@@ -58,7 +58,6 @@ text(cex=0.8, x=plotaware+0.25, y=-25, labels=labs, xpd=TRUE, srt=45, pos=2)
 
 ``` {r awaresplitssex, echo=FALSE}
 library(ggplot2)
-sex <- table(data$geslacht)
-ggplot(Data, aes(x=aware, y='n') + geom_point(bar) + facet_wrap(~sex)
+ggplot(data=data, aes(x=Awareness, y='n')) + geom_bar(stat="identity") + facet_wrap(~geslacht)
 ```
 
