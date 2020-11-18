@@ -47,7 +47,6 @@ num_users <- nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app
 
 Van de `r nrow(data)` deelnemers, hadden er `r nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))` de app geïnstalleerd, en `r nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer'))` hadden hem nu niet meer geïnstalleerd, maar wel gehad. In totaal hebben `r nrow(filter(data, (Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment' | Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer') & (notifications_1 == 'Ja, 1 keer' | notifications_1 == 'Ja, al meerdere keren')))` deelnemers die de app nu gebruikten, of gebruikt hadden, minstens één melding gehad vanuit de app.
 
-
 ```{r demographics, echo=FALSE}
 # Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 aware <- table(data$Awareness)
