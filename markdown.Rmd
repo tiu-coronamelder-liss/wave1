@@ -54,6 +54,8 @@ num_users <- nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app
 
 Van de `r nrow(data)` deelnemers, hadden er `r nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))` de app geïnstalleerd, en `r nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer'))` hadden hem nu niet meer geïnstalleerd, maar wel gehad. In totaal hebben `r nrow(filter(data, (Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment' | Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer') & (notifications_1 == 'Ja, 1 keer' | notifications_1 == 'Ja, al meerdere keren')))` deelnemers die de app nu gebruikten, of gebruikt hadden, minstens één melding gehad vanuit de app.
 
+# Bekendheid met Coronamelder
+
 ```{r awareness, echo=FALSE}
 # Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 aware <- table(data$Awareness)
@@ -62,12 +64,32 @@ labs <- paste(names(table(data$Awareness)))
 text(cex=0.8, x=plotaware+0.25, y=-25, labels=labs, xpd=TRUE, srt=45, pos=2)
 
 # Awareness op leeftijdscategorie, met ook 'reversed' labels en waarden in de bar chart:
-ggplot(data=data, aes(fill=Awareness, x=lftdcat, y='n')) + geom_bar(position=position_fill(reverse = TRUE), stat="identity") + guides(fill = guide_legend(reverse = TRUE))
+my_palette5 <- brewer.pal(11,"RdYlGn")[c(4, 5, 6, 7, 8, 9, 10)]
+ggplot(data=data, aes(fill=Awareness, x=lftdcat)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("15-24", "25-34", "35-44", "45-54", "55-64", "65+")) + coord_flip() + labs(x = "Leeftijdscategorie", y = "", fill = "") + ggtitle("Bekendheid Coronamelder per leeftijdscategorie") + scale_fill_manual(values=my_palette5) + guides(fill = guide_legend(reverse = TRUE))
 
+# Awareness op gender
+my_palette5 <- brewer.pal(11,"RdYlGn")[c(4, 5, 6, 7, 8, 9, 10)]
+ggplot(data=data, aes(fill=Awareness, x=geslacht)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("man", "vrouw")) + coord_flip() + labs(x = " ", y = "", fill = "") + ggtitle("Bekendheid Coronamelder per geslacht") + scale_fill_manual(values=my_palette5) + guides(fill = guide_legend(reverse = TRUE))
 ```
 
-``` {r awaresplitssex, echo=FALSE}
-ggplot(data=data, aes(x=Awareness, y=Awareness)) + geom_bar(stat="identity") + facet_wrap(~geslacht)
+# UTAUT variabelen 
+```{r UTAUT, echo=FALSE}
+my_palette7 <- brewer.pal(11,"RdYlGn")[c(9,8,7,6,5,4,3)]
+ggplot(data=data, aes(fill=BI1a_UTAUT, BI2a_UTAUT, x=geslacht)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + coord_flip() + labs(x = " ", y = "", fill = "") + ggtitle("Bekendheid Coronamelder per geslacht") + scale_fill_manual(values=my_palette7) + guides(fill = guide_legend(reverse = TRUE))
+?contains
+# Dataframe maken voor UTAUT vars + antwoordopties terugzetten
+df_utaut_pe <- data %>% gather("UTAUT_PE", "value", contains("PE1_UTAUT"), contains("PE2_UTAUT"))
+df_utaut_pe <- mutate(df_utaut_pe, value = factor(value, levels=rev(levels(data$PE1_UTAUT))))
+
+# Custom kleurtjes -- we lenen zwart uit 'RdGy' voor "ik ben niet van plan de coronamelder te gebruiken",
+# dan van oranje naar groen voor de overige opties (oneens -> eens):
+# Grafiek uitdraaien
+my_palette7 <- brewer.pal(11,"RdYlGn")[c(9,8,7,6,5,4,3)]
+
+ggplot(data=df_utaut_pe, aes(fill=value, x=UTAUT_PE)) + geom_bar(aes(y = (..count..)/sum(..count..)*2)) + coord_flip() + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("Door de CoronaMelder app te gebruiken help ik mee bij de bestrijding van het coronavirus", "De CoronaMelder app is nuttig om ervoor te zorgen dat het coronavirus zich minder verspreidt")) + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette7)
+  
+  scale_x_discrete(labels=c("Door de CoronaMelder app te gebruiken help ik mee bij de bestrijding van het coronavirus", "De CoronaMelder app is nuttig om ervoor te zorgen dat het coronavirus zich minder verspreidt"))
+
 ```
 
 
@@ -97,3 +119,5 @@ my_palette = c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "RdYlGn")[c(9,8,7,6
 ggplot(data=df_adherence, aes(fill=Value, x=Symptoms)) + geom_bar(aes(y = (..count..)/sum(..count..)*2)) + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("Geen symptomen", "Wel symptomen")) + labs(x = "", y = "", fill = "") + ggtitle("Als ik wel/geen symptomen heb, zou ik bellen om een coronatest aan te vragen.") + scale_fill_manual(values=my_palette)
 
 ```
+
+
