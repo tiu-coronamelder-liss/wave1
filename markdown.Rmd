@@ -4,7 +4,6 @@ author: "Nynke van der Laan, Nadine van der Waal, Jan de Wit"
 date: "11/11/2020"
 output: word_document
 ---
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
@@ -35,6 +34,53 @@ my_palette7 <- brewer.pal(11,"RdYlGn")[c(9,8,7,6,5,4,3)]
 # dan van oranje naar groen voor de overige opties (oneens -> eens):
 my_palette_nonuse = c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "RdYlGn")[c(9,8,7,6,5,4,3)])
 ```
+
+# 1 Achtergrond
+# 2 Methoden
+# 3 Resultaten
+## 3.1 Karakteristieken van de steekproef
+### 3.1.1 Demografische factoren
+
+### 3.1.2 Gezondheidsmotivatie en risicoperceptie corona besmetting
+
+### 3.1.3 Algemene opvattingen over het coronavirus
+## 3.2 Bekendheid en gebruik
+
+```{r health literacy, echo=FALSE}
+
+#Average health literacy
+hl_av <- rowMeans(sapply(data[, c("HealthLiteracy1", "HealthLiteracy2", "HealthLiteracy3")], as.numeric), na.rm = TRUE)
+mean(hl_av)
+
+```
+
+
+### 3.2.1 Bekendheid met CoronaMelder
+### 3.2.2 Gebruik en intentie tot gebruik CoronaMelder
+## 3.3 Verklarende variabelen voor adoptie
+### 3.3.1 Verwachte effectiviteit CoronaMelder in bestrijding coronavirus
+### 3.3.2 Vertrouwen in adequaatheid techniek
+### 3.3.3 Maatschappelijke gevolgen gebruik CoronaMelder
+### 3.3.4 Verwachte gebruiksvriendelijkheid en zelfeffectiviteit
+### 3.3.5 Technologie gerelateerde belemmeringen
+### 3.3.6 Persoonlijke nadelen van gebruik en verplichting tot gebruik
+### 3.3.7 Affectieve reacties
+### 3.3.8 Sociale invloeden
+### 3.3.9 Privacy en dataveiligheid 
+## 3.4 Effecten
+### 3.4.1 Meldingen en reacties op adviezen gegeven in de melding
+### 3.4.2 Intentie tot doorgeven codes na positieve test
+### 2.4.3 Onbeoogde effecten: schijnveiligheid
+# 4 Conclusie en aanbevelingen
+# 5 Referenties
+# 6 Bijlagen
+## 6.1 Vragenlijst wave 1
+
+
+
+
+
+
 
 # Resultaten descriptieve statistiek
 
