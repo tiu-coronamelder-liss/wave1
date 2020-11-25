@@ -2,7 +2,9 @@
 title: "CoronaMelder rapportage"
 author: "Nynke van der Laan, Nadine van der Waal, Jan de Wit"
 date: "11/11/2020"
-output: word_document
+output: 
+  bookdown::word_document2:
+    reference_docx: markdown_template.docx
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -11,7 +13,11 @@ knitr::opts_chunk$set(echo = TRUE)
 library(foreign)
 
 # For filtering
+library(plyr)
 library(dplyr)
+
+# For tables
+library(flextable)
 
 # Various plotting stuff
 library(ggplot2)
@@ -163,7 +169,7 @@ ggplot(data=df_utaut_pe, aes(fill=value, x=UTAUT_PE)) + geom_bar(aes(y = (..coun
 
 ## Opvolging van advies om je te laten testen
 
-``` {r adherence, echo=FALSE}
+``` {r adherence, echo=FALSE, fig.width=7, fig.cap="Test"}
 # Geavanceerd dingetje hier. We moeten 2 kolommen samenvoegen in een dataframe 
 # zodat ze in één grafiek terug kunnen komen. Effectief hebben we nu dubbel zo veel rijen.
 df_adherence <- data %>% gather("Symptoms", "Value", contains("ymptoms_Test"))
@@ -178,8 +184,42 @@ df_adherence <- mutate(df_adherence, Value = factor(Value, levels=rev(levels(dat
 # - Omdat we de 2 kolommen hebben samengevoegd is onze dataframe 2x zo lang geworden (zie df_adherence in de Environment voor meer info), waardoor we het percentage moeten verdubbelen: vandaar de *2 (normaal gesproken is die count/sum count voldoende voor totaal van 100%)
 # - Schalen en labels goed zetten
 # - Inkleuren
-ggplot(data=df_adherence, aes(fill=Value, x=Symptoms)) + geom_bar(aes(y = (..count..)/sum(..count..)*2)) + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("Geen symptomen", "Wel symptomen")) + labs(x = "", y = "", fill = "") + ggtitle("Als ik wel/geen symptomen heb, zou ik bellen om een coronatest aan te vragen.") + scale_fill_manual(values=my_palette_nonuse)
+ggplot(data=df_adherence, aes(fill=Value, x=Symptoms)) + geom_bar(aes(y = (..count..)/sum(..count..)*2)) + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("Geen symptomen", "Wel symptomen")) + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette_nonuse, labels=c("Ik zou de app niet gebruiken", "Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal oneens")) + coord_flip() + theme(plot.margin = margin(0.2, 0.2, 0, 0, "cm"), legend.position = "bottom", legend.text=element_text(size=8))
 
 ```
 
+Zoals te zien in figuur \@ref(fig:adherence), gebeuren er interessante dingen.
 
+
+## Test
+``` {r tabtest, echo=FALSE, tab.cap="Jan is hier"}
+# Na wat onderzoek op internet heb ik ontdekt dat de "flextable" package het beste te gebruiken is als we naar Word willen exporteren, vandaar dat ik nu voor deze ben gegaan :)
+
+# Ik denk dat de beste manier is om gewoon een dataframe te maken die al juist ingericht is,
+# in plaats van allerlei berekeningen binnen de tabel te moeten doen (zoals counts en groeperen)...
+# Deze hieronder lijkt te werken, maar ik weet niet hoe stabiel die 'x' kolom is, en of die altijd gelijk gaat zijn aan 'x.1' in dit geval -- in de gaten houden :)
+testframe <- data.frame(plyr::count(df_adherence$Value[df_adherence$Symptoms == 'AdherenceNotificationMeasuresSymptoms_Test']), plyr::count(df_adherence$Value[df_adherence$Symptoms == 'AdherenceNotificationMeasuresNosymptoms_Test']))
+
+ft <- flextable(
+  head(testframe, n = nrow(testframe)),
+  col_keys = c("x", "freq", "freq.1")
+)
+
+ft <- set_header_labels(ft, values = list(x = "", freq = "Wel symptomen", freq.1 = "Geen symptomen"))
+
+# Percentages toevoegen
+ft <- compose(ft, j = "freq", value = as_paragraph(freq, " (", sprintf("%.2f", freq/sum(freq)*100), "%)"))
+ft <- compose(ft, j = "freq.1", value = as_paragraph(freq.1, " (", sprintf("%.2f", freq.1/sum(freq.1)*100), "%)"))
+
+# Totalen
+bla <- as_paragraph(sum(testframe$freq), " (100%)")
+ft <- add_footer_row(ft, values = c("Totaal", paste(sum(testframe$freq), " (100%)"), paste(sum(testframe$freq.1), " (100%)")), colwidths = c(1,1,1))#as_paragraph(sum(freq), " (100%)"), as_paragraph(sum(freq.1), " (100%)")))
+ft <- fontsize(ft, size = 11, part = "footer")
+ft <- align(ft, j = 2:3, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+ft <- autofit(ft)
+
+ft
+
+```
