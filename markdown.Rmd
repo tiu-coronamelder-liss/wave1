@@ -48,7 +48,7 @@ hl_scale <- rowMeans(sapply(data[, c("HealthLiteracy1", "HealthLiteracy2", "Heal
 hl_avg <- mean(hl_scale)
 
 #Data splitsen hoge vs. midden. vs lage health literacy
-CatHL <- cut(hl_scale, breaks = c(0,1.333333,3.66666,5), labels = c("Laag", "Midden", "Hoog"))
+data$CatHL <- cut(hl_scale, breaks = c(0,1.333333,3.66666,5), labels = c("Laag", "Midden", "Hoog"))
 
 ```
 
@@ -78,13 +78,13 @@ ggplot(data=df_PSus, aes(fill=value, x=PSus)) + geom_bar(aes(y = (..count..)/sum
 
 ```
 
-```{r Psev, echo=FALSE, fig.width=7}
+```{r Psev, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst van het Coronavirus"}
 # Dataframe voor severity + antwoordopties terugzetten
 df_PSev <- data %>% gather("PSev", "value", contains("HBM_PSev_self1"), contains("HBM_PSev_other2"))
 df_PSev <- mutate(df_PSev, value = factor(value, levels=rev(levels(data$HBM_PSev_self1))))
 
 # Plot severity self / others
-ggplot(data=df_PSev, aes(fill=value, x=PSev)) + geom_bar(aes(y = (..count..)/sum(..count..)*2)) + scale_y_continuous(labels=percent) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette7) + ggtitle("Waargenomen ernst van het Coronavirus") + scale_x_discrete(labels=c("Ik vind het erg als ik\n andere mensen besmet", "Ik vind het erg om\n besmet te raken")) + ggtitle("Waargenomen ernst van het Coronavirus")
+ggplot(data=df_PSev, aes(fill=value, x=PSev)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*2)) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette7) + scale_x_discrete(labels=c("Ik vind het erg als ik\n andere mensen besmet", "Ik vind het erg om\n besmet te raken")) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 ```
 
@@ -133,10 +133,18 @@ ggplot(data=df_intentie, aes(fill=value, x=intentie)) + geom_bar(aes(y = (..coun
 
 ```{r Intentie gesplitst op HL, echo=FALSE}
 #Plot intenties gesplitst op HL (mensen die de CoronaMelder al gebruiken)
-ggplot(data=data, aes(fill=BI1a_UTAUT, x=CatHL)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + coord_flip() + labs(x = " ", y = "", fill = "") + ggtitle("Intenties gesplitst op gezondheidsvaardigheden") + scale_fill_manual(values=my_palette7) + guides(fill = guide_legend(reverse = TRUE)) + theme(plot.margin = margin(0.2, 0.2, 0, 0, "cm"), legend.position = "bottom", legend.text=element_text(size=8))
+#df_PSev %>% filter(!is.na(Value))
+
+data_nona1a <- data[!is.na(data$BI1a_UTAUT),]
+data_nona1b <- data[!is.na(data$BI1b_UTAUT),]
+
+ggplot(data=data_nona1a, aes(fill=BI1a_UTAUT, x=CatHL)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + coord_flip() + labs(x = " ", y = "", fill = "") + ggtitle("Intenties gesplitst op gezondheidsvaardigheden") + scale_fill_manual(values=my_palette7) + guides(fill = guide_legend(reverse = TRUE)) + theme(plot.margin = margin(0.2, 0.2, 0, 0, "cm"), legend.position = "bottom", legend.text=element_text(size=8))
 
 #Plot intenties gesplitst op HL (mensen die de CoronaMelder nog niet gebruiken)
-ggplot(data=data, aes(fill=BI1b_UTAUT, x=CatHL)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + coord_flip() + labs(x = " ", y = "", fill = "") + ggtitle("Intenties gesplitst op gezondheidsvaardigheden") + scale_fill_manual(values=my_palette7) + guides(fill = guide_legend(reverse = TRUE)) + theme(plot.margin = margin(0.2, 0.2, 0, 0, "cm"), legend.position = "bottom", legend.text=element_text(size=8))
+ggplot(data=data_nona1b, aes(fill=BI1b_UTAUT, x=CatHL)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + coord_flip() + labs(x = " ", y = "", fill = "") + ggtitle("Intenties gesplitst op gezondheidsvaardigheden") + scale_fill_manual(values=my_palette7) + guides(fill = guide_legend(reverse = TRUE)) + theme(plot.margin = margin(0.2, 0.2, 0, 0, "cm"), legend.position = "bottom", legend.text=element_text(size=8))
+
+rm(data_nona1a)
+rm(data_nona1b)
 ```
 
 
