@@ -9,6 +9,7 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
+
 # For importing SPSS files
 library(foreign)
 
@@ -39,6 +40,16 @@ my_palette7 <- brewer.pal(11,"RdYlGn")[c(9,8,7,6,5,4,3)]
 # Custom kleurtjes -- we lenen zwart uit 'RdGy' voor "ik ben niet van plan de coronamelder te gebruiken",
 # dan van oranje naar groen voor de overige opties (oneens -> eens):
 my_palette_nonuse = c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "RdYlGn")[c(9,8,7,6,5,4,3)])
+
+# Creating new variables
+## Health literacy
+#Average health literacy
+hl_scale <- rowMeans(sapply(data[, c("HealthLiteracy1", "HealthLiteracy2", "HealthLiteracy3")], as.numeric), na.rm = TRUE)
+hl_avg <- mean(hl_scale)
+
+#Data splitsen hoge vs. midden. vs lage health literacy
+CatHL <- cut(hl_scale, breaks = c(0,1.333333,3.66666,5), labels = c("Laag", "Midden", "Hoog"))
+
 ```
 
 # 1 Achtergrond
@@ -47,27 +58,105 @@ my_palette_nonuse = c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "RdYlGn")[c(
 ## 3.1 Karakteristieken van de steekproef
 ### 3.1.1 Demografische factoren
 
+```{r demographics, echo=FALSE}
+# Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+ages <- table(data$lftdcat)
+pl <- barplot(ages, main="Leeftijdscategorieën van respondenten", xaxt="n")
+labs <- paste(names(table(data$lftdcat)))
+text(cex=0.8, x=pl+0.25, y=-25, labels=labs, xpd=TRUE, srt=45, pos=2)
+```
+
 ### 3.1.2 Gezondheidsmotivatie en risicoperceptie corona besmetting
 
-### 3.1.3 Algemene opvattingen over het coronavirus
-## 3.2 Bekendheid en gebruik
+```{r PSus, echo=FALSE}
+# Dataframe voor susceptibility + antwoordopties terugzetten
+df_PSus <- data %>% gather("PSus", "value", contains("HBM_PSus_self1"), contains("HBM_PSus_other2"))
+df_PSus <- mutate(df_PSus, value = factor(value, levels=rev(levels(data$HBM_PSus_self1))))
 
-```{r health literacy, echo=FALSE}
-
-#Average health literacy
-hl_av <- rowMeans(sapply(data[, c("HealthLiteracy1", "HealthLiteracy2", "HealthLiteracy3")], as.numeric), na.rm = TRUE)
-mean(hl_av)
+# Plot susceptibility self / others
+ggplot(data=df_PSus, aes(fill=value, x=PSus)) + geom_bar(aes(y = (..count..)/sum(..count..)*2)) + scale_y_continuous(labels=percent) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette7) + scale_x_discrete(labels=c("Als ik zelf besmet raak\n is de kans groot dat\n ik anderen besmet", "Er is een grote kans\n dat ik in de komende\n 2 maanden besmet raak")) + ggtitle("Waargenomen vatbaarheid voor het Coronavirus")
 
 ```
 
+```{r Psev, echo=FALSE, fig.width=7}
+# Dataframe voor severity + antwoordopties terugzetten
+df_PSev <- data %>% gather("PSev", "value", contains("HBM_PSev_self1"), contains("HBM_PSev_other2"))
+df_PSev <- mutate(df_PSev, value = factor(value, levels=rev(levels(data$HBM_PSev_self1))))
 
+# Plot severity self / others
+ggplot(data=df_PSev, aes(fill=value, x=PSev)) + geom_bar(aes(y = (..count..)/sum(..count..)*2)) + scale_y_continuous(labels=percent) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette7) + ggtitle("Waargenomen ernst van het Coronavirus") + scale_x_discrete(labels=c("Ik vind het erg als ik\n andere mensen besmet", "Ik vind het erg om\n besmet te raken")) + ggtitle("Waargenomen ernst van het Coronavirus")
+
+```
+
+### 3.1.3 Algemene opvattingen over het coronavirus
+
+
+
+## 3.2 Bekendheid en gebruik
 ### 3.2.1 Bekendheid met CoronaMelder
+
+```{r awarenessleeftijd, echo=FALSE}
+# Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+#Dit is even een test voor grafiek zonder ggplot, laat het even staan als voorbeeld.
+aware <- table(data$Awareness)
+plotaware <- barplot(aware, main="Bekendheid met CoronaMelder", xaxt="n")
+labs <- paste(names(table(data$Awareness)))
+text(cex=0.8, x=plotaware+0.25, y=-25, labels=labs, xpd=TRUE, srt=45, pos=2)
+
+# Awareness op leeftijdscategorie, met ook 'reversed' labels en waarden in de bar chart:
+ggplot(data=data, aes(fill=Awareness, x=lftdcat)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("15-24", "25-34", "35-44", "45-54", "55-64", "65+")) + coord_flip() + labs(x = "Leeftijdscategorie", y = "", fill = "") + ggtitle("Bekendheid Coronamelder per leeftijdscategorie") + scale_fill_manual(values=my_palette5) + guides(fill = guide_legend(reverse = TRUE))
+```
+
+```{r awarenessgender, echo=FALSE}
+# Awareness op gender
+ggplot(data=data, aes(fill=Awareness, x=geslacht)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("man", "vrouw")) + coord_flip() + labs(x = " ", y = "", fill = "") + ggtitle("Bekendheid Coronamelder per geslacht") + scale_fill_manual(values=my_palette5) + guides(fill = guide_legend(reverse = TRUE))
+```
+
 ### 3.2.2 Gebruik en intentie tot gebruik CoronaMelder
+
+```{r Intentie hele sample, echo=FALSE}
+###Intentie gesplitst op wel + niet gebruik
+
+# Dataframe voor intentie + antwoordopties terugzetten
+df_intentie <- data %>% gather("intentie", "value", contains("BI1a_UTAUT"), contains("BI1b_UTAUT"))
+df_intentie <- mutate(df_intentie, value = factor(value, levels=rev(levels(data$BI1a_UTAUT))))
+
+# De grote plot. Deze doet meerdere dingen:
+# - Onze gecombineerde kolommen gebruiken op de x-as
+# - De frequentie van alle antwoorden omzetten in percentages, dat is die (..count..)/sum(..count..)
+# - Omdat we de 2 kolommen hebben samengevoegd is onze dataframe 2x zo lang geworden (zie df_adherence in de Environment voor meer info), waardoor we het percentage moeten verdubbelen: vandaar de *2 (normaal gesproken is die count/sum count voldoende voor totaal van 100%)
+# - Schalen en labels goed zetten
+# - Inkleuren
+ggplot(data=df_intentie, aes(fill=value, x=intentie)) + geom_bar(aes(y = (..count..)/sum(..count..)*2)) + scale_y_continuous(labels=percent) + coord_flip() + scale_x_discrete(labels=c("Niet-gebruiker", "Gebruiker")) + labs(x = "", y = "", fill = "") + ggtitle("Intenties gesplitst op huidig gebruik") + scale_fill_manual(values=my_palette7)
+```
+
+
+```{r Intentie gesplitst op HL, echo=FALSE}
+#Plot intenties gesplitst op HL (mensen die de CoronaMelder al gebruiken)
+ggplot(data=data, aes(fill=BI1a_UTAUT, x=CatHL)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + coord_flip() + labs(x = " ", y = "", fill = "") + ggtitle("Intenties gesplitst op gezondheidsvaardigheden") + scale_fill_manual(values=my_palette7) + guides(fill = guide_legend(reverse = TRUE)) + theme(plot.margin = margin(0.2, 0.2, 0, 0, "cm"), legend.position = "bottom", legend.text=element_text(size=8))
+
+#Plot intenties gesplitst op HL (mensen die de CoronaMelder nog niet gebruiken)
+ggplot(data=data, aes(fill=BI1b_UTAUT, x=CatHL)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + coord_flip() + labs(x = " ", y = "", fill = "") + ggtitle("Intenties gesplitst op gezondheidsvaardigheden") + scale_fill_manual(values=my_palette7) + guides(fill = guide_legend(reverse = TRUE)) + theme(plot.margin = margin(0.2, 0.2, 0, 0, "cm"), legend.position = "bottom", legend.text=element_text(size=8))
+```
+
+
 ## 3.3 Verklarende variabelen voor adoptie
 ### 3.3.1 Verwachte effectiviteit CoronaMelder in bestrijding coronavirus
 ### 3.3.2 Vertrouwen in adequaatheid techniek
 ### 3.3.3 Maatschappelijke gevolgen gebruik CoronaMelder
 ### 3.3.4 Verwachte gebruiksvriendelijkheid en zelfeffectiviteit
+
+```{r UTAUT_PE, echo=FALSE}
+# Dataframe maken voor Perceived Expectancy + antwoordopties terugzetten
+df_utaut_pe <- data %>% gather("UTAUT_PE", "value", contains("PE1_UTAUT"), contains("PE2_UTAUT"))
+df_utaut_pe <- mutate(df_utaut_pe, value = factor(value, levels=rev(levels(data$PE1_UTAUT))))
+
+# Custom kleurtjes
+# van oranje naar groen voor de overige opties (oneens -> eens):
+# Grafiek uitdraaien
+ggplot(data=df_utaut_pe, aes(fill=value, x=UTAUT_PE)) + geom_bar(aes(y = (..count..)/sum(..count..)*2)) +  scale_y_continuous(labels=percent) + labs(x = "", y = "", fill = "") + scale_x_discrete(labels=c("Door de CoronaMelder app\n te gebruiken help ik mee\n bij de bestrijding van het\n coronavirus", "De CoronaMelder app is\n nuttig om ervoor te zorgen\n dat het coronavirus zich\n minder verspreidt")) + coord_flip() + scale_fill_manual(values=my_palette7)
+```
+
 ### 3.3.5 Technologie gerelateerde belemmeringen
 ### 3.3.6 Persoonlijke nadelen van gebruik en verplichting tot gebruik
 ### 3.3.7 Affectieve reacties
@@ -88,18 +177,10 @@ mean(hl_av)
 
 
 
-# Resultaten descriptieve statistiek
 
-Even een testje om wat demografische informatie weer te geven, in dit geval leeftijd in categorieën!
 
-```{r demographics, echo=FALSE}
-# Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-ages <- table(data$lftdcat)
-pl <- barplot(ages, main="Leeftijdscategorieën van respondenten", xaxt="n")
-labs <- paste(names(table(data$lftdcat)))
-text(cex=0.8, x=pl+0.25, y=-25, labels=labs, xpd=TRUE, srt=45, pos=2)
 
-```
+
 
 ## Meldingen en reacties op adviezen gegeven in de melding
 
@@ -116,53 +197,17 @@ Van de `r nrow(data)` deelnemers, hadden er `r nrow(filter(data, Behavior_UTAUT 
 # Bekendheid met Coronamelder [vooral om te proberen]
 ### Bekendheid_Splitsing leeftijd
 
-```{r awarenessleeftijd, echo=FALSE}
-# Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-#Dit is even een test voor grafiek zonder ggplot, laat het even staan als voorbeeld.
-aware <- table(data$Awareness)
-plotaware <- barplot(aware, main="Bekendheid met CoronaMelder", xaxt="n")
-labs <- paste(names(table(data$Awareness)))
-text(cex=0.8, x=plotaware+0.25, y=-25, labels=labs, xpd=TRUE, srt=45, pos=2)
 
-# Awareness op leeftijdscategorie, met ook 'reversed' labels en waarden in de bar chart:
-ggplot(data=data, aes(fill=Awareness, x=lftdcat)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("15-24", "25-34", "35-44", "45-54", "55-64", "65+")) + coord_flip() + labs(x = "Leeftijdscategorie", y = "", fill = "") + ggtitle("Bekendheid Coronamelder per leeftijdscategorie") + scale_fill_manual(values=my_palette5) + guides(fill = guide_legend(reverse = TRUE))
-```
 
 # Bekendheid_Splitsing geslacht
-```{r awarenessgender, echo=FALSE}
-# Awareness op gender
-my_palette5 <- brewer.pal(11,"RdYlGn")[c(4, 5, 6, 7, 8, 9, 10)]
-ggplot(data=data, aes(fill=Awareness, x=geslacht)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("man", "vrouw")) + coord_flip() + labs(x = " ", y = "", fill = "") + ggtitle("Bekendheid Coronamelder per geslacht") + scale_fill_manual(values=my_palette5) + guides(fill = guide_legend(reverse = TRUE))
-```
 
-# UTAUT variabelen
-###Intentie gesplitst op wel + niet gebruik
-``` {r intention, echo=FALSE}
-# Dataframe voor intentie + antwoordopties terugzetten
-df_intentie <- data %>% gather("intentie", "value", contains("BI1a_UTAUT"), contains("BI1b_UTAUT"))
-df_intentie <- mutate(df_intentie, Value = factor(value, levels=rev(levels(data$BI1a_UTAUT))))
 
-# De grote plot. Deze doet meerdere dingen:
-# - Onze gecombineerde kolommen gebruiken op de x-as
-# - De frequentie van alle antwoorden omzetten in percentages, dat is die (..count..)/sum(..count..)
-# - Omdat we de 2 kolommen hebben samengevoegd is onze dataframe 2x zo lang geworden (zie df_adherence in de Environment voor meer info), waardoor we het percentage moeten verdubbelen: vandaar de *2 (normaal gesproken is die count/sum count voldoende voor totaal van 100%)
-# - Schalen en labels goed zetten
-# - Inkleuren
-ggplot(data=df_intentie, aes(fill=value, x=intentie)) + geom_bar(aes(y = (..count..)/sum(..count..)*2)) + scale_y_continuous(labels=percent) + coord_flip() + scale_x_discrete(labels=c("Niet-gebruiker", "Gebruiker")) + labs(x = "", y = "", fill = "") + ggtitle("Intenties gesplitst op huidig gebruik") + scale_fill_manual(values=my_palette7)
-````
+
+
 
 
 ###Performance expectancy
-```{r UTAUT_PE, echo=FALSE}
-# Dataframe maken voor Perceived Expectancy + antwoordopties terugzetten
-df_utaut_pe <- data %>% gather("UTAUT_PE", "value", contains("PE1_UTAUT"), contains("PE2_UTAUT"))
-df_utaut_pe <- mutate(df_utaut_pe, value = factor(value, levels=rev(levels(data$PE1_UTAUT))))
 
-# Custom kleurtjes
-# van oranje naar groen voor de overige opties (oneens -> eens):
-# Grafiek uitdraaien
-ggplot(data=df_utaut_pe, aes(fill=value, x=UTAUT_PE)) + geom_bar(aes(y = (..count..)/sum(..count..)*2)) +  scale_y_continuous(labels=percent) + labs(x = "", y = "", fill = "") + scale_x_discrete(labels=c("Door de CoronaMelder app\n te gebruiken help ik mee\n bij de bestrijding van het\n coronavirus", "De CoronaMelder app is\n nuttig om ervoor te zorgen\n dat het coronavirus zich\n minder verspreidt")) + coord_flip() + scale_fill_manual(values=my_palette7)
-```
 
 
 # Overige analyses
