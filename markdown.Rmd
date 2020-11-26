@@ -41,6 +41,11 @@ my_palette7 <- brewer.pal(11,"RdYlGn")[c(9,8,7,6,5,4,3)]
 # dan van oranje naar groen voor de overige opties (oneens -> eens):
 my_palette_nonuse = c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "RdYlGn")[c(9,8,7,6,5,4,3)])
 
+
+recode_7point <- '1=7, 2=6, 3=5, 4=4, 5=3, 6=2, 7=1, "NA"=NA'
+data$HealthLiteracy1rec <- recode(data$HealthLiteracy1,recode_7point)
+
+
 # Creating new variables
 ## Health literacy
 #Average health literacy
