@@ -67,7 +67,8 @@ text(cex=0.8, x=pl+0.25, y=-25, labels=labs, xpd=TRUE, srt=45, pos=2)
 ```
 
 ### 3.1.2 Gezondheidsmotivatie en risicoperceptie corona besmetting
-
+#### 3.1.2.1 Besmetting met het coronavirus bij zichzelf en mensen in de directe omgeving
+#### 3.2.2.2 Corona risicoperceptie en ernst
 ```{r PSus, echo=FALSE}
 # Dataframe voor susceptibility + antwoordopties terugzetten
 df_PSus <- data %>% gather("PSus", "value", contains("HBM_PSus_self1"), contains("HBM_PSus_other2"))
@@ -88,8 +89,12 @@ ggplot(data=df_PSev, aes(fill=value, x=PSev)) + theme_bw() + geom_bar(aes(y = (.
 
 ```
 
-### 3.1.3 Algemene opvattingen over het coronavirus
+#### 3.1.2.3 Naleven algemene gedragsregels
+#### 3.1.2.4 Intentie tot naleving algemene gedragsregels
 
+### 3.1.3 Algemene opvattingen over het coronavirus
+#### 3.1.3.1 Complottheorieën
+#### 3.1.3.2 Vertrouwen in aanpak van de overheid
 
 
 ## 3.2 Bekendheid en gebruik
@@ -172,6 +177,13 @@ ggplot(data=df_utaut_pe, aes(fill=value, x=UTAUT_PE)) + geom_bar(aes(y = (..coun
 ### 3.3.9 Privacy en dataveiligheid 
 ## 3.4 Effecten
 ### 3.4.1 Meldingen en reacties op adviezen gegeven in de melding
+#### 3.4.1.1 Ontvangen meldingen en opvolging van de adviezen
+#### 3.4.1.2 Intentie tot opvolgen adviezen gegeven in de melding
+##### 3.4.1.2.1 Bij aanwezigheid symptomen die passen bij een besmetting met het coronavirus
+##### 3.4.1.2.2 Bij afwezigheid symptomen die passen bij een besmetting met het coronavirus
+#### 3.4.1.3 Verklarende factoren opvolging adviezen gegeven in melding
+##### 3.4.1.3.1 Eigen effectiviteit opvolging adviezen
+##### 3.4.1.3.2 Gepercipieerde persoonlijke voor- en nadelen van opvolgen adviezen
 ### 3.4.2 Intentie tot doorgeven codes na positieve test
 ### 2.4.3 Onbeoogde effecten: schijnveiligheid
 # 4 Conclusie en aanbevelingen
