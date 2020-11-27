@@ -9,6 +9,7 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
+rm(list = ls()) #Clear workspace
 
 # For importing SPSS files
 library(foreign)
@@ -42,18 +43,35 @@ my_palette7 <- brewer.pal(11,"RdYlGn")[c(9,8,7,6,5,4,3)]
 my_palette_nonuse = c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "RdYlGn")[c(9,8,7,6,5,4,3)])
 
 
-recode_7point <- '1=7, 2=6, 3=5, 4=4, 5=3, 6=2, 7=1, "NA"=NA'
-data$HealthLiteracy1rec <- recode(data$HealthLiteracy1,recode_7point)
+#reversecode_scheme_7point = "1=7; 2=6; 3=5; 4=4; 5=3; 6=2; 7=1; NA=NA"
+#data$HealthLiteracy1rec <- recode(data$HealthLiteracy1,reversecode_scheme_7point)
+View(data)
 
+#data$HealthLiteracy1r <- recode(data$HealthLiteracy1, "'Nooit'='Altijd'; 'Af en toe'='Vaak'; 'Vaak'='Af en toe'; 'Altijd'='Nooit'")
+
+#Werkt:
+#data$HealthLiteracy1r <- recode(data$HealthLiteracy1, Nooit='Altijd', 'Af en toe'='Vaak', Vaak='Af en toe', Altijd='Nooit')
 
 # Creating new variables
 ## Health literacy
-#Average health literacy
-hl_scale <- rowMeans(sapply(data[, c("HealthLiteracy1", "HealthLiteracy2", "HealthLiteracy3")], as.numeric), na.rm = TRUE)
-hl_avg <- mean(hl_scale)
+# To enable a median split, labels are first recoded to numbers 
+data$HealthLiteracy1n = recode(data$HealthLiteracy1, Nooit=1, 'Af en toe'=2, Soms=3, Vaak=4,  Altijd=5)
+data$HealthLiteracy2n = recode(data$HealthLiteracy2, 'Helemaal niet'=1, 'Een klein beetje'=2, 'Een beetje'=3, 'Nogal'=4,  'Heel erg'=5)
+data$HealthLiteracy3n = recode(data$HealthLiteracy3, Nooit=1, 'Af en toe'=2, Soms=3, Vaak=4,  Altijd=5)
 
-#Data splitsen hoge vs. midden. vs lage health literacy
-data$CatHL <- cut(hl_scale, breaks = c(0,1.333333,3.66666,5), labels = c("Laag", "Midden", "Hoog"))
+# Since items HealtLiteracy1 and 3 are negatively phrased they will be reverse coded such that higher numbers refer to higher health literacy
+data$HealthLiteracy1nr = recode(data$HealthLiteracy1n, "1"="5", "2"="4", "3"="3", "4"="2", "5"="1") 
+data$HealthLiteracy3nr = recode(data$HealthLiteracy3n, "1"="5", "2"="4", "3"="3", "4"="2", "5"="1") 
+
+#View(data)
+
+
+# Average health literacy
+#hl_scale <- rowMeans(sapply(data[, c("HealthLiteracy1", "HealthLiteracy2", "HealthLiteracy3")], as.numeric), na.rm = TRUE)
+#hl_avg <- mean(hl_scale)
+
+# Data splitsen hoge vs. midden. vs lage health literacy
+#data$CatHL <- cut(hl_scale, breaks = c(0,1.333333,3.66666,5), labels = c("Laag", "Midden", "Hoog"))
 
 ```
 
