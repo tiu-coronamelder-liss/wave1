@@ -4,6 +4,8 @@ author: "Nynke van der Laan, Nadine van der Waal, Jan de Wit"
 date: "11/11/2020"
 output: 
   bookdown::word_document2:
+    toc: true
+    toc_depth: 3
     reference_docx: markdown_template.docx
 ---
 ```{r setup, include=FALSE}
@@ -28,6 +30,9 @@ library(forcats)
 library(scales)
 library(RColorBrewer)
 
+# For analysis and data preprocessing
+library(psy) # psy for the cronbach function
+
 # Load dataset (not included on Github)
 data_in <- read.spss('L_CoronaMelder_wave1_3p.sav', to.data.frame=TRUE, use.missings=FALSE)
 
@@ -42,16 +47,6 @@ my_palette7 <- brewer.pal(11,"RdYlGn")[c(9,8,7,6,5,4,3)]
 # dan van oranje naar groen voor de overige opties (oneens -> eens):
 my_palette_nonuse = c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "RdYlGn")[c(9,8,7,6,5,4,3)])
 
-
-#reversecode_scheme_7point = "1=7; 2=6; 3=5; 4=4; 5=3; 6=2; 7=1; NA=NA"
-#data$HealthLiteracy1rec <- recode(data$HealthLiteracy1,reversecode_scheme_7point)
-View(data)
-
-#data$HealthLiteracy1r <- recode(data$HealthLiteracy1, "'Nooit'='Altijd'; 'Af en toe'='Vaak'; 'Vaak'='Af en toe'; 'Altijd'='Nooit'")
-
-#Werkt:
-#data$HealthLiteracy1r <- recode(data$HealthLiteracy1, Nooit='Altijd', 'Af en toe'='Vaak', Vaak='Af en toe', Altijd='Nooit')
-
 # Creating new variables
 ## Health literacy
 # To enable a median split, labels are first recoded to numbers 
@@ -60,26 +55,56 @@ data$HealthLiteracy2n = recode(data$HealthLiteracy2, 'Helemaal niet'=1, 'Een kle
 data$HealthLiteracy3n = recode(data$HealthLiteracy3, Nooit=1, 'Af en toe'=2, Soms=3, Vaak=4,  Altijd=5)
 
 # Since items HealtLiteracy1 and 3 are negatively phrased they will be reverse coded such that higher numbers refer to higher health literacy
-data$HealthLiteracy1nr = recode(data$HealthLiteracy1n, "1"="5", "2"="4", "3"="3", "4"="2", "5"="1") 
-data$HealthLiteracy3nr = recode(data$HealthLiteracy3n, "1"="5", "2"="4", "3"="3", "4"="2", "5"="1") 
+data$HealthLiteracy1nr = recode(data$HealthLiteracy1n, "1"=5, "2"=4, "3"=3, "4"=2, "5"=1) 
+data$HealthLiteracy3nr = recode(data$HealthLiteracy3n, "1"=5, "2"=4, "3"=3, "4"=2, "5"=1) 
 
-#View(data)
-
-
-# Average health literacy
-#hl_scale <- rowMeans(sapply(data[, c("HealthLiteracy1", "HealthLiteracy2", "HealthLiteracy3")], as.numeric), na.rm = TRUE)
-#hl_avg <- mean(hl_scale)
-
+# Calculate construct and cronbach alpha (0.58 - poor). The reliability of the scale is low and based on the histogram the distribution is highly skewed; no further analysis of this variable will be done. 
+data$HealthLiteracy <- rowMeans(data[, c("HealthLiteracy1nr", "HealthLiteracy2n", "HealthLiteracy3nr")], na.rm = TRUE)
+cronbach(data[, c("HealthLiteracy1nr", "HealthLiteracy2n", "HealthLiteracy3nr")])
+#hl_avg <- mean(data$HealthLiteracy)
+#hist(data$HealthLiteracy)
 # Data splitsen hoge vs. midden. vs lage health literacy
-#data$CatHL <- cut(hl_scale, breaks = c(0,1.333333,3.66666,5), labels = c("Laag", "Midden", "Hoog"))
+#data$CatHL <- cut(data$HealthLiteracy, breaks = c(0,1.333333,3.66666,5), labels = c("Laag", "Midden", "Hoog"))
 
 ```
+\newpage
+# Samenvatting {.unlisted .unnumbered}
+## Inleiding {.unlisted .unnumbered}
+## Methode {.unlisted .unnumbered}
+## Resultaten {.unlisted .unnumbered}
+## Conclusie {.unlisted .unnumbered}
+## Aanbevelingen {.unlisted .unnumbered}
+\newpage
+# Achtergrond
+Het doel van dit onderzoek is om, over de tijd, de adoptie van de app en de (intentie tot) opvolging van de in de app gegeven adviezen te onderzoeken en te verklaren.
+\newpage
+# Methoden
+## Onderzoeksopzet
+In het kader van de evaluatie van de CoronaMelder wordt er een longitudinaal vragenlijstonderzoek uitgevoerd via het LISS panel (LISSdata.nl) waarbij er over een periode van 5 maanden 4 metingen zullen plaatsvinden. Het doel van dit onderzoek is om, over de tijd, de adoptie van de app en de (intentie tot) opvolging van de in de app gegeven adviezen te onderzoeken en te verklaren.
 
-# 1 Achtergrond
-# 2 Methoden
-# 3 Resultaten
-## 3.1 Karakteristieken van de steekproef
-### 3.1.1 Demografische factoren
+## Beschrijving panel
+Het LISS panel is bij uitstek geschikt voor onderzoek waarbij een goede vertegenwoordiging van de Nederlandse bevolking van groot belang is. Het LISS panel is een probability-based (geen zelfselectie) panel dat iedere maand vragenlijsten invullen via internet. De adressensteekproeven voor de werving en de bijwervingen zijn getrokken uit het populatieregister in samenwerking met het CBS. Indien een huishouden niet beschikt over een breedbandverbinding en/of computer, dan stelt CentERdata de benodigde apparatuur in bruikleen beschikbaar om alsnog mee te kunnen doen aan het panel. Hiermee onderscheidt het LISS panel zich van andere online panels, waar niet-internetters ontbreken en waar panelleden de gelegenheid hebben om zichzelf aan te melden.  
+
+Panelleden ontvangen € 7,50 voor een vragenlijst met een invultijd van dertig minuten. Omdat het veldwerk standaard bijna een maand duurt en men twee herinneringen krijgt, is iedereen (van oud tot jong, werkend of niet werkend en/of tijdelijk afwezig) in de gelegenheid de vragenlijsten in te vullen.
+
+## Huidige rapportage: Meting 1 
+Steekproef: Een aselecte steekproef van LISS-panelleden van 16 jaar en ouder die ook de LISS-kernvragenlijst ‘Health’ (afgenomen in november en december 2019) en de vragenlijst over het coronavirus (afgenomen in het LISS panel maart 2020) hebben ingevuld.  
+
+Responsoverzicht | 
+------------- | -------------
+Selectie aantal leden huishouden: | 2.093 (100,0%)  
+Nonrespons | 183 (8,7%)  
+Respons | 1.910 (91,3%)  
+  Compleet | 1.900 (90,8%)  
+  Incompleet | 10 (0,5%)  
+
+Datum van dataverzameling: 19 oktober 2020 – 1 november 2020.
+
+In de resultaten sectie worden de uitkomsten getoond van de 1900 respondenten waarbij de data compleet was. In appendix X kan een vergelijking van de demografische samenstelling steekproef in vergelijking met die van de Nederlandse bevolking gevonden worden. 
+\newpage
+# Resultaten
+## Karakteristieken van de steekproef
+### Demografische factoren
 
 ```{r demographics, echo=FALSE}
 # Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
@@ -89,9 +114,9 @@ labs <- paste(names(table(data$lftdcat)))
 text(cex=0.8, x=pl+0.25, y=-25, labels=labs, xpd=TRUE, srt=45, pos=2)
 ```
 
-### 3.1.2 Gezondheidsmotivatie en risicoperceptie corona besmetting
-#### 3.1.2.1 Besmetting met het coronavirus bij zichzelf en mensen in de directe omgeving
-#### 3.2.2.2 Corona risicoperceptie en ernst
+### Gezondheidsmotivatie en risicoperceptie corona besmetting
+#### Besmetting met het coronavirus bij zichzelf en mensen in de directe omgeving
+#### Corona risicoperceptie en ernst
 ```{r PSus, echo=FALSE}
 # Dataframe voor susceptibility + antwoordopties terugzetten
 df_PSus <- data %>% gather("PSus", "value", contains("HBM_PSus_self1"), contains("HBM_PSus_other2"))
@@ -112,16 +137,16 @@ ggplot(data=df_PSev, aes(fill=value, x=PSev)) + theme_bw() + geom_bar(aes(y = (.
 
 ```
 
-#### 3.1.2.3 Naleven algemene gedragsregels
-#### 3.1.2.4 Intentie tot naleving algemene gedragsregels
+#### Naleven algemene gedragsregels
+#### Intentie tot naleving algemene gedragsregels
 
-### 3.1.3 Algemene opvattingen over het coronavirus
-#### 3.1.3.1 Complottheorieën
-#### 3.1.3.2 Vertrouwen in aanpak van de overheid
+### Algemene opvattingen over het coronavirus
+#### Complottheorieën
+#### Vertrouwen in aanpak van de overheid
 
 
-## 3.2 Bekendheid en gebruik
-### 3.2.1 Bekendheid met CoronaMelder
+## Bekendheid en gebruik
+### Bekendheid met CoronaMelder
 
 ```{r awarenessleeftijd, echo=FALSE}
 # Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
@@ -140,7 +165,7 @@ ggplot(data=data, aes(fill=Awareness, x=lftdcat)) + geom_bar(position=position_f
 ggplot(data=data, aes(fill=Awareness, x=geslacht)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("man", "vrouw")) + coord_flip() + labs(x = " ", y = "", fill = "") + ggtitle("Bekendheid Coronamelder per geslacht") + scale_fill_manual(values=my_palette5) + guides(fill = guide_legend(reverse = TRUE))
 ```
 
-### 3.2.2 Gebruik en intentie tot gebruik CoronaMelder
+### Gebruik en intentie tot gebruik CoronaMelder
 
 ```{r Intentie hele sample, echo=FALSE}
 ###Intentie gesplitst op wel + niet gebruik
@@ -166,21 +191,21 @@ ggplot(data=df_intentie, aes(fill=value, x=intentie)) + geom_bar(aes(y = (..coun
 data_nona1a <- data[!is.na(data$BI1a_UTAUT),]
 data_nona1b <- data[!is.na(data$BI1b_UTAUT),]
 
-ggplot(data=data_nona1a, aes(fill=BI1a_UTAUT, x=CatHL)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + coord_flip() + labs(x = " ", y = "", fill = "") + ggtitle("Intenties gesplitst op gezondheidsvaardigheden") + scale_fill_manual(values=my_palette7) + guides(fill = guide_legend(reverse = TRUE)) + theme(plot.margin = margin(0.2, 0.2, 0, 0, "cm"), legend.position = "bottom", legend.text=element_text(size=8))
+#ggplot(data=data_nona1a, aes(fill=BI1a_UTAUT, x=CatHL)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + coord_flip() + labs(x = " ", y = "", fill = "") + ggtitle("Intenties gesplitst op gezondheidsvaardigheden") + scale_fill_manual(values=my_palette7) + guides(fill = guide_legend(reverse = TRUE)) + theme(plot.margin = margin(0.2, 0.2, 0, 0, "cm"), legend.position = "bottom", legend.text=element_text(size=8))
 
 #Plot intenties gesplitst op HL (mensen die de CoronaMelder nog niet gebruiken)
-ggplot(data=data_nona1b, aes(fill=BI1b_UTAUT, x=CatHL)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + coord_flip() + labs(x = " ", y = "", fill = "") + ggtitle("Intenties gesplitst op gezondheidsvaardigheden") + scale_fill_manual(values=my_palette7) + guides(fill = guide_legend(reverse = TRUE)) + theme(plot.margin = margin(0.2, 0.2, 0, 0, "cm"), legend.position = "bottom", legend.text=element_text(size=8))
+#ggplot(data=data_nona1b, aes(fill=BI1b_UTAUT, x=CatHL)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + coord_flip() + labs(x = " ", y = "", fill = "") + ggtitle("Intenties gesplitst op gezondheidsvaardigheden") + scale_fill_manual(values=my_palette7) + guides(fill = guide_legend(reverse = TRUE)) + theme(plot.margin = margin(0.2, 0.2, 0, 0, "cm"), legend.position = "bottom", legend.text=element_text(size=8))
 
 rm(data_nona1a)
 rm(data_nona1b)
 ```
 
 
-## 3.3 Verklarende variabelen voor adoptie
-### 3.3.1 Verwachte effectiviteit CoronaMelder in bestrijding coronavirus
-### 3.3.2 Vertrouwen in adequaatheid techniek
-### 3.3.3 Maatschappelijke gevolgen gebruik CoronaMelder
-### 3.3.4 Verwachte gebruiksvriendelijkheid en zelfeffectiviteit
+## Verklarende variabelen voor adoptie
+### Verwachte effectiviteit CoronaMelder in bestrijding coronavirus
+### Vertrouwen in adequaatheid techniek
+### Maatschappelijke gevolgen gebruik CoronaMelder
+### Verwachte gebruiksvriendelijkheid en zelfeffectiviteit
 
 ```{r UTAUT_PE, echo=FALSE}
 # Dataframe maken voor Perceived Expectancy + antwoordopties terugzetten
@@ -193,26 +218,29 @@ df_utaut_pe <- mutate(df_utaut_pe, value = factor(value, levels=rev(levels(data$
 ggplot(data=df_utaut_pe, aes(fill=value, x=UTAUT_PE)) + geom_bar(aes(y = (..count..)/sum(..count..)*2)) +  scale_y_continuous(labels=percent) + labs(x = "", y = "", fill = "") + scale_x_discrete(labels=c("Door de CoronaMelder app\n te gebruiken help ik mee\n bij de bestrijding van het\n coronavirus", "De CoronaMelder app is\n nuttig om ervoor te zorgen\n dat het coronavirus zich\n minder verspreidt")) + coord_flip() + scale_fill_manual(values=my_palette7)
 ```
 
-### 3.3.5 Technologie gerelateerde belemmeringen
-### 3.3.6 Persoonlijke nadelen van gebruik en verplichting tot gebruik
-### 3.3.7 Affectieve reacties
-### 3.3.8 Sociale invloeden
-### 3.3.9 Privacy en dataveiligheid 
-## 3.4 Effecten
-### 3.4.1 Meldingen en reacties op adviezen gegeven in de melding
-#### 3.4.1.1 Ontvangen meldingen en opvolging van de adviezen
-#### 3.4.1.2 Intentie tot opvolgen adviezen gegeven in de melding
-##### 3.4.1.2.1 Bij aanwezigheid symptomen die passen bij een besmetting met het coronavirus
-##### 3.4.1.2.2 Bij afwezigheid symptomen die passen bij een besmetting met het coronavirus
-#### 3.4.1.3 Verklarende factoren opvolging adviezen gegeven in melding
-##### 3.4.1.3.1 Eigen effectiviteit opvolging adviezen
-##### 3.4.1.3.2 Gepercipieerde persoonlijke voor- en nadelen van opvolgen adviezen
-### 3.4.2 Intentie tot doorgeven codes na positieve test
-### 2.4.3 Onbeoogde effecten: schijnveiligheid
-# 4 Conclusie en aanbevelingen
-# 5 Referenties
-# 6 Bijlagen
-## 6.1 Vragenlijst wave 1
+### Technologie gerelateerde belemmeringen
+### Persoonlijke nadelen van gebruik en verplichting tot gebruik
+### Affectieve reacties
+### Sociale invloeden
+### Privacy en dataveiligheid 
+## Effecten
+### Meldingen en reacties op adviezen gegeven in de melding
+#### Ontvangen meldingen en opvolging van de adviezen
+#### Intentie tot opvolgen adviezen gegeven in de melding
+##### Bij aanwezigheid symptomen die passen bij een besmetting met het coronavirus
+##### Bij afwezigheid symptomen die passen bij een besmetting met het coronavirus
+#### Verklarende factoren opvolging adviezen gegeven in melding
+##### Eigen effectiviteit opvolging adviezen
+##### Gepercipieerde persoonlijke voor- en nadelen van opvolgen adviezen
+### Intentie tot doorgeven codes na positieve test
+### Onbeoogde effecten: schijnveiligheid
+\newpage
+# Conclusie en aanbevelingen
+\newpage
+# Referenties
+\newpage
+# Bijlagen
+## Vragenlijst wave 1
 
 
 
