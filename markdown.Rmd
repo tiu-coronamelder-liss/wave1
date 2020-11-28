@@ -101,10 +101,25 @@ Respons | 1.910 (91,3%)
 Datum van dataverzameling: 19 oktober 2020 – 1 november 2020.
 
 In de resultaten sectie worden de uitkomsten getoond van de 1900 respondenten waarbij de data compleet was. In appendix X kan een vergelijking van de demografische samenstelling steekproef in vergelijking met die van de Nederlandse bevolking gevonden worden. 
+
+
 \newpage
+
 # Resultaten
 ## Karakteristieken van de steekproef
 ### Demografische factoren
+
+
+Geslacht
+Lftdcat
+sted
+belbezig
+oplmet
+DS_mobile
+HealthLiteracy
+Riskgroup_contact
+
+
 
 ```{r demographics, echo=FALSE}
 # Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
@@ -115,8 +130,25 @@ text(cex=0.8, x=pl+0.25, y=-25, labels=labs, xpd=TRUE, srt=45, pos=2)
 ```
 
 ### Gezondheidsmotivatie en risicoperceptie corona besmetting
+
+CoronaInfectionSelf
+CoronaInfectionSelfTest
+CoronaInfectionSelfTest_1
+CoronaInfectionSelfTest_2
+CoronaInfectionOther_1-8
+
+
 #### Besmetting met het coronavirus bij zichzelf en mensen in de directe omgeving
 #### Corona risicoperceptie en ernst
+
+HBM_PSus_self1
+HBM_PSus_self2
+HBM_PSus_other2
+HBM_PSev_self1
+HBM_PSev_self2
+HBM_PSev_other2
+
+
 ```{r PSus, echo=FALSE}
 # Dataframe voor susceptibility + antwoordopties terugzetten
 df_PSus <- data %>% gather("PSus", "value", contains("HBM_PSus_self1"), contains("HBM_PSus_other2"))
@@ -138,12 +170,34 @@ ggplot(data=df_PSev, aes(fill=value, x=PSev)) + theme_bw() + geom_bar(aes(y = (.
 ```
 
 #### Naleven algemene gedragsregels
+
+Behavior_AdherenceGeneralMeasures_distance
+Behavior_AdherenceGeneralMeasures_avoidbusyplaces
+Behavior_AdherenceGeneralMeasures_quarantaine
+Corona_complaints + Behavior_AdherenceGeneralMeasures_quarantaine
+
+
 #### Intentie tot naleving algemene gedragsregels
 
+Intention_AdherenceGeneralMeasures_handwashing
+Intention_AdherenceGeneralMeasures_distance
+Intention_AdherenceGeneralMeasures_avoidbusyplaces
+Intention_AdherenceGeneralMeasures_quarantaine
+
+
 ### Algemene opvattingen over het coronavirus
+
+Beliefs_Conspiracy1
+Beliefs_Conspiracy2
+
 #### Complottheorieën
+
+Beliefs_Conspiracy1
+Beliefs_Conspiracy2
+
 #### Vertrouwen in aanpak van de overheid
 
+Beliefs_TrustGovernment
 
 ## Bekendheid en gebruik
 ### Bekendheid met CoronaMelder
@@ -200,12 +254,45 @@ rm(data_nona1a)
 rm(data_nona1b)
 ```
 
+Opsplitsing Gedrag en intentie (2.2.2):   
+1) Vergelijking gebruikers vs niet gebruikers (deze wave laten we de groep die het gebruikt hebben maar nu niet meer buiten beschouwing agz dat er nog vrij weinig zijn)  
+2) Van de niet gebruikers: vergelijking van intentie eens (beetjemee eens + eens + helemaal mee eens), neutraal, oneens (beetje mee oneens + eens + helemaal oneens).   
+--> Vergelijk deze groepen op alle variabelen in:   
+Demografische factoren, gezondheidsmotivatie en algemene opvattingen over het coronavirus (variabelen 2.1).   
+Deze opsplitsing naar demografie geeft inzicht in welke groepen vd bevolking de CoronaMelder meer of minder gebruikt wordt. De opsplitsing naar adherence en intentie tot adherence aan de andere maatregelen geeft inzicht in of de gebruikers van de CoronaMelder mensen zijn die zich sowieso al meer aan de maatregelen houden.
+
 
 ## Verklarende variabelen voor adoptie
+
+Opspliting verklarende variabelen (alle subsectie 2.3): 
+Allemaal opsplitsen naar 1) gebruikers vs niet gebruikers en 2) Van de niet gebruikers: vergelijking van eens, neutraal, oneens. In zijn totaliteit geeft deze sectie dan een beeld van wat de gebruikers onderscheid van de niet gebruikers, en welke beliefs veranderd kunnen worden bij de groep die de CoronaMelder niet gebruikt maar er neutraal tegenover staat (obv deze verklarende variabelen)
+
+
 ### Verwachte effectiviteit CoronaMelder in bestrijding coronavirus
+
+PE1_UTAUT
+PE2_UTAUT
+Beliefs_ResponseefficasyOther
+Beliefs_Protectriskgroups
+
+
 ### Vertrouwen in adequaatheid techniek
+
+Beliefs_technologyperformance
+
 ### Maatschappelijke gevolgen gebruik CoronaMelder
+
+Beliefs_benefiteconomic
+
 ### Verwachte gebruiksvriendelijkheid en zelfeffectiviteit
+
+EE1a_UTAUT
+EE2a_UTAUT
+EE1b_UTAUT
+EE2b_UTAUT
+HBM_selfefficacy_CoronaMelder
+
+
 
 ```{r UTAUT_PE, echo=FALSE}
 # Dataframe maken voor Perceived Expectancy + antwoordopties terugzetten
@@ -219,21 +306,106 @@ ggplot(data=df_utaut_pe, aes(fill=value, x=UTAUT_PE)) + geom_bar(aes(y = (..coun
 ```
 
 ### Technologie gerelateerde belemmeringen
+
+FC1_UTAUT
+FC2_UTAUT
+
+
 ### Persoonlijke nadelen van gebruik en verplichting tot gebruik
+
+HBM_ barriers _CoronaMelder 
+Beliefs_voluntariness
+
+
 ### Affectieve reacties
+
+Beliefs_fear
+Beliefs_notificationfear
+
+
+
 ### Sociale invloeden
+
+
+Beliefs_AppAdoption
+SI1_UTAUT
+SI2_UTAUT
+Beliefs_civicduty
+
+
 ### Privacy en dataveiligheid 
+
+Beliefs_datasafety
+Beliefs_locationmonitoring
+Beliefs_identitymonitoring
+
+
 ## Effecten
 ### Meldingen en reacties op adviezen gegeven in de melding
+
+notifications_1: hoeveel hebben 1 keer of meerdere keren een melding gehad?
+Van degenen die een of meerder meldingen hebben gehad:in welke mate rapporteren ze zich aan de adviezen te houden? 
+notification_behavior_quarantaine
+Notification_behavior_test
+Notification_symptoms
+
+
 #### Ontvangen meldingen en opvolging van de adviezen
 #### Intentie tot opvolgen adviezen gegeven in de melding
-##### Bij aanwezigheid symptomen die passen bij een besmetting met het coronavirus
-##### Bij afwezigheid symptomen die passen bij een besmetting met het coronavirus
+
+ 
+
+AdherenceNotificationMeasuresSymptoms_Test
+AdherenceNotificationMeasuresSymptoms_Quarantaine
+AdherenceNotificationMeasuresSymptoms_Visits
+AdherenceNotificationMeasuresSymptoms_CallGP
+AdherenceNotificationMeasuresNosymptoms_Test
+AdherenceNotificationMeasuresNosymptoms_Quarantaine
+AdherenceNotificationMeasuresNoSymptoms_Visits
+AdherenceNotificationMeasuresNosymptoms_CallGP  
+
+
+Opsplitsing intentie tot opvolgen adviezen gegeven in melding: 2.4.1.2.   
+Demografische factoren, gezondheidsmotivatie en algemene opvattingen over het coronavirus 
+
+
 #### Verklarende factoren opvolging adviezen gegeven in melding
 ##### Eigen effectiviteit opvolging adviezen
+HBM_ selfefficacy _Test
+HBM_ selfefficacy _Quarantaine
+HBM_ selfefficacy _Visits
+HBM_ selfefficacy _GP
+
+
 ##### Gepercipieerde persoonlijke voor- en nadelen van opvolgen adviezen
+
+HBM_ benefits _Test
+HBM_ benefits _Quarantaine
+HBM_ benefits _Visits
+HBM_ benefits _GP
+
+HBM_ barriers _Test
+HBM_ barriers _Quarantaine
+HBM_ barriers _Visits
+HBM_ barriers _GP
+
+
+
+
 ### Intentie tot doorgeven codes na positieve test
+
+Intention_reportinfection
+
 ### Onbeoogde effecten: schijnveiligheid
+
+
+
+Beliefs_falsesecurity1
+Beliefs_falsesecurity2  
+
+
+Opsplitsing Onbeoogde effecten: schijnveiligheid 2.4.3: naar Demografische factoren  
+
 \newpage
 # Conclusie en aanbevelingen
 \newpage
