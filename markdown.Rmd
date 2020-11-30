@@ -142,25 +142,26 @@ CoronaInfectionOther_1-8
 #### Corona risicoperceptie en ernst
 
 HBM_PSus_self1
-HBM_PSus_self2
+HBM_PSus_self2 (niet gebruikt vooralsnog)
 HBM_PSus_other2
 HBM_PSev_self1
-HBM_PSev_self2
+HBM_PSev_self2 (niet gebruikt vooralsnog)
 HBM_PSev_other2
 
 
-```{r PSus, echo=FALSE}
+```{r PSus, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ontvankelijkheid voor het Coronavirus"}
 # Dataframe voor susceptibility + antwoordopties terugzetten
 df_PSus <- data %>% gather("PSus", "value", contains("HBM_PSus_self1"), contains("HBM_PSus_other2"))
 df_PSus <- mutate(df_PSus, value = factor(value, levels=rev(levels(data$HBM_PSus_self1))))
 
 # Plot susceptibility self / others
-ggplot(data=df_PSus, aes(fill=value, x=PSus)) + geom_bar(aes(y = (..count..)/sum(..count..)*2)) + scale_y_continuous(labels=percent) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette7) + scale_x_discrete(labels=c("Als ik zelf besmet raak\n is de kans groot dat\n ik anderen besmet", "Er is een grote kans\n dat ik in de komende\n 2 maanden besmet raak")) + ggtitle("Waargenomen vatbaarheid voor het Coronavirus")
+ggplot(data=df_PSus, aes(fill=value, x=PSus)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*2)) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette7) + scale_x_discrete(labels=c("Als ik zelf besmet raak\n is de kans groot dat\n ik anderen besmet", "Er is een grote kans dat\n ik in de komende 2\n maanden besmet raak")) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
 
 ```
 
-```{r Psev, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst van het Coronavirus"}
-# Dataframe voor severity + antwoordopties terugzetten
+```{r PSev, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst van het Coronavirus"}
+# Dataframe severity + replacing answer options
 df_PSev <- data %>% gather("PSev", "value", contains("HBM_PSev_self1"), contains("HBM_PSev_other2"))
 df_PSev <- mutate(df_PSev, value = factor(value, levels=rev(levels(data$HBM_PSev_self1))))
 
@@ -170,11 +171,31 @@ ggplot(data=df_PSev, aes(fill=value, x=PSev)) + theme_bw() + geom_bar(aes(y = (.
 ```
 
 #### Naleven algemene gedragsregels
-
 Behavior_AdherenceGeneralMeasures_distance
 Behavior_AdherenceGeneralMeasures_avoidbusyplaces
 Behavior_AdherenceGeneralMeasures_quarantaine
 Corona_complaints + Behavior_AdherenceGeneralMeasures_quarantaine
+
+```{r AdherenceGen, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot naleving gedragsregels voor de komende 2 maanden"}
+# Dataframe general adherence to measures + replacing answer options
+df_Adherence_Gen <- data %>% gather("Adherence_Gen", "Value", contains("Intention_AdherenceGeneralMeasures_handwashing"), contains("Intention_AdherenceGeneralMeasures_distance"), contains("Intention_AdherenceGeneralMeasures_avoidbusyplaces"), contains("Intention_AdherenceGeneralMeasures_quarantaine")) 
+df_Adherence_Gen <- mutate(df_Adherence_Gen, Value = factor(Value, levels=rev(levels(data$Intention_AdherenceGeneralMeasures_handwashing))))
+
+# Plot adherence general measures
+ggplot(data=df_Adherence_Gen, aes(fill=Value, x=Adherence_Gen)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*4)) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette7) + scale_x_discrete(labels=c("Drukke plekken vermijden", "1,5 meter afstand houden", "Handen regelmatig wassen", "Thuisblijven bij klachten"))  + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+```
+
+```{r AdherenceGen, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot naleving gedragsregels voor de komende 2 maanden"}
+# Dataframe general adherence to measures + replacing answer options
+df_Adherence_Gen <- data %>% gather("Adherence_Gen", "Value", contains("Intention_AdherenceGeneralMeasures_handwashing"), contains("Intention_AdherenceGeneralMeasures_distance"), contains("Intention_AdherenceGeneralMeasures_avoidbusyplaces"), contains("Intention_AdherenceGeneralMeasures_quarantaine")) 
+df_Adherence_Gen <- mutate(df_Adherence_Gen, Value = factor(Value, levels=rev(levels(data$Intention_AdherenceGeneralMeasures_handwashing))))
+
+# Plot general adherence
+ggplot(data=df_Adherence_Gen, aes(fill=Value, x=Adherence_Gen)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*2)) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette7) + scale_x_discrete(labels=c("Drukke plekken vermijden", "1,5 meter afstand houden", "Handen regelmatig wassen", "Thuisblijven bij klachten")) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+```
+
 
 
 #### Intentie tot naleving algemene gedragsregels
