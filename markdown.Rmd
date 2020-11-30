@@ -32,6 +32,7 @@ library(RColorBrewer)
 
 # For analysis and data preprocessing
 library(psy) # psy for the cronbach function
+library(reshape2) # For converting from wide to long format (function: melt)
 
 # Load dataset (not included on Github)
 data_in <- read.spss('L_CoronaMelder_wave1_3p.sav', to.data.frame=TRUE, use.missings=FALSE)
@@ -137,38 +138,57 @@ CoronaInfectionSelfTest_1
 CoronaInfectionSelfTest_2
 CoronaInfectionOther_1-8
 
-
 #### Besmetting met het coronavirus bij zichzelf en mensen in de directe omgeving
 #### Corona risicoperceptie en ernst
 
+```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid"}
+
+# Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
+graph_variablenames = c("HBM_PSus_self1", 
+                        "HBM_PSus_other2", 
+                        "HBM_PSev_self1", 
+                        "HBM_PSev_other2")
+graph_questionlabels = c("Ik loop in de komende \n twee maanden risico op een \n besmetting met het coronavirus", 
+                         "Als ik besmet raak \n is de kans  groot dat ik anderen \n zal besmetten", 
+                         "Ik vind het erg om \n besmet te raken", 
+                         "Ik vind het erg als ik \n andere mensen besmet"); 
+
+# Order of the question categories: first = most green, last = most red # Check if the answer categories match with the codebook (e.g, sometimes also 'weet ik niet is one of the answeroptions')
+graph_answercategories = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
+
+# Create a dataframe for the plot
+#First only keep the variables you wish to keep. Note: nomem_enc is the participant id
+data_graph_wideformat = select(data, nomem_encr, all_of(graph_variablenames))
+
+#Convert it to long format
+data_graph_longformat = melt(data_graph_wideformat, id.vars = c('nomem_encr'), measure.vars = graph_variablenames)
+
+# Set the correct ordering of the questions (by default the first variable is placed on the bottom)
+# It is not needed to reverse the order of the questionlabels. 
+data_graph_longformat$variable <- factor(data_graph_longformat$variable,levels = rev(graph_variablenames))
+
+# Also invert the order of the question labels (as default is that the first element of the vector is placed on the bottom)
+graph_questionlabels = rev(graph_questionlabels)
+
+# Set the correct ordering of the answer categories (by default on alphabetic order)
+data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
+
+# Create the plot
+ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette7) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+# To check: also create the plot with variable labels
+#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette7) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+```
+
+
 HBM_PSus_self1
-HBM_PSus_self2 (niet gebruikt vooralsnog)
+HBM_PSus_self2
 HBM_PSus_other2
 HBM_PSev_self1
-HBM_PSev_self2 (niet gebruikt vooralsnog)
+HBM_PSev_self2
 HBM_PSev_other2
 
-
-```{r PSus, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ontvankelijkheid voor het Coronavirus"}
-# Dataframe voor susceptibility + antwoordopties terugzetten
-df_PSus <- data %>% gather("PSus", "value", contains("HBM_PSus_self1"), contains("HBM_PSus_other2"))
-df_PSus <- mutate(df_PSus, value = factor(value, levels=rev(levels(data$HBM_PSus_self1))))
-
-# Plot susceptibility self / others
-ggplot(data=df_PSus, aes(fill=value, x=PSus)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*2)) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette7) + scale_x_discrete(labels=c("Als ik zelf besmet raak\n is de kans groot dat\n ik anderen besmet", "Er is een grote kans dat\n ik in de komende 2\n maanden besmet raak")) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
-
-
-```
-
-```{r PSev, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst van het Coronavirus"}
-# Dataframe severity + replacing answer options
-df_PSev <- data %>% gather("PSev", "value", contains("HBM_PSev_self1"), contains("HBM_PSev_other2"))
-df_PSev <- mutate(df_PSev, value = factor(value, levels=rev(levels(data$HBM_PSev_self1))))
-
-# Plot severity self / others
-ggplot(data=df_PSev, aes(fill=value, x=PSev)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*2)) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette7) + scale_x_discrete(labels=c("Ik vind het erg als ik\n andere mensen besmet", "Ik vind het erg om\n besmet te raken")) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
-
-```
 
 #### Naleven algemene gedragsregels
 Behavior_AdherenceGeneralMeasures_distance
@@ -208,13 +228,48 @@ Intention_AdherenceGeneralMeasures_quarantaine
 
 ### Algemene opvattingen over het coronavirus
 
-Beliefs_Conspiracy1
-Beliefs_Conspiracy2
 
 #### Complottheorieën
 
 Beliefs_Conspiracy1
 Beliefs_Conspiracy2
+
+```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Geloof in complottheorien"}
+
+# Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
+graph_variablenames = c("Beliefs_Conspiracy1", 
+                        "Beliefs_Conspiracy2")
+graph_questionlabels = c("Het coronavirus is een \n biologisch wapen dat in een \n laboratorium is gemaakt", 
+                         "De uitbraak van het \n coronavirus heeft te maken met \n (de aanleg van) het 5G netwerk"); 
+
+# Hier nog wijzigen naar waar/niet waar coding
+# Order of the question categories: first = most green, last = most red # Check if the answer categories match with the codebook (e.g, sometimes also 'weet ik niet is one of the answeroptions')
+graph_answercategories = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
+
+# Create a dataframe for the plot
+#First only keep the variables you wish to keep. Note: nomem_enc is the participant id
+data_graph_wideformat = select(data, nomem_encr, all_of(graph_variablenames))
+
+#Convert it to long format
+data_graph_longformat = melt(data_graph_wideformat, id.vars = c('nomem_encr'), measure.vars = graph_variablenames)
+
+# Set the correct ordering of the questions (by default the first variable is placed on the bottom)
+# It is not needed to reverse the order of the questionlabels. 
+data_graph_longformat$variable <- factor(data_graph_longformat$variable,levels = rev(graph_variablenames))
+
+# Also invert the order of the question labels (as default is that the first element of the vector is placed on the bottom)
+graph_questionlabels = rev(graph_questionlabels)
+
+# Set the correct ordering of the answer categories (by default on alphabetic order)
+data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
+
+# Create the plot
+ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette7) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+# To check: also create the plot with variable labels
+#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette7) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+```
 
 #### Vertrouwen in aanpak van de overheid
 
@@ -293,8 +348,44 @@ Allemaal opsplitsen naar 1) gebruikers vs niet gebruikers en 2) Van de niet gebr
 
 PE1_UTAUT
 PE2_UTAUT
+
+```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Verwachte effeciviteit CoronaMelder"}
+
+# Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
+graph_variablenames = c("PE1_UTAUT", 
+                        "PE2_UTAUT")
+graph_questionlabels = c("Door de CoronaMelder app te \n gebruiken help ik mee bij de \n bestrijding van het coronavirus", 
+                         "De CoronaMelder app is nuttig \n om ervoor te zorgen dat het \n coronavirus zich minder verspreidt"); 
+
+# Order of the question categories: first = most green, last = most red # Check if the answer categories match with the codebook (e.g, sometimes also 'weet ik niet is one of the answeroptions')
+graph_answercategories = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
+
+# Create a dataframe for the plot
+#First only keep the variables you wish to keep. Note: nomem_enc is the participant id
+data_graph_wideformat = select(data, nomem_encr, all_of(graph_variablenames))
+
+#Convert it to long format
+data_graph_longformat = melt(data_graph_wideformat, id.vars = c('nomem_encr'), measure.vars = graph_variablenames)
+
+# Set the correct ordering of the questions (by default the first variable is placed on the bottom)
+# It is not needed to reverse the order of the questionlabels. 
+data_graph_longformat$variable <- factor(data_graph_longformat$variable,levels = rev(graph_variablenames))
+
+# Also invert the order of the question labels (as default is that the first element of the vector is placed on the bottom)
+graph_questionlabels = rev(graph_questionlabels)
+
+# Set the correct ordering of the answer categories (by default on alphabetic order)
+data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
+
+# Create the plot
+ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette7) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+```
+
 Beliefs_ResponseefficasyOther
 Beliefs_Protectriskgroups
+
+
 
 
 ### Vertrouwen in adequaatheid techniek
@@ -413,13 +504,45 @@ HBM_ barriers _GP
 
 
 
-### Intentie tot doorgeven codes na positieve test
+### Intentie tot doorgeven GGD-sleutel na positieve test
 
 Intention_reportinfection
 
+```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot doorgeven GGD-sleutel"}
+
+# Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
+graph_variablenames = c("Intention_reportinfection")
+graph_questionlabels = c("Als ik besmet ben, \n ben ik van plan om dit door\n  te geven via de CoronaMelder app"); 
+
+# Order of the question categories: first = most green, last = most red
+graph_answercategories = c("Ik zou de CoronaMelder app niet gebruiken", "Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
+
+# Create a dataframe for the plot
+#First only keep the variables you wish to keep. Note: nomem_enc is the participant id
+data_graph_wideformat = select(data, nomem_encr, all_of(graph_variablenames))
+
+#Convert it to long format
+data_graph_longformat = melt(data_graph_wideformat, id.vars = c('nomem_encr'), measure.vars = graph_variablenames)
+
+# Set the correct ordering of the questions (by default the first variable is placed on the bottom)
+# It is not needed to reverse the order of the questionlabels. 
+data_graph_longformat$variable <- factor(data_graph_longformat$variable,levels = rev(graph_variablenames))
+
+# Set the correct ordering of the answer categories (by default on alphabetic order)
+data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
+View(data_graph_longformat)
+
+# Create the plot
+ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette_nonuse) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+
+```
+
+
+
+
+
 ### Onbeoogde effecten: schijnveiligheid
-
-
 
 Beliefs_falsesecurity1
 Beliefs_falsesecurity2  
