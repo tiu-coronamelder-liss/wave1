@@ -47,6 +47,7 @@ my_palette7 <- brewer.pal(11,"RdYlGn")[c(9,8,7,6,5,4,3)]
 # Custom kleurtjes -- we lenen zwart uit 'RdGy' voor "ik ben niet van plan de coronamelder te gebruiken",
 # dan van oranje naar groen voor de overige opties (oneens -> eens):
 my_palette_nonuse = c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "RdYlGn")[c(9,8,7,6,5,4,3)])
+my_palette5true <- c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "RdYlGn")[c(6,7,8,9)])
 
 # Creating new variables
 ## Health literacy
@@ -153,6 +154,8 @@ graph_questionlabels = c("Ik loop in de komende \n twee maanden risico op een \n
                          "Ik vind het erg om \n besmet te raken", 
                          "Ik vind het erg als ik \n andere mensen besmet"); 
 
+# These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
+color_palette = my_palette7
 # Order of the question categories: first = most green, last = most red # Check if the answer categories match with the codebook (e.g, sometimes also 'weet ik niet is one of the answeroptions')
 graph_answercategories = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
 
@@ -174,21 +177,12 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette7) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 # To check: also create the plot with variable labels
-#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette7) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 ```
-
-
-HBM_PSus_self1
-HBM_PSus_self2
-HBM_PSus_other2
-HBM_PSev_self1
-HBM_PSev_self2
-HBM_PSev_other2
-
 
 #### Naleven algemene gedragsregels
 Behavior_AdherenceGeneralMeasures_distance
@@ -219,21 +213,17 @@ Intention_AdherenceGeneralMeasures_quarantaine
 
 
 #### Complottheorieën
-
-Beliefs_Conspiracy1
-Beliefs_Conspiracy2
-
 ```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Geloof in complottheorien"}
-
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Beliefs_Conspiracy1", 
                         "Beliefs_Conspiracy2")
 graph_questionlabels = c("Het coronavirus is een \n biologisch wapen dat in een \n laboratorium is gemaakt", 
                          "De uitbraak van het \n coronavirus heeft te maken met \n (de aanleg van) het 5G netwerk"); 
 
-# Hier nog wijzigen naar waar/niet waar coding
+# These questions have 5 answer categories: Zeker niet waar - Zeker waar en Weet ik niet. The following color palette should be used:
+color_palette = my_palette5true
 # Order of the question categories: first = most green, last = most red # Check if the answer categories match with the codebook (e.g, sometimes also 'weet ik niet is one of the answeroptions')
-graph_answercategories = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
+graph_answercategories = c("Weet ik niet", "Zeker waar", "Misschien waar", "Misschien niet waar", "Zeker niet waar"); 
 
 # Create a dataframe for the plot
 #First only keep the variables you wish to keep. Note: nomem_enc is the participant id
@@ -253,10 +243,12 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette7) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 # To check: also create the plot with variable labels
-#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette7) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+table(data$Beliefs_Conspiracy1)
 
 ```
 
@@ -334,18 +326,18 @@ Allemaal opsplitsen naar 1) gebruikers vs niet gebruikers en 2) Van de niet gebr
 
 
 ### Verwachte effectiviteit CoronaMelder in bestrijding coronavirus
-
-PE1_UTAUT
-PE2_UTAUT
-
 ```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Verwachte effeciviteit CoronaMelder"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("PE1_UTAUT", 
-                        "PE2_UTAUT")
+                        "PE2_UTAUT", 
+                        "Beliefs_Protectriskgroups")
 graph_questionlabels = c("Door de CoronaMelder app te \n gebruiken help ik mee bij de \n bestrijding van het coronavirus", 
-                         "De CoronaMelder app is nuttig \n om ervoor te zorgen dat het \n coronavirus zich minder verspreidt"); 
+                         "De CoronaMelder app is nuttig \n om ervoor te zorgen dat het \n coronavirus zich minder verspreidt", 
+                         "De CoronaMelder app helpt om \nmensen met een kwetsbare \n gezondheid te beschermen") 
 
+# These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
+color_palette = my_palette7
 # Order of the question categories: first = most green, last = most red # Check if the answer categories match with the codebook (e.g, sometimes also 'weet ik niet is one of the answeroptions')
 graph_answercategories = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
 
@@ -367,15 +359,19 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette7) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 ```
+De meeste respondenten (`r round(nrow(filter(data, Beliefs_ResponseefficasyOther == '76-90%'))/nrow(data)*100, digits = 1)`%) dachten dat 76-90% van de Nederlandse bevolking de CoronaMelder moet gebruiken om de verspreiding van het coronavirus tegen te gaan. In totaal dacht `r round(((nrow(filter(data, Beliefs_ResponseefficasyOther == '51-75%')) + nrow(filter(data, Beliefs_ResponseefficasyOther == '76-90%')) + nrow(filter(data, Beliefs_ResponseefficasyOther == '91-100%')))/nrow(data)*100), digits = 1)`% van de respondenten dat meer dan 50% van de Nederlandse bevolking de CoronaMelder app moet gebruiken om effectief te zijn. Het aandeel respondenten dat aan gaf niet te weten hoeveel mensen de CoronaMelder app zouden moeten gebruiken is `r round(nrow(filter(data, Beliefs_ResponseefficasyOther == 'Weet ik niet'))/nrow(data)*100, digits = 1)`%. 
 
-Beliefs_ResponseefficasyOther
-Beliefs_Protectriskgroups
+```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Percentage bevolking dat de CoronaMelder moet gebruiken om verspreiding van het virus tegen te gaan"}
+# Beliefs_ResponseefficasyOther
+Beliefs_ResponseefficasyOther <- table(data$Beliefs_ResponseefficasyOther)
+pl <- barplot(Beliefs_ResponseefficasyOther, xaxt="n")
+labs <- paste(names(table(data$Beliefs_ResponseefficasyOther)))
+text(cex=0.8, x=pl+0.25, y=-25, labels=labs, xpd=TRUE, srt=45, pos=2)
 
-
-
+```
 
 ### Vertrouwen in adequaatheid techniek
 
