@@ -133,6 +133,20 @@ ages <- table(data$lftdcat)
 pl <- barplot(ages, main="Leeftijdscategorieën van respondenten", xaxt="n")
 labs <- paste(names(table(data$lftdcat)))
 text(cex=0.8, x=pl+0.25, y=-25, labels=labs, xpd=TRUE, srt=45, pos=2)
+
+ggplot(data=data, aes(x = lftdcat)) +  
+  geom_bar(aes(y = (..count..)/sum(..count..)))
+
+
+data %>% 
+  count(lftdcat) %>% 
+  mutate(percent = n / nrow(lftdcat)) -> data2
+
+ggplot(data2, aes(x = lftdcat, y = perc)) + geom_bar(stat = "identity")
+
+
+ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle(plot_title) + theme(plot.title = element_text(size=11))
+
 ```
 
 ### Gezondheidsmotivatie en risicoperceptie corona besmetting
@@ -823,11 +837,77 @@ ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + g
 HBM_ barriers _CoronaMelder 
 Beliefs_voluntariness
 
+```{r Barriersvoluntariness, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Persoonlijke nadelen en verplichting tot gebruik"}
+# Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
+graph_variablenames = c("HBM_perceivedbenefits_CoronaMelder", 
+                        "Beliefs_voluntariness")
+graph_questionlabels = c("Het heeft voor mij\n persoonlijke nadelen om\n de CoronaMelder te\n gebruiken", 
+                         "Ik voel me verplicht\n om de CoronaMelder\n te gebruiken"); 
+
+# These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
+color_palette = my_palette7
+# Order of the question categories: first = most green, last = most red # Check if the answer categories match with the codebook (e.g, sometimes also 'weet ik niet is one of the answeroptions')
+graph_answercategories = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
+
+# Create a dataframe for the plot
+#First only keep the variables you wish to keep. Note: nomem_enc is the participant id
+data_graph_wideformat = select(data, nomem_encr, all_of(graph_variablenames))
+
+#Convert it to long format
+data_graph_longformat = melt(data_graph_wideformat, id.vars = c('nomem_encr'), measure.vars = graph_variablenames)
+
+# Set the correct ordering of the questions (by default the first variable is placed on the bottom)
+data_graph_longformat$variable <- factor(data_graph_longformat$variable,levels = rev(graph_variablenames))
+
+# Also invert the order of the question labels (as default is that the first element of the vector is placed on the bottom)
+graph_questionlabels = rev(graph_questionlabels)
+
+# Set the correct ordering of the answer categories (by default on alphabetic order)
+data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
+
+# Create the plot
+ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+```
+
 
 ### Affectieve reacties
 
 Beliefs_fear
 Beliefs_notificationfear
+
+```{r Affective, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Affectieve reacties"}
+# Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
+graph_variablenames = c("Beliefs_fear", 
+                        "Beliefs_notificationfear")
+graph_questionlabels = c("Ik vind de\n CoronaMelder eng", 
+                         "Ik zou angstig\n worden als ik een\n melding ontvang van\n de CoronaMelder"); 
+
+# These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
+color_palette = my_palette7
+# Order of the question categories: first = most green, last = most red # Check if the answer categories match with the codebook (e.g, sometimes also 'weet ik niet is one of the answeroptions')
+graph_answercategories = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
+
+# Create a dataframe for the plot
+#First only keep the variables you wish to keep. Note: nomem_enc is the participant id
+data_graph_wideformat = select(data, nomem_encr, all_of(graph_variablenames))
+
+#Convert it to long format
+data_graph_longformat = melt(data_graph_wideformat, id.vars = c('nomem_encr'), measure.vars = graph_variablenames)
+
+# Set the correct ordering of the questions (by default the first variable is placed on the bottom)
+data_graph_longformat$variable <- factor(data_graph_longformat$variable,levels = rev(graph_variablenames))
+
+# Also invert the order of the question labels (as default is that the first element of the vector is placed on the bottom)
+graph_questionlabels = rev(graph_questionlabels)
+
+# Set the correct ordering of the answer categories (by default on alphabetic order)
+data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
+
+# Create the plot
+ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+```
 
 
 
@@ -838,6 +918,48 @@ Beliefs_AppAdoption
 SI1_UTAUT
 SI2_UTAUT
 Beliefs_civicduty
+
+
+```{r Beliefsappadoption, echo=FALSE, fig.width=7, fig.height=2, fig.cap=""}
+
+```
+
+
+```{r Socialnormscivicduty, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Sociale normen"}
+# Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
+graph_variablenames = c("SI1_UTAUT", 
+                        "SI2_UTAUT",
+                        "Beliefs_civicduty")
+graph_questionlabels = c("Veel mensen in mijn\n omgeving gebruiken\n de CoronaMelder", 
+                         "Mensen in mijn directe\n omgeving vinden\n dat ik de CoronaMelder\n moet gebruiken",
+                         "Het gebruiken van de\n CoronaMelder maakt je\n een goede burger"); 
+
+# These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
+color_palette = my_palette7
+# Order of the question categories: first = most green, last = most red # Check if the answer categories match with the codebook (e.g, sometimes also 'weet ik niet is one of the answeroptions')
+graph_answercategories = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
+
+# Create a dataframe for the plot
+#First only keep the variables you wish to keep. Note: nomem_enc is the participant id
+data_graph_wideformat = select(data, nomem_encr, all_of(graph_variablenames))
+
+#Convert it to long format
+data_graph_longformat = melt(data_graph_wideformat, id.vars = c('nomem_encr'), measure.vars = graph_variablenames)
+
+# Set the correct ordering of the questions (by default the first variable is placed on the bottom)
+data_graph_longformat$variable <- factor(data_graph_longformat$variable,levels = rev(graph_variablenames))
+
+# Also invert the order of the question labels (as default is that the first element of the vector is placed on the bottom)
+graph_questionlabels = rev(graph_questionlabels)
+
+# Set the correct ordering of the answer categories (by default on alphabetic order)
+data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
+
+# Create the plot
+ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+```
+
 
 
 ### Privacy en dataveiligheid 
@@ -1051,13 +1173,11 @@ HBM_ barriers _GP
 ```{r HBMbenefits, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Persoonlijke voordelen om adviezen op te volgen"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
-graph_variablenames = c("HBM_perceivedbenefits_CoronaMelder", 
-                        "HBM_perceivedbenefits_Test", 
+graph_variablenames = c("HBM_perceivedbenefits_Test", 
                         "HBM_perceivedbenefits_Quarantaine", 
                         "HBM_perceivedbenefits_Visits",
                         "HBM_perceivedbenefits_GP")
-graph_questionlabels = c("... de CoronaMelder te gebruiken", 
-                         "... te bellen voor een test", 
+graph_questionlabels = c("... te bellen voor een test", 
                          "... zo lang thuis te blijven\n als wordt geadviseerd", 
                          "... geen bezoek te ontvangen",
                          "... de huisarts te bellen"); 
