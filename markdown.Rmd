@@ -197,8 +197,45 @@ Behavior_AdherenceGeneralMeasures_avoidbusyplaces
 Behavior_AdherenceGeneralMeasures_quarantaine
 Corona_complaints + Behavior_AdherenceGeneralMeasures_quarantaine
 
-```{r AdherenceGen, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot naleving gedragsregels voor de komende 2 maanden"}
+```{r adherence general measures, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Naleving algemene gedragsregels"}
 
+# Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
+graph_variablenames = c("Intention_AdherenceGeneralMeasures_handwashing", 
+                        "Intention_AdherenceGeneralMeasures_distance", 
+                        "Intention_AdherenceGeneralMeasures_avoidbusyplaces", 
+                        "Intention_AdherenceGeneralMeasures_quarantaine")
+graph_questionlabels = c("... mijn handen regelmatig te wassen", 
+                         "... 1,5 meter afstand te houden van\n mensen buiten mijn huishouden", 
+                         "... drukke plekken te vermijden", 
+                         "... thuis te blijven als ik last heb\n van klachten die passen bij het coronavirus"); 
+
+# These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
+color_palette = my_palette7
+# Order of the question categories: first = most green, last = most red # Check if the answer categories match with the codebook (e.g, sometimes also 'weet ik niet is one of the answeroptions')
+graph_answercategories = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
+
+# Create a dataframe for the plot
+# Select only the current users
+data_selected = data[ which(data$Behavior_UTAUT=='Ik gebruik de CoronaMelder app op dit moment'
+), ]
+#First only keep the variables you wish to keep. Note: nomem_enc is the participant id. 
+data_graph_wideformat = select(data_selected, nomem_encr, all_of(graph_variablenames))
+
+#Convert it to long format
+data_graph_longformat = melt(data_graph_wideformat, id.vars = c('nomem_encr'), measure.vars = graph_variablenames)
+
+# Set the correct ordering of the questions (by default the first variable is placed on the bottom)
+# It is not needed to reverse the order of the questionlabels. 
+data_graph_longformat$variable <- factor(data_graph_longformat$variable,levels = rev(graph_variablenames))
+
+# Also invert the order of the question labels (as default is that the first element of the vector is placed on the bottom)
+graph_questionlabels = rev(graph_questionlabels)
+
+# Set the correct ordering of the answer categories (by default on alphabetic order)
+data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
+
+# Create the plot
+ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))+ ggtitle("Ik ben van plan komende twee maanden...") + theme(plot.title = element_text(size=11))
 
 ```
 
@@ -211,11 +248,12 @@ Intention_AdherenceGeneralMeasures_avoidbusyplaces
 Intention_AdherenceGeneralMeasures_quarantaine
 
 
+
 ### Algemene opvattingen over het coronavirus
 
 
 #### Complottheorieën
-```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Geloof in complottheorien"}
+```{r complot, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Geloof in complottheorien"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Beliefs_Conspiracy1", 
                         "Beliefs_Conspiracy2")
@@ -325,7 +363,7 @@ data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph
 ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 ```
 
-```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - Niet gebruikers"}
+```{r perceived susceptibility and severity, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - Niet gebruikers"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("HBM_PSus_self1", 
