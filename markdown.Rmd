@@ -175,7 +175,6 @@ data_graph_wideformat = select(data, nomem_encr, all_of(graph_variablenames))
 data_graph_longformat = melt(data_graph_wideformat, id.vars = c('nomem_encr'), measure.vars = graph_variablenames)
 
 # Set the correct ordering of the questions (by default the first variable is placed on the bottom)
-# It is not needed to reverse the order of the questionlabels. 
 data_graph_longformat$variable <- factor(data_graph_longformat$variable,levels = rev(graph_variablenames))
 
 # Also invert the order of the question labels (as default is that the first element of the vector is placed on the bottom)
@@ -567,6 +566,8 @@ graph_questionlabels = c("Bellen om coronatest\n aan te vragen",
                          "Geen bezoek ontvangen", 
                          "De huisarts bellen"); 
 
+# These questions have 8 answer categories: Helemaal mee eens - Helemaal mee oneens and no use. The following color palette should be used:
+color_palette = my_palette_nonuse
 # Order of the question categories: first = most green, last = most red
 graph_answercategories = c("Ik zou de CoronaMelder app niet gebruiken", "Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
 
@@ -578,15 +579,16 @@ data_graph_wideformat = select(data, nomem_encr, all_of(graph_variablenames))
 data_graph_longformat = melt(data_graph_wideformat, id.vars = c('nomem_encr'), measure.vars = graph_variablenames)
 
 # Set the correct ordering of the questions (by default the first variable is placed on the bottom)
-# It is not needed to reverse the order of the questionlabels. 
 data_graph_longformat$variable <- factor(data_graph_longformat$variable,levels = rev(graph_variablenames))
+
+# Also invert the order of the question labels (as default is that the first element of the vector is placed on the bottom)
+graph_questionlabels = rev(graph_questionlabels)
 
 # Set the correct ordering of the answer categories (by default on alphabetic order)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
-View(data_graph_longformat)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette_nonuse) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 ```
 
@@ -602,6 +604,8 @@ graph_questionlabels = c("Bellen om coronatest\n aan te vragen",
                          "Geen bezoek ontvangen", 
                          "De huisarts bellen"); 
 
+# These questions have 8 answer categories: Helemaal mee eens - Helemaal mee oneens and no use. The following color palette should be used:
+color_palette = my_palette_nonuse
 # Order of the question categories: first = most green, last = most red
 graph_answercategories = c("Ik zou de CoronaMelder app niet gebruiken", "Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
 
@@ -613,18 +617,19 @@ data_graph_wideformat = select(data, nomem_encr, all_of(graph_variablenames))
 data_graph_longformat = melt(data_graph_wideformat, id.vars = c('nomem_encr'), measure.vars = graph_variablenames)
 
 # Set the correct ordering of the questions (by default the first variable is placed on the bottom)
-# It is not needed to reverse the order of the questionlabels. 
 data_graph_longformat$variable <- factor(data_graph_longformat$variable,levels = rev(graph_variablenames))
+
+# Also invert the order of the question labels (as default is that the first element of the vector is placed on the bottom)
+graph_questionlabels = rev(graph_questionlabels)
 
 # Set the correct ordering of the answer categories (by default on alphabetic order)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
-View(data_graph_longformat)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette_nonuse) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette_nonuse) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 ```
 
@@ -662,6 +667,8 @@ Intention_reportinfection
 graph_variablenames = c("Intention_reportinfection")
 graph_questionlabels = c("Als ik besmet ben, \n ben ik van plan om dit door\n  te geven via de CoronaMelder app"); 
 
+# These questions have 8 answer categories: Helemaal mee eens - Helemaal mee oneens and no use. The following color palette should be used:
+color_palette = my_palette_nonuse
 # Order of the question categories: first = most green, last = most red
 graph_answercategories = c("Ik zou de CoronaMelder app niet gebruiken", "Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
 
@@ -673,17 +680,16 @@ data_graph_wideformat = select(data, nomem_encr, all_of(graph_variablenames))
 data_graph_longformat = melt(data_graph_wideformat, id.vars = c('nomem_encr'), measure.vars = graph_variablenames)
 
 # Set the correct ordering of the questions (by default the first variable is placed on the bottom)
-# It is not needed to reverse the order of the questionlabels. 
 data_graph_longformat$variable <- factor(data_graph_longformat$variable,levels = rev(graph_variablenames))
+
+# Also invert the order of the question labels (as default is that the first element of the vector is placed on the bottom)
+graph_questionlabels = rev(graph_questionlabels)
 
 # Set the correct ordering of the answer categories (by default on alphabetic order)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
-View(data_graph_longformat)
 
 # Create the plot
 ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette_nonuse) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
-
-
 ```
 
 
