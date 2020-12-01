@@ -208,7 +208,7 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
   # Add to new dataframe
-  data_table[graph_variablenames[idx]] <- plyr::count(data_graph_wideformat[graph_variablenames[idx]])[2]
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
   # Add correct mapping to column headings
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
@@ -252,8 +252,17 @@ ft <- padding(ft, padding = 5, part = "footer")
 # Basic autofit does not work well with Word, found this code below
 # but it seems to make all columns of equal size (7 inch / number of columns?)
 # Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
 ft_out <- ft %>% autofit()
-ft_out <- width(ft_out, width = dim(ft_out)$widths*7 /(flextable_dim(ft_out)$widths))
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
 
 ft_out
 ```
@@ -264,7 +273,7 @@ Behavior_AdherenceGeneralMeasures_avoidbusyplaces
 Behavior_AdherenceGeneralMeasures_quarantaine
 Corona_complaints + Behavior_AdherenceGeneralMeasures_quarantaine
 
-```{r behavioradhgenmeasures, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Naleving algemene gedragsregels"}
+```{r behavioradhgenmeasures, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Naleving algemene gedragsregels", tab.cap="Naleving algemene gedragsregels"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Behavior_AdherenceGeneralMeasures_handwashing", 
@@ -299,6 +308,78 @@ data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph
 # Create the plot
 ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle(plot_title) + theme(plot.title = element_text(size=11))
 
+# Create the table. Step 1: new data frame containing counts
+table_answercategories = rev(graph_answercategories)
+data_table = data.frame(table_answercategories)
+
+# We need one extra (empty) column label for the row with the possible values
+table_questionlabels = list()
+table_questionlabels["table_answercategories"] <- ""
+
+# We also need the 'unreversed' question labels ;)
+graph_questionlabels_unrev <- rev(graph_questionlabels)
+
+# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
+# and add the correct labels for column headings
+for(idx in 1:length(graph_variablenames)) {
+  # Add to new dataframe
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
+  
+  # Add correct mapping to column headings
+  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
+}
+
+# Sort properly -- NOTE: does not work yet?
+data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+# Build the basic table
+ft <- flextable(
+  head(data_table, n = nrow(data_table))
+)
+
+# Header labels
+ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal")
+
+# Percentages and totals
+for(colname in colnames(data_table)) {
+  if(colname != "table_answercategories") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
+    
+    # Add total to footer
+    tablecolumn = paste("data_table$", colname)
+    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
+
+ft_out
 ```
 
 ```{r coronacomplaintsquarantaine, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Naleving algemene gedragsregels"}
@@ -316,7 +397,7 @@ Intention_AdherenceGeneralMeasures_distance
 Intention_AdherenceGeneralMeasures_avoidbusyplaces
 Intention_AdherenceGeneralMeasures_quarantaine
 
-```{r intentionadhgenmeasures, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Naleving algemene gedragsregels"}
+```{r intentionadhgenmeasures, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot naleving algemene gedragsregels", tab.cap="Intentie tot naleving algemene gedragsregels"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Intention_AdherenceGeneralMeasures_handwashing", 
@@ -352,6 +433,78 @@ data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph
 # Create the plot
 ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle(plot_title) + theme(plot.title = element_text(size=11))
 
+# Create the table. Step 1: new data frame containing counts
+table_answercategories = rev(graph_answercategories)
+data_table = data.frame(table_answercategories)
+
+# We need one extra (empty) column label for the row with the possible values
+table_questionlabels = list()
+table_questionlabels["table_answercategories"] <- ""
+
+# We also need the 'unreversed' question labels ;)
+graph_questionlabels_unrev <- rev(graph_questionlabels)
+
+# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
+# and add the correct labels for column headings
+for(idx in 1:length(graph_variablenames)) {
+  # Add to new dataframe
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
+  
+  # Add correct mapping to column headings
+  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
+}
+
+# Sort properly -- NOTE: does not work yet?
+data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+# Build the basic table
+ft <- flextable(
+  head(data_table, n = nrow(data_table))
+)
+
+# Header labels
+ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal")
+
+# Percentages and totals
+for(colname in colnames(data_table)) {
+  if(colname != "table_answercategories") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
+    
+    # Add total to footer
+    tablecolumn = paste("data_table$", colname)
+    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
+
+ft_out
 ```
 
 
@@ -361,7 +514,7 @@ ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + g
 
 
 #### Complottheorieën
-```{r complot, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Geloof in complottheorien"}
+```{r complot, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Geloof in complottheorien", tab.cap="Geloof in complottheorien"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Beliefs_Conspiracy1", 
                         "Beliefs_Conspiracy2")
@@ -399,6 +552,78 @@ ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + g
 
 #table(data$Beliefs_Conspiracy1)
 
+# Create the table. Step 1: new data frame containing counts
+table_answercategories = rev(graph_answercategories)
+data_table = data.frame(table_answercategories)
+
+# We need one extra (empty) column label for the row with the possible values
+table_questionlabels = list()
+table_questionlabels["table_answercategories"] <- ""
+
+# We also need the 'unreversed' question labels ;)
+graph_questionlabels_unrev <- rev(graph_questionlabels)
+
+# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
+# and add the correct labels for column headings
+for(idx in 1:length(graph_variablenames)) {
+  # Add to new dataframe
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
+  
+  # Add correct mapping to column headings
+  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
+}
+
+# Sort properly -- NOTE: does not work yet?
+data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+# Build the basic table
+ft <- flextable(
+  head(data_table, n = nrow(data_table))
+)
+
+# Header labels
+ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal")
+
+# Percentages and totals
+for(colname in colnames(data_table)) {
+  if(colname != "table_answercategories") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
+    
+    # Add total to footer
+    tablecolumn = paste("data_table$", colname)
+    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
+
+ft_out
 ```
 
 #### Vertrouwen in aanpak van de overheid
@@ -430,7 +655,7 @@ ggplot(data=data, aes(fill=Awareness, x=geslacht)) + geom_bar(position=position_
 Van alle respondenten gaf `r round(nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))/nrow(data)*100, digits = 1)`% aan dat hij/zij de CoronaMelder op dit moment gebruikt en `r round(nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt'))/nrow(data)*100, digits = 1)`% geeft aan de CoronaMelder niet te gebruiken. Slechts `r round(nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer'))/nrow(data)*100, digits = 1)`% gaf aan de CoronaMelder in het verleden gebruikt te hebben maar op dit moment niet meer. 
 
 #### Vergelijking gebruikers en niet gebruikers
-```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - Gebruikers"}
+```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - Gebruikers", tab.cap="Waargenomen ernst en vatbaarheid - Gebruikers"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("HBM_PSus_self1", 
@@ -469,9 +694,82 @@ data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph
 
 # Create the plot
 ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+# Create the table. Step 1: new data frame containing counts
+table_answercategories = rev(graph_answercategories)
+data_table = data.frame(table_answercategories)
+
+# We need one extra (empty) column label for the row with the possible values
+table_questionlabels = list()
+table_questionlabels["table_answercategories"] <- ""
+
+# We also need the 'unreversed' question labels ;)
+graph_questionlabels_unrev <- rev(graph_questionlabels)
+
+# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
+# and add the correct labels for column headings
+for(idx in 1:length(graph_variablenames)) {
+  # Add to new dataframe
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
+  
+  # Add correct mapping to column headings
+  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
+}
+
+# Sort properly -- NOTE: does not work yet?
+data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+# Build the basic table
+ft <- flextable(
+  head(data_table, n = nrow(data_table))
+)
+
+# Header labels
+ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal")
+
+# Percentages and totals
+for(colname in colnames(data_table)) {
+  if(colname != "table_answercategories") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
+    
+    # Add total to footer
+    tablecolumn = paste("data_table$", colname)
+    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
+
+ft_out
 ```
 
-```{r perceivedsuscsev, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - Niet gebruikers"}
+```{r perceivedsuscsev, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - Niet gebruikers", tab.cap="Waargenomen ernst en vatbaarheid - Niet gebruikers"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("HBM_PSus_self1", 
@@ -510,6 +808,79 @@ data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph
 
 # Create the plot
 ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+# Create the table. Step 1: new data frame containing counts
+table_answercategories = rev(graph_answercategories)
+data_table = data.frame(table_answercategories)
+
+# We need one extra (empty) column label for the row with the possible values
+table_questionlabels = list()
+table_questionlabels["table_answercategories"] <- ""
+
+# We also need the 'unreversed' question labels ;)
+graph_questionlabels_unrev <- rev(graph_questionlabels)
+
+# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
+# and add the correct labels for column headings
+for(idx in 1:length(graph_variablenames)) {
+  # Add to new dataframe
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
+  
+  # Add correct mapping to column headings
+  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
+}
+
+# Sort properly -- NOTE: does not work yet?
+data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+# Build the basic table
+ft <- flextable(
+  head(data_table, n = nrow(data_table))
+)
+
+# Header labels
+ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal")
+
+# Percentages and totals
+for(colname in colnames(data_table)) {
+  if(colname != "table_answercategories") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
+    
+    # Add total to footer
+    tablecolumn = paste("data_table$", colname)
+    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
+
+ft_out
 ```
 
 ### Intentie tot (blijvend) gebruik CoronaMelder
@@ -517,7 +888,7 @@ Er werd gevraagd of de respondenten de intentie hadden om de CoronaMelder de kom
 
 Van de respondenten die de CoronaMelder op dit moment al gebruiken, gaf een overgrote meerderheid (`r round((nrow(filter(data, (BI1b_UTAUT == 'Helemaal mee eens'| BI1b_UTAUT == 'Mee eens'| BI1b_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)`%) aan van plan te zijn de CoronaMelder te blijven gebruiken in de komende 2 maanden. Een kleine hoeveelheid respondenten gaf aan hier neutraal in te staan (`r round((nrow(filter(data, (BI1b_UTAUT == 'Neutraal') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)`%) Slechts `r round((nrow(filter(data, (BI1b_UTAUT == 'Helemaal mee oneens'| BI1b_UTAUT == 'Oneens'| BI1b_UTAUT == 'Een beetje oneens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)` gaf aan niet van plan te zijn de CoronaMelder te blijven gebruiken. 
 
-```{r intentiontousenonusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot gebruik bij respondenten die de CoronaMelder op dit moment niet gebruiken"}
+```{r intentiontousenonusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot gebruik bij respondenten die de CoronaMelder op dit moment niet gebruiken", tab.cap="Intentie tot gebruik bij respondenten die de CoronaMelder op dit moment niet gebruiken"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("BI1a_UTAUT", 
@@ -553,10 +924,82 @@ data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph
 # Create the plot
 ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
+# Create the table. Step 1: new data frame containing counts
+table_answercategories = rev(graph_answercategories)
+data_table = data.frame(table_answercategories)
+
+# We need one extra (empty) column label for the row with the possible values
+table_questionlabels = list()
+table_questionlabels["table_answercategories"] <- ""
+
+# We also need the 'unreversed' question labels ;)
+graph_questionlabels_unrev <- rev(graph_questionlabels)
+
+# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
+# and add the correct labels for column headings
+for(idx in 1:length(graph_variablenames)) {
+  # Add to new dataframe
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
+  
+  # Add correct mapping to column headings
+  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
+}
+
+# Sort properly -- NOTE: does not work yet?
+data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+# Build the basic table
+ft <- flextable(
+  head(data_table, n = nrow(data_table))
+)
+
+# Header labels
+ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal")
+
+# Percentages and totals
+for(colname in colnames(data_table)) {
+  if(colname != "table_answercategories") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
+    
+    # Add total to footer
+    tablecolumn = paste("data_table$", colname)
+    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
+
+ft_out
 ```
 
 
-```{r intentiontousecurrentusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot gebruik bij respondenten die de CoronaMelder op dit moment al gebruiken"}
+```{r intentiontousecurrentusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot gebruik bij respondenten die de CoronaMelder op dit moment al gebruiken", tab.cap="Intentie tot gebruik bij respondenten die de CoronaMelder op dit moment al gebruiken"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("BI1b_UTAUT", 
@@ -591,6 +1034,79 @@ data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph
 
 # Create the plot
 ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+# Create the table. Step 1: new data frame containing counts
+table_answercategories = rev(graph_answercategories)
+data_table = data.frame(table_answercategories)
+
+# We need one extra (empty) column label for the row with the possible values
+table_questionlabels = list()
+table_questionlabels["table_answercategories"] <- ""
+
+# We also need the 'unreversed' question labels ;)
+graph_questionlabels_unrev <- rev(graph_questionlabels)
+
+# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
+# and add the correct labels for column headings
+for(idx in 1:length(graph_variablenames)) {
+  # Add to new dataframe
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
+  
+  # Add correct mapping to column headings
+  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
+}
+
+# Sort properly -- NOTE: does not work yet?
+data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+# Build the basic table
+ft <- flextable(
+  head(data_table, n = nrow(data_table))
+)
+
+# Header labels
+ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal")
+
+# Percentages and totals
+for(colname in colnames(data_table)) {
+  if(colname != "table_answercategories") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
+    
+    # Add total to footer
+    tablecolumn = paste("data_table$", colname)
+    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
+
+ft_out
 ```
 
 
@@ -642,7 +1158,7 @@ Allemaal opsplitsen naar 1) gebruikers vs niet gebruikers en 2) Van de niet gebr
 
 
 ### Verwachte effectiviteit CoronaMelder in bestrijding coronavirus
-```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Verwachte effeciviteit CoronaMelder"}
+```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Verwachte effeciviteit CoronaMelder", tab.cap="Verwachte effeciviteit CoronaMelder"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("PE1_UTAUT", 
@@ -677,6 +1193,78 @@ data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph
 # Create the plot
 ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
+# Create the table. Step 1: new data frame containing counts
+table_answercategories = rev(graph_answercategories)
+data_table = data.frame(table_answercategories)
+
+# We need one extra (empty) column label for the row with the possible values
+table_questionlabels = list()
+table_questionlabels["table_answercategories"] <- ""
+
+# We also need the 'unreversed' question labels ;)
+graph_questionlabels_unrev <- rev(graph_questionlabels)
+
+# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
+# and add the correct labels for column headings
+for(idx in 1:length(graph_variablenames)) {
+  # Add to new dataframe
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
+  
+  # Add correct mapping to column headings
+  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
+}
+
+# Sort properly -- NOTE: does not work yet?
+data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+# Build the basic table
+ft <- flextable(
+  head(data_table, n = nrow(data_table))
+)
+
+# Header labels
+ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal")
+
+# Percentages and totals
+for(colname in colnames(data_table)) {
+  if(colname != "table_answercategories") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
+    
+    # Add total to footer
+    tablecolumn = paste("data_table$", colname)
+    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
+
+ft_out
 ```
 De meeste respondenten (`r round(nrow(filter(data, Beliefs_ResponseefficasyOther == '76-90%'))/nrow(data)*100, digits = 1)`%) dachten dat 76-90% van de Nederlandse bevolking de CoronaMelder moet gebruiken om de verspreiding van het coronavirus tegen te gaan. In totaal dacht `r round(((nrow(filter(data, Beliefs_ResponseefficasyOther == '51-75%')) + nrow(filter(data, Beliefs_ResponseefficasyOther == '76-90%')) + nrow(filter(data, Beliefs_ResponseefficasyOther == '91-100%')))/nrow(data)*100), digits = 1)`% van de respondenten dat meer dan 50% van de Nederlandse bevolking de CoronaMelder app moet gebruiken om effectief te zijn. Het aandeel respondenten dat aan gaf niet te weten hoeveel mensen de CoronaMelder app zouden moeten gebruiken is `r round(nrow(filter(data, Beliefs_ResponseefficasyOther == 'Weet ik niet'))/nrow(data)*100, digits = 1)`%. 
 
@@ -693,7 +1281,7 @@ text(cex=0.8, x=pl+0.25, y=-25, labels=labs, xpd=TRUE, srt=45, pos=2)
 
 Beliefs_technologyperformance
 
-```{r technology, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Geloof in techniek"}
+```{r technology, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Geloof in techniek", tab.cap="Geloof in techniek"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Beliefs_technologyperformance")
                         
@@ -728,13 +1316,85 @@ ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + g
 # To check: also create the plot with variable labels
 #ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
+# Create the table. Step 1: new data frame containing counts
+table_answercategories = rev(graph_answercategories)
+data_table = data.frame(table_answercategories)
+
+# We need one extra (empty) column label for the row with the possible values
+table_questionlabels = list()
+table_questionlabels["table_answercategories"] <- ""
+
+# We also need the 'unreversed' question labels ;)
+graph_questionlabels_unrev <- rev(graph_questionlabels)
+
+# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
+# and add the correct labels for column headings
+for(idx in 1:length(graph_variablenames)) {
+  # Add to new dataframe
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
+  
+  # Add correct mapping to column headings
+  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
+}
+
+# Sort properly -- NOTE: does not work yet?
+data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+# Build the basic table
+ft <- flextable(
+  head(data_table, n = nrow(data_table))
+)
+
+# Header labels
+ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal")
+
+# Percentages and totals
+for(colname in colnames(data_table)) {
+  if(colname != "table_answercategories") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
+    
+    # Add total to footer
+    tablecolumn = paste("data_table$", colname)
+    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
+
+ft_out
 ```
 
 ### Maatschappelijke gevolgen gebruik CoronaMelder
 
 Beliefs_benefiteconomic
 
-```{r beneficteconomic, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Geloof dat de CoronaMelder de Nederlandse economie helpt"}
+```{r beneficteconomic, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Geloof dat de CoronaMelder de Nederlandse economie helpt", tab.cap="Geloof dat de CoronaMelder de Nederlandse economie helpt"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Beliefs_benefiteconomic")
@@ -763,6 +1423,79 @@ data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph
 
 # Create the plot
 ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) 
+
+# Create the table. Step 1: new data frame containing counts
+table_answercategories = rev(graph_answercategories)
+data_table = data.frame(table_answercategories)
+
+# We need one extra (empty) column label for the row with the possible values
+table_questionlabels = list()
+table_questionlabels["table_answercategories"] <- ""
+
+# We also need the 'unreversed' question labels ;)
+graph_questionlabels_unrev <- rev(graph_questionlabels)
+
+# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
+# and add the correct labels for column headings
+for(idx in 1:length(graph_variablenames)) {
+  # Add to new dataframe
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
+  
+  # Add correct mapping to column headings
+  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
+}
+
+# Sort properly -- NOTE: does not work yet?
+data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+# Build the basic table
+ft <- flextable(
+  head(data_table, n = nrow(data_table))
+)
+
+# Header labels
+ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal")
+
+# Percentages and totals
+for(colname in colnames(data_table)) {
+  if(colname != "table_answercategories") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
+    
+    # Add total to footer
+    tablecolumn = paste("data_table$", colname)
+    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
+
+ft_out
 ```
 
 
@@ -785,7 +1518,7 @@ HBM_selfefficacy_CoronaMelder
 FC1_UTAUT
 FC2_UTAUT
 
-```{r , echo=FALSE, fig.width=7, fig.height=2, fig.cap=""}
+```{r , echo=FALSE, fig.width=7, fig.height=2, fig.cap="", tab.cap=""}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("FC1_UTAUT", 
@@ -817,6 +1550,78 @@ data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph
 # Create the plot
 ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
+# Create the table. Step 1: new data frame containing counts
+table_answercategories = rev(graph_answercategories)
+data_table = data.frame(table_answercategories)
+
+# We need one extra (empty) column label for the row with the possible values
+table_questionlabels = list()
+table_questionlabels["table_answercategories"] <- ""
+
+# We also need the 'unreversed' question labels ;)
+graph_questionlabels_unrev <- rev(graph_questionlabels)
+
+# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
+# and add the correct labels for column headings
+for(idx in 1:length(graph_variablenames)) {
+  # Add to new dataframe
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
+  
+  # Add correct mapping to column headings
+  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
+}
+
+# Sort properly -- NOTE: does not work yet?
+data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+# Build the basic table
+ft <- flextable(
+  head(data_table, n = nrow(data_table))
+)
+
+# Header labels
+ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal")
+
+# Percentages and totals
+for(colname in colnames(data_table)) {
+  if(colname != "table_answercategories") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
+    
+    # Add total to footer
+    tablecolumn = paste("data_table$", colname)
+    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
+
+ft_out
 ```
 
 
@@ -825,7 +1630,7 @@ ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + g
 HBM_ barriers _CoronaMelder 
 Beliefs_voluntariness
 
-```{r Barriersvoluntariness, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Persoonlijke nadelen en verplichting tot gebruik"}
+```{r Barriersvoluntariness, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Persoonlijke nadelen en verplichting tot gebruik", tab.cap="Persoonlijke nadelen en verplichting tot gebruik"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("HBM_perceivedbenefits_CoronaMelder", 
                         "Beliefs_voluntariness")
@@ -856,6 +1661,78 @@ data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph
 # Create the plot
 ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
+# Create the table. Step 1: new data frame containing counts
+table_answercategories = rev(graph_answercategories)
+data_table = data.frame(table_answercategories)
+
+# We need one extra (empty) column label for the row with the possible values
+table_questionlabels = list()
+table_questionlabels["table_answercategories"] <- ""
+
+# We also need the 'unreversed' question labels ;)
+graph_questionlabels_unrev <- rev(graph_questionlabels)
+
+# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
+# and add the correct labels for column headings
+for(idx in 1:length(graph_variablenames)) {
+  # Add to new dataframe
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
+  
+  # Add correct mapping to column headings
+  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
+}
+
+# Sort properly -- NOTE: does not work yet?
+data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+# Build the basic table
+ft <- flextable(
+  head(data_table, n = nrow(data_table))
+)
+
+# Header labels
+ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal")
+
+# Percentages and totals
+for(colname in colnames(data_table)) {
+  if(colname != "table_answercategories") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
+    
+    # Add total to footer
+    tablecolumn = paste("data_table$", colname)
+    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
+
+ft_out
 ```
 
 
@@ -864,7 +1741,7 @@ ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + g
 Beliefs_fear
 Beliefs_notificationfear
 
-```{r Affective, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Affectieve reacties"}
+```{r Affective, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Affectieve reacties", tab.cap="Affectieve reacties"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Beliefs_fear", 
                         "Beliefs_notificationfear")
@@ -895,6 +1772,78 @@ data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph
 # Create the plot
 ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
+# Create the table. Step 1: new data frame containing counts
+table_answercategories = rev(graph_answercategories)
+data_table = data.frame(table_answercategories)
+
+# We need one extra (empty) column label for the row with the possible values
+table_questionlabels = list()
+table_questionlabels["table_answercategories"] <- ""
+
+# We also need the 'unreversed' question labels ;)
+graph_questionlabels_unrev <- rev(graph_questionlabels)
+
+# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
+# and add the correct labels for column headings
+for(idx in 1:length(graph_variablenames)) {
+  # Add to new dataframe
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
+  
+  # Add correct mapping to column headings
+  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
+}
+
+# Sort properly -- NOTE: does not work yet?
+data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+# Build the basic table
+ft <- flextable(
+  head(data_table, n = nrow(data_table))
+)
+
+# Header labels
+ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal")
+
+# Percentages and totals
+for(colname in colnames(data_table)) {
+  if(colname != "table_answercategories") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
+    
+    # Add total to footer
+    tablecolumn = paste("data_table$", colname)
+    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
+
+ft_out
 ```
 
 
@@ -913,7 +1862,7 @@ Beliefs_civicduty
 ```
 
 
-```{r Socialnormscivicduty, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Sociale normen"}
+```{r Socialnormscivicduty, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Sociale normen", tab.cap="Sociale normen"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("SI1_UTAUT", 
                         "SI2_UTAUT",
@@ -946,6 +1895,78 @@ data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph
 # Create the plot
 ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
+# Create the table. Step 1: new data frame containing counts
+table_answercategories = rev(graph_answercategories)
+data_table = data.frame(table_answercategories)
+
+# We need one extra (empty) column label for the row with the possible values
+table_questionlabels = list()
+table_questionlabels["table_answercategories"] <- ""
+
+# We also need the 'unreversed' question labels ;)
+graph_questionlabels_unrev <- rev(graph_questionlabels)
+
+# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
+# and add the correct labels for column headings
+for(idx in 1:length(graph_variablenames)) {
+  # Add to new dataframe
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
+  
+  # Add correct mapping to column headings
+  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
+}
+
+# Sort properly -- NOTE: does not work yet?
+data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+# Build the basic table
+ft <- flextable(
+  head(data_table, n = nrow(data_table))
+)
+
+# Header labels
+ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal")
+
+# Percentages and totals
+for(colname in colnames(data_table)) {
+  if(colname != "table_answercategories") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
+    
+    # Add total to footer
+    tablecolumn = paste("data_table$", colname)
+    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
+
+ft_out
 ```
 
 
@@ -1068,7 +2089,7 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
   # Add to new dataframe
-  data_table[graph_variablenames[idx]] <- plyr::count(data_graph_wideformat[graph_variablenames[idx]])[2]
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
   # Add correct mapping to column headings
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
@@ -1179,7 +2200,7 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
   # Add to new dataframe
-  data_table[graph_variablenames[idx]] <- plyr::count(data_graph_wideformat[graph_variablenames[idx]])[2]
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
   # Add correct mapping to column headings
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
@@ -1247,7 +2268,7 @@ HBM_ selfefficacy _Quarantaine
 HBM_ selfefficacy _Visits
 HBM_ selfefficacy _GP
 
-```{r adherencenotificationsselfefficacy, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Eigen effectiviteit om adviezen op te volgen"}
+```{r adherencenotificationsselfefficacy, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Eigen effectiviteit om adviezen op te volgen", tab.cap="Eigen effectiviteit om adviezen op te volgen"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("HBM_selfefficacy_CoronaMelder", 
@@ -1288,6 +2309,71 @@ ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + g
 # To check: also create the plot with variable labels
 #ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
+# Create the table. Step 1: new data frame containing counts
+table_answercategories = rev(graph_answercategories)
+data_table = data.frame(table_answercategories)
+
+# We need one extra (empty) column label for the row with the possible values
+table_questionlabels = list()
+table_questionlabels["table_answercategories"] <- ""
+
+# We also need the 'unreversed' question labels ;)
+graph_questionlabels_unrev <- rev(graph_questionlabels)
+
+# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
+# and add the correct labels for column headings
+for(idx in 1:length(graph_variablenames)) {
+  # Add to new dataframe
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
+  
+  # Add correct mapping to column headings
+  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
+}
+
+# Sort properly -- NOTE: does not work yet?
+data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+# Build the basic table
+ft <- flextable(
+  head(data_table, n = nrow(data_table))
+)
+
+# Header labels
+ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal")
+
+# Percentages and totals
+for(colname in colnames(data_table)) {
+  if(colname != "table_answercategories") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
+    
+    # Add total to footer
+    tablecolumn = paste("data_table$", colname)
+    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
+
+ft_out
+
 ```
 
 
@@ -1304,7 +2390,7 @@ HBM_ barriers _Visits
 HBM_ barriers _GP
 
 
-```{r HBMbenefits, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Persoonlijke voordelen om adviezen op te volgen"}
+```{r HBMbenefits, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Persoonlijke voordelen om adviezen op te volgen", tab.cap="Persoonlijke voordelen om adviezen op te volgen"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("HBM_perceivedbenefits_Test", 
@@ -1340,9 +2426,73 @@ data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph
 # Create the plot
 ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle("Het heeft voor mij persoonlijke voordelen om...") + theme(plot.title = element_text(size=11))
 
+# Create the table. Step 1: new data frame containing counts
+table_answercategories = rev(graph_answercategories)
+data_table = data.frame(table_answercategories)
+
+# We need one extra (empty) column label for the row with the possible values
+table_questionlabels = list()
+table_questionlabels["table_answercategories"] <- ""
+
+# We also need the 'unreversed' question labels ;)
+graph_questionlabels_unrev <- rev(graph_questionlabels)
+
+# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
+# and add the correct labels for column headings
+for(idx in 1:length(graph_variablenames)) {
+  # Add to new dataframe
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
+  
+  # Add correct mapping to column headings
+  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
+}
+
+# Sort properly -- NOTE: does not work yet?
+data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+# Build the basic table
+ft <- flextable(
+  head(data_table, n = nrow(data_table))
+)
+
+# Header labels
+ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal")
+
+# Percentages and totals
+for(colname in colnames(data_table)) {
+  if(colname != "table_answercategories") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
+    
+    # Add total to footer
+    tablecolumn = paste("data_table$", colname)
+    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
+
+ft_out
 ```
 
-```{r HBMbarriers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Persoonlijke nadelen om adviezen op te volgen"}
+```{r HBMbarriers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Persoonlijke nadelen om adviezen op te volgen", tab.cap="Persoonlijke nadelen om adviezen op te volgen"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("HBM_barriers_CoronaMelder", 
@@ -1380,6 +2530,70 @@ data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph
 # Create the plot
 ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle("Het heeft voor mij persoonlijke nadelen om...") + theme(plot.title = element_text(size=11))
 
+# Create the table. Step 1: new data frame containing counts
+table_answercategories = rev(graph_answercategories)
+data_table = data.frame(table_answercategories)
+
+# We need one extra (empty) column label for the row with the possible values
+table_questionlabels = list()
+table_questionlabels["table_answercategories"] <- ""
+
+# We also need the 'unreversed' question labels ;)
+graph_questionlabels_unrev <- rev(graph_questionlabels)
+
+# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
+# and add the correct labels for column headings
+for(idx in 1:length(graph_variablenames)) {
+  # Add to new dataframe
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
+  
+  # Add correct mapping to column headings
+  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
+}
+
+# Sort properly -- NOTE: does not work yet?
+data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+# Build the basic table
+ft <- flextable(
+  head(data_table, n = nrow(data_table))
+)
+
+# Header labels
+ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal")
+
+# Percentages and totals
+for(colname in colnames(data_table)) {
+  if(colname != "table_answercategories") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
+    
+    # Add total to footer
+    tablecolumn = paste("data_table$", colname)
+    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
+
+ft_out
 ```
 
 
@@ -1387,7 +2601,7 @@ ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + g
 
 Intention_reportinfection
 
-```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot doorgeven GGD-sleutel"}
+```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot doorgeven GGD-sleutel", tab.cap="Intentie tot doorgeven GGD-sleutel"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Intention_reportinfection")
@@ -1416,6 +2630,71 @@ data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph
 
 # Create the plot
 ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette_nonuse) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+# Create the table. Step 1: new data frame containing counts
+table_answercategories = rev(graph_answercategories)
+data_table = data.frame(table_answercategories)
+
+# We need one extra (empty) column label for the row with the possible values
+table_questionlabels = list()
+table_questionlabels["table_answercategories"] <- ""
+
+# We also need the 'unreversed' question labels ;)
+graph_questionlabels_unrev <- rev(graph_questionlabels)
+
+# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
+# and add the correct labels for column headings
+for(idx in 1:length(graph_variablenames)) {
+  # Add to new dataframe
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
+  
+  # Add correct mapping to column headings
+  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
+}
+
+# Sort properly -- NOTE: does not work yet?
+data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+# Build the basic table
+ft <- flextable(
+  head(data_table, n = nrow(data_table))
+)
+
+# Header labels
+ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal")
+
+# Percentages and totals
+for(colname in colnames(data_table)) {
+  if(colname != "table_answercategories") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
+    
+    # Add total to footer
+    tablecolumn = paste("data_table$", colname)
+    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
+
+ft_out
 ```
 
 
