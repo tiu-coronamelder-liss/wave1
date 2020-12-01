@@ -79,11 +79,14 @@ cronbach(data[, c("HealthLiteracy1nr", "HealthLiteracy2n", "HealthLiteracy3nr")]
 \newpage
 # Achtergrond
 Het doel van dit onderzoek is om, over de tijd, de adoptie van de app en de (intentie tot) opvolging van de in de app gegeven adviezen te onderzoeken en te verklaren.
-\newpage
-# Methoden
-## Onderzoeksopzet
-In het kader van de evaluatie van de CoronaMelder wordt er een longitudinaal vragenlijstonderzoek uitgevoerd via het LISS panel (LISSdata.nl) waarbij er over een periode van 5 maanden 4 metingen zullen plaatsvinden. Het doel van dit onderzoek is om, over de tijd, de adoptie van de app en de (intentie tot) opvolging van de in de app gegeven adviezen te onderzoeken en te verklaren.
+\newpage  
+  
+# Methoden  
 
+## Onderzoeksopzet  
+
+In het kader van de evaluatie van de CoronaMelder wordt er een longitudinaal vragenlijstonderzoek uitgevoerd via het LISS panel (LISSdata.nl) waarbij er over een periode van 5 maanden 4 metingen zullen plaatsvinden. Het doel van dit onderzoek is om, over de tijd, de adoptie van de app en de (intentie tot) opvolging van de in de app gegeven adviezen te onderzoeken en te verklaren.
+  
 ## Beschrijving panel
 Het LISS panel is bij uitstek geschikt voor onderzoek waarbij een goede vertegenwoordiging van de Nederlandse bevolking van groot belang is. Het LISS panel is een probability-based (geen zelfselectie) panel dat iedere maand vragenlijsten invullen via internet. De adressensteekproeven voor de werving en de bijwervingen zijn getrokken uit het populatieregister in samenwerking met het CBS. Indien een huishouden niet beschikt over een breedbandverbinding en/of computer, dan stelt CentERdata de benodigde apparatuur in bruikleen beschikbaar om alsnog mee te kunnen doen aan het panel. Hiermee onderscheidt het LISS panel zich van andere online panels, waar niet-internetters ontbreken en waar panelleden de gelegenheid hebben om zichzelf aan te melden.  
 
@@ -259,6 +262,7 @@ Beliefs_TrustGovernment
 
 ## Bekendheid en gebruik
 ### Bekendheid met CoronaMelder
+In de vragenlijst werd gevraagd hoe bekend men (voor het openen van de vragenlijst) was met de CoronaMelder app. In totaal gaven `r round(((nrow(filter(data, Awareness == 'Heel erg bekend')) + nrow(filter(data, Awareness == 'Bekend')) + nrow(filter(data, Awareness == 'Redelijk bekend'))+ nrow(filter(data, Awareness == 'Een beetje bekend')))/nrow(data)*100), digits = 1)`% aan in meer of mindere mate bekend te zijn met de CoronaMelder (Tabel 1). Ruim 1 op de 10 `r round(nrow(filter(data, Awareness == 'Niet bekend'))/nrow(data)*100, digits = 1)`% gaf aan niet bekend te zijn met de CoronaMelder
 
 ```{r awarenessleeftijd, echo=FALSE}
 # Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
