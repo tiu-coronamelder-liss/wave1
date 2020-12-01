@@ -136,13 +136,18 @@ text(cex=0.8, x=pl+0.25, y=-25, labels=labs, xpd=TRUE, srt=45, pos=2)
 
 ### Gezondheidsmotivatie en risicoperceptie corona besmetting
 
-CoronaInfectionSelf
-CoronaInfectionSelfTest
-CoronaInfectionSelfTest_1
-CoronaInfectionSelfTest_2
+#### Besmetting met het coronavirus bij zichzelf en mensen in de directe omgeving
+In de vragenlijst werd gevraagd of de respondenten zelf of mensen in hun directe omgeving besmet zijn (geweest) met het coronavirus. In totaal gaven `r round(nrow(filter(data, CoronaInfectionSelf == 'Ja'))/nrow(data)*100, digits = 1)`% van de respondenten het antwoord *Ja* op de vraag of zij zelf dachten besmet te zijn (geweest) en `r round(nrow(filter(data, CoronaInfectionSelf == 'Nee'))/nrow(data)*100, digits = 1)`% antwoorde hierop *Nee*. Een subsantieel percentage (`r round(nrow(filter(data, CoronaInfectionSelf == 'Ik weet het niet'))/nrow(data)*100, digits = 1)`%) gaf aan dit niet te weten.
+
+Ook werd gevraagd of er wel eens een coronatest bij de respondent was afgenomen. Hierop antwoorde `r round(nrow(filter(data, CoronaInfectionSelfTest == 'Ja, een keer'))/nrow(data)*100, digits = 1)`% dat er 1 keer een test was afgenomen en `r round(nrow(filter(data, CoronaInfectionSelfTest == 'Ja, meerdere keren'))/nrow(data)*100, digits = 1)`% dat er al meerdere keren een test was afgenomen. De rest (`r round(nrow(filter(data, CoronaInfectionSelfTest == 'Nee'))/nrow(data)*100, digits = 1)`) gaf aan dat er nog nooit een test was afgenomen. 
+
+Van de mensen bij wie al minstens een keer een test was afgenomen (`r  nrow(filter(data, (CoronaInfectionSelfTest == 'Ja, een keer' | CoronaInfectionSelfTest == 'Ja, meerdere keren')))`), gaf  `r  round((nrow(filter(data, (CoronaInfectionSelfTest_1 == 'Ja' | CoronaInfectionSelfTest_2 == 'Ja'))) / nrow(filter(data, (CoronaInfectionSelfTest == 'Ja, een keer' | CoronaInfectionSelfTest == 'Ja, meerdere keren'))))*100, digits = 1)`% aan dat een van deze testen positief was, `r  round((nrow(filter(data, (CoronaInfectionSelfTest_1 == 'Nee' | CoronaInfectionSelfTest_2 == 'Nee'))) / nrow(filter(data, (CoronaInfectionSelfTest == 'Ja, een keer' | CoronaInfectionSelfTest == 'Ja, meerdere keren'))))*100, digits = 1)`% gaf aan dat de test negatief was en de rest (`r  round((nrow(filter(data, (CoronaInfectionSelfTest_1 == 'Weet ik (nog) niet' | CoronaInfectionSelfTest_2 == 'Weet ik (nog) niet'))) / nrow(filter(data, (CoronaInfectionSelfTest == 'Ja, een keer' | CoronaInfectionSelfTest == 'Ja, meerdere keren'))))*100, digits = 1)`%) gaf aan dit (nog) niet te weten. 
+
+In totaal `r round(nrow(filter(data, (CoronaInfectionOther_1 == 'Ja' | CoronaInfectionOther_2 == 'Ja' | CoronaInfectionOther_3 == 'Ja' | CoronaInfectionOther_4 == 'Ja' | CoronaInfectionOther_5 == 'Ja' | CoronaInfectionOther_6 == 'Ja')))/nrow(data)*100, digits = 1)`% gaf aan dat iemand in hun directe omgeving besmet is (geweest)  met het coronavirus.
+In onderstaande grafiek is te zien welke relatie deze personen tot de respondent hadden. 
 CoronaInfectionOther_1-8
 
-#### Besmetting met het coronavirus bij zichzelf en mensen in de directe omgeving
+
 #### Corona risicoperceptie en ernst
 
 ```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - hele populatie"}
