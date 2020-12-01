@@ -256,6 +256,7 @@ for(colname in colnames(data_table)) {
 ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
 
 # Change layout of table, and footer specifically
+ft <- width(ft, j = 1, width = 2)
 ft <- fontsize(ft, size = 10, part = "all")
 ft <- font(ft, fontname = "Cambria", part = "all")
 ft <- align(ft, j = -1, align = "right", part = "footer")
@@ -264,8 +265,17 @@ ft <- padding(ft, padding = 5, part = "footer")
 # Basic autofit does not work well with Word, found this code below
 # but it seems to make all columns of equal size (7 inch / number of columns?)
 # Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
 ft_out <- ft %>% autofit()
-ft_out <- width(ft_out, width = dim(ft_out)$widths*7 /(flextable_dim(ft_out)$widths))
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
 
 ft_out
 ```
@@ -1017,6 +1027,8 @@ ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + g
 
 
 #### Ontvangen meldingen en opvolging van de adviezen
+In totaal hebben `r nrow(filter(data, (Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment' | Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer') & (notifications_1 == 'Ja, 1 keer' | notifications_1 == 'Ja, al meerdere keren')))` deelnemers die de app nu gebruikten, of gebruikt hadden, minstens één melding gehad vanuit de app; dat is `r round(nrow(filter(data, (Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment' | Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer') & (notifications_1 == 'Ja, 1 keer' | notifications_1 == 'Ja, al meerdere keren')))/nrow(filter(data, (Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment' | Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer')))*100, digits = 1)`%.Vanwege dit lage aantal zijn de vervolgvragen voor deelnemers die een melding hebben ontvangen (opvolging van de adviezen, etc.) niet verder bekeken. 
+
 #### Intentie tot opvolgen adviezen gegeven in de melding
 AdherenceNotificationMeasuresSymptoms_Test
 AdherenceNotificationMeasuresSymptoms_Quarantaine
