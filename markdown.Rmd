@@ -1,7 +1,7 @@
 ---
-title: "CoronaMelder rapportage"
+title: "CoronaMelder rapportage Wave 1 (preliminaire status: resultaten onder voorbehoud)"
 author: "Nynke van der Laan, Nadine van der Waal, Jan de Wit"
-date: "11/11/2020"
+date: "01/12/2020"
 output: 
   bookdown::word_document2:
     toc: true
@@ -83,22 +83,39 @@ cronbach(data[, c("HealthLiteracy1nr", "HealthLiteracy2n", "HealthLiteracy3nr")]
 ## Aanbevelingen {.unlisted .unnumbered}
 \newpage
 # Achtergrond
-Het doel van dit onderzoek is om, over de tijd, de adoptie van de app en de (intentie tot) opvolging van de in de app gegeven adviezen te onderzoeken en te verklaren.
+De CoronaMelder app is ontwikkeld door het ministerie van Volksgezondheid, Welzijn en Sport en wordt nu landelijk gebruikt in de strijd tegen het coronavirus. Het doel van dit onderzoek is om, over de tijd, de adoptie van de app en de (intentie tot) opvolging van de in de app gegeven adviezen te onderzoeken en te verklaren.
 \newpage  
   
 # Methoden  
 
 ## Onderzoeksopzet  
 
-In het kader van de evaluatie van de CoronaMelder wordt er een longitudinaal vragenlijstonderzoek uitgevoerd via het LISS panel (LISSdata.nl) waarbij er over een periode van 5 maanden 4 metingen zullen plaatsvinden. Het doel van dit onderzoek is om, over de tijd, de adoptie van de app en de (intentie tot) opvolging van de in de app gegeven adviezen te onderzoeken en te verklaren.
+In het kader van de evaluatie van de CoronaMelder wordt er een longitudinaal vragenlijstonderzoek uitgevoerd via het LISS panel (LISSdata.nl) waarbij er over een periode van 5 maanden 4 metingen zullen plaatsvinden. Het doel van dit onderzoek is om, over de tijd, de adoptie van de app en de (intentie tot) opvolging van de in de app gegeven adviezen te onderzoeken en te verklaren. Meer specfifiek gaan we in dit longitudinale onderzoek in op de volgende onderzoeksvragen:
   
+Onderzoeksvraag 1: Wat is de temporele dynamiek van de adoptie van digitale contracttracering in de Nederlandse bevolking en welke factoren (persoonlijk, sociaal, omgevingsfactoren) hebben hierop betrekking? 
+  
+Onderzoeksvraag 2: Wat is de temporele dynamiek van de intentie om zich te houden aan de adviezen die worden gecommuniceerd in de digitale contacttracing app CoronaMelder en welke factoren (persoonlijk, sociaal, omgeving, app-gerelateerd) zijn hierop van invloed? 
+
+De huidige rapportage beslaat de data van de eerste meting. De datacollectie (wave 1) van deze rapportage vond plaats tussen 19 oktober en 1 november 2020, 1.5 week na de landelijke lancering op 10 oktober 2020. Vervolgmetingen vinden plaats 1.5 maand na lancering (wave 2: 07-12 t/m 20-12), 3 maanden na lancering (18-01 t/m 31-01) en 5 maanden na lancering (15-03 t/m 29-03). 
+
+De (9 minuten durende) vragenlijst bevat op elk meetmoment de volgende onderwerpen:   
+- Gebruiksgedrag van CoronaMelder  
+- Technologische factoren die zijn afgeleid van de Unified Theory of Acceptance and Use of Techology (UTAUT): prestatieverwachting, inspanningsverwachting, sociale invloed en gedragsintentie. 
+- COVID-19 en CoronaMelder-gerelateerde percepties en overtuigingen  
+- Overtuigingen over de voordelen en de persoonlijke/maatschappelijke waarde van de CoronaMelder  
+- Misvattingen over Covid-19 en CoronaMelder  
+- Persoonlijke, sociale en omgevingsfactoren   
+- Preventief gedrag / naleving van adviezen en factoren die zijn afgeleid van het Health Belief Model (HBM): Preventief gedrag (afgelopen week en intentie), waargenomen ernst en vatbaarheid, persoonlijke voordelen en barrières, zelfredzaamheid  
+
+Sommige items zijn aan verandering onderhevig (bijvoorbeeld items over misvattingen over de app of Covid-19 zullen gebaseerd zijn op de meest recente ontwikkelingen en actuele gebeurtenissen in de media). In de bijlage kan de vragenlijst van wave 1 gevonden worden. 
+
 ## Beschrijving panel
 Het LISS panel is bij uitstek geschikt voor onderzoek waarbij een goede vertegenwoordiging van de Nederlandse bevolking van groot belang is. Het LISS panel is een probability-based (geen zelfselectie) panel dat iedere maand vragenlijsten invullen via internet. De adressensteekproeven voor de werving en de bijwervingen zijn getrokken uit het populatieregister in samenwerking met het CBS. Indien een huishouden niet beschikt over een breedbandverbinding en/of computer, dan stelt CentERdata de benodigde apparatuur in bruikleen beschikbaar om alsnog mee te kunnen doen aan het panel. Hiermee onderscheidt het LISS panel zich van andere online panels, waar niet-internetters ontbreken en waar panelleden de gelegenheid hebben om zichzelf aan te melden.  
 
 Panelleden ontvangen € 7,50 voor een vragenlijst met een invultijd van dertig minuten. Omdat het veldwerk standaard bijna een maand duurt en men twee herinneringen krijgt, is iedereen (van oud tot jong, werkend of niet werkend en/of tijdelijk afwezig) in de gelegenheid de vragenlijsten in te vullen.
 
 ## Huidige rapportage: Meting 1 
-Steekproef: Een aselecte steekproef van LISS-panelleden van 16 jaar en ouder die ook de LISS-kernvragenlijst ‘Health’ (afgenomen in november en december 2019) en de vragenlijst over het coronavirus (afgenomen in het LISS panel maart 2020) hebben ingevuld.  
+Steekproef meting 1: Een aselecte steekproef van LISS-panelleden van 16 jaar en ouder die ook de LISS-kernvragenlijst ‘Health’ (afgenomen in november en december 2019) en de vragenlijst over het coronavirus (afgenomen in het LISS panel maart 2020) hebben ingevuld.  
 
 Responsoverzicht | 
 ------------- | -------------
@@ -110,16 +127,16 @@ Respons | 1.910 (91,3%)
 
 Datum van dataverzameling: 19 oktober 2020 – 1 november 2020.
 
-In de resultaten sectie worden de uitkomsten getoond van de 1900 respondenten waarbij de data compleet was. In appendix X kan een vergelijking van de demografische samenstelling steekproef in vergelijking met die van de Nederlandse bevolking gevonden worden. 
-
+In de resultaten sectie worden de uitkomsten getoond van de 1900 respondenten waarbij de data compleet was. Ook word er een overzicht van de karakteristieken van de steekproef getoond. In de bijlage kan een vergelijking van de demografische samenstelling van de steekproef in vergelijking met die van de Nederlandse bevolking (op basis van gegevens van het CBS) gevonden worden. 
 
 \newpage
 
 # Resultaten
 ## Karakteristieken van de steekproef
 ### Demografische factoren
+Aan dit onderzoek hebben 1900 (gemiddelde leeftijd in jaren: 51.8, standaarddeviatie 18.3, range: 17-96); 55.1% vrouw) respondenten deelgenomen. 
 
-
+--> To do: nog uitwerken in tabellen:  
 Geslacht
 Lftdcat
 sted
@@ -131,7 +148,7 @@ Riskgroup_contact
 
 
 
-```{r demographics, echo=FALSE}
+```{r demographics, echo=FALSE, fig.cap="Samenstelling leeftijd steekproef", tab.cap="Waargenomen ernst en vatbaarheid - hele populatie"}
 # Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 ggplot(data=data, aes(x = lftdcat)) + geom_bar(aes(y = (..count..)/sum(..count..)*100)) + xlab("Leeftijdscategorie") + ylab("Percentage") + geom_bar(fill = "#add8e6", color = "#6fbbd3")
 
@@ -140,19 +157,18 @@ ggplot(data=data, aes(x = lftdcat)) + geom_bar(aes(y = (..count..)/sum(..count..
 ### Gezondheidsmotivatie en risicoperceptie corona besmetting
 
 #### Besmetting met het coronavirus bij zichzelf en mensen in de directe omgeving
-In de vragenlijst werd gevraagd of de respondenten zelf of mensen in hun directe omgeving besmet zijn (geweest) met het coronavirus. In totaal gaven `r round(nrow(filter(data, CoronaInfectionSelf == 'Ja'))/nrow(data)*100, digits = 1)`% van de respondenten het antwoord *Ja* op de vraag of zij zelf dachten besmet te zijn (geweest) en `r round(nrow(filter(data, CoronaInfectionSelf == 'Nee'))/nrow(data)*100, digits = 1)`% antwoorde hierop *Nee*. Een subsantieel percentage (`r round(nrow(filter(data, CoronaInfectionSelf == 'Ik weet het niet'))/nrow(data)*100, digits = 1)`%) gaf aan dit niet te weten.
+In de vragenlijst werd gevraagd of de respondenten zelf of mensen in hun directe omgeving besmet zijn (geweest) met het coronavirus. In totaal gaven `r round(nrow(filter(data, CoronaInfectionSelf == 'Ja'))/nrow(data)*100, digits = 1)`% van de respondenten het antwoord *Ja* op de vraag of zij zelf dachten besmet te zijn (geweest) en `r round(nrow(filter(data, CoronaInfectionSelf == 'Nee'))/nrow(data)*100, digits = 1)`% antwoorde hierop *Nee*. Een substantieel percentage (`r round(nrow(filter(data, CoronaInfectionSelf == 'Ik weet het niet'))/nrow(data)*100, digits = 1)`%) gaf aan dit niet te weten.
 
 Ook werd gevraagd of er wel eens een coronatest bij de respondent was afgenomen. Hierop antwoorde `r round(nrow(filter(data, CoronaInfectionSelfTest == 'Ja, een keer'))/nrow(data)*100, digits = 1)`% dat er 1 keer een test was afgenomen en `r round(nrow(filter(data, CoronaInfectionSelfTest == 'Ja, meerdere keren'))/nrow(data)*100, digits = 1)`% dat er al meerdere keren een test was afgenomen. De rest (`r round(nrow(filter(data, CoronaInfectionSelfTest == 'Nee'))/nrow(data)*100, digits = 1)`)% gaf aan dat er nog nooit een test was afgenomen. 
 
 Van de mensen bij wie al minstens een keer een test was afgenomen (`r  nrow(filter(data, (CoronaInfectionSelfTest == 'Ja, een keer' | CoronaInfectionSelfTest == 'Ja, meerdere keren')))`), gaf  `r  round((nrow(filter(data, (CoronaInfectionSelfTest_1 == 'Ja' | CoronaInfectionSelfTest_2 == 'Ja'))) / nrow(filter(data, (CoronaInfectionSelfTest == 'Ja, een keer' | CoronaInfectionSelfTest == 'Ja, meerdere keren'))))*100, digits = 1)`% aan dat een van deze testen positief was, `r  round((nrow(filter(data, (CoronaInfectionSelfTest_1 == 'Nee' | CoronaInfectionSelfTest_2 == 'Nee'))) / nrow(filter(data, (CoronaInfectionSelfTest == 'Ja, een keer' | CoronaInfectionSelfTest == 'Ja, meerdere keren'))))*100, digits = 1)`% gaf aan dat de test negatief was en de rest (`r  round((nrow(filter(data, (CoronaInfectionSelfTest_1 == 'Weet ik (nog) niet' | CoronaInfectionSelfTest_2 == 'Weet ik (nog) niet'))) / nrow(filter(data, (CoronaInfectionSelfTest == 'Ja, een keer' | CoronaInfectionSelfTest == 'Ja, meerdere keren'))))*100, digits = 1)`%) gaf aan dit (nog) niet te weten. 
 
 In totaal `r round(nrow(filter(data, (CoronaInfectionOther_1 == 'Ja' | CoronaInfectionOther_2 == 'Ja' | CoronaInfectionOther_3 == 'Ja' | CoronaInfectionOther_4 == 'Ja' | CoronaInfectionOther_5 == 'Ja' | CoronaInfectionOther_6 == 'Ja')))/nrow(data)*100, digits = 1)`% gaf aan dat iemand in hun directe omgeving besmet is (geweest)  met het coronavirus.
-In onderstaande grafiek is te zien welke relatie deze personen tot de respondent hadden. 
-CoronaInfectionOther_1-8
 
+--> To do: nog uitwerken: CoronaInfectionOther_1-8 - In onderstaande grafiek is te zien welke relatie deze personen tot de respondent hadden (grafiek nog maken). 
 
 #### Corona risicoperceptie en ernst
-
+Uit gedragswetenschappelijke literatuur is bekend dat gepercipieerde ernst en vatbaarheid voor een ziekte een rol kan spelen in de acceptatie van gezondheidsadviezen. 
 ```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - hele populatie", tab.cap="Waargenomen ernst en vatbaarheid - hele populatie"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -268,10 +284,8 @@ ft_out
 ```
 
 #### Naleven algemene gedragsregels
-Behavior_AdherenceGeneralMeasures_distance
-Behavior_AdherenceGeneralMeasures_avoidbusyplaces
-Behavior_AdherenceGeneralMeasures_quarantaine
-Corona_complaints + Behavior_AdherenceGeneralMeasures_quarantaine
+In kaart is gebracht in hoeverre de respondenten zich in de afgelopen 2 maanden aan een aantal van de algemene gedragsregels hebben gehouden.    
+--> To do: nog uitwerken Corona_complaints + Behavior_AdherenceGeneralMeasures_quarantaine
 
 ```{r behavioradhgenmeasures, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Naleving algemene gedragsregels", tab.cap="Naleving algemene gedragsregels"}
 
@@ -391,11 +405,7 @@ ft_out
 
 
 #### Intentie tot naleving algemene gedragsregels
-
-Intention_AdherenceGeneralMeasures_handwashing
-Intention_AdherenceGeneralMeasures_distance
-Intention_AdherenceGeneralMeasures_avoidbusyplaces
-Intention_AdherenceGeneralMeasures_quarantaine
+Er is gevraagd naar in welke mate men van plan is om zich de komende twee maanden te houden aan een aantal van de algemene gedragsregels. 
 
 ```{r intentionadhgenmeasures, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot naleving algemene gedragsregels", tab.cap="Intentie tot naleving algemene gedragsregels"}
 
@@ -514,6 +524,7 @@ ft_out
 
 
 #### Complottheorieën
+Om in kaart te brengen in hoeverre complottheorieën een rol spelen is gevraagd of men dacht dat onderstaande stellingen waar of onwaar zijn (zie figuur \@ref(fig:complot)). 
 ```{r complot, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Geloof in complottheorien", tab.cap="Geloof in complottheorien"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Beliefs_Conspiracy1", 
@@ -627,12 +638,13 @@ ft_out
 ```
 
 #### Vertrouwen in aanpak van de overheid
-
-Beliefs_TrustGovernment
+--> To do: not uitwerken Beliefs_TrustGovernment.
 
 ## Bekendheid en gebruik
 ### Bekendheid met CoronaMelder
-In de vragenlijst werd gevraagd hoe bekend men (voor het openen van de vragenlijst) was met de CoronaMelder app. In totaal gaven `r round(((nrow(filter(data, Awareness == 'Heel erg bekend')) + nrow(filter(data, Awareness == 'Bekend')) + nrow(filter(data, Awareness == 'Redelijk bekend'))+ nrow(filter(data, Awareness == 'Een beetje bekend')))/nrow(data)*100), digits = 1)`% aan in meer of mindere mate bekend te zijn met de CoronaMelder (Tabel 1). Ruim 1 op de 10 `r round(nrow(filter(data, Awareness == 'Niet bekend'))/nrow(data)*100, digits = 1)`% gaf aan niet bekend te zijn met de CoronaMelder
+In de vragenlijst werd gevraagd hoe bekend men (voor het openen van de vragenlijst) was met de CoronaMelder app. In totaal gaven `r round(((nrow(filter(data, Awareness == 'Heel erg bekend')) + nrow(filter(data, Awareness == 'Bekend')) + nrow(filter(data, Awareness == 'Redelijk bekend'))+ nrow(filter(data, Awareness == 'Een beetje bekend')))/nrow(data)*100), digits = 1)`% aan in meer of mindere mate bekend te zijn met de CoronaMelder (Tabel 1). Ruim 1 op de 10 `r round(nrow(filter(data, Awareness == 'Niet bekend'))/nrow(data)*100, digits = 1)`% gaf aan niet bekend te zijn met de CoronaMelder.   
+
+--> To do: standaard grafiek template toepassen op volgende grafieken. Verdere uitplitsingen. 
 
 ```{r awarenessleeftijd, echo=FALSE}
 # Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
@@ -655,6 +667,8 @@ ggplot(data=data, aes(fill=Awareness, x=geslacht)) + geom_bar(position=position_
 Van alle respondenten gaf `r round(nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))/nrow(data)*100, digits = 1)`% aan dat hij/zij de CoronaMelder op dit moment gebruikt en `r round(nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt'))/nrow(data)*100, digits = 1)`% geeft aan de CoronaMelder niet te gebruiken. Slechts `r round(nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer'))/nrow(data)*100, digits = 1)`% gaf aan de CoronaMelder in het verleden gebruikt te hebben maar op dit moment niet meer. 
 
 #### Vergelijking gebruikers en niet gebruikers
+Om inzicht te krijgen in welke factoren (demografisch, persoonlijk, sociaal, omgevingsfactoren) worden gebruikers vergeleken met niet gebruikers. 
+--> To do: verdere uitsplitsingen en bijbehorende statistische tests.   
 ```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - Gebruikers", tab.cap="Waargenomen ernst en vatbaarheid - Gebruikers"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -884,10 +898,7 @@ ft_out
 ```
 
 ### Intentie tot (blijvend) gebruik CoronaMelder
-Er werd gevraagd of de respondenten de intentie hadden om de CoronaMelder de komende 2 maanden te (blijven) gebruiken. Van de respondenten die de CoronaMelder app nooit hebben gebruikt, gaf `r round((nrow(filter(data, (BI1a_UTAUT == 'Helemaal mee eens'| BI1a_UTAUT == 'Mee eens'| BI1a_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`% aan van plan te zijn om de CoronaMelder te gebruiken in de komende twee maanden. Ongeveer een kwart geeft aan hier neutraal in te staan (`r round((nrow(filter(data, (BI1a_UTAUT == 'Neutraal') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`%). Bijna dan 6 op de 10 respondenten (`r round((nrow(filter(data, (BI1a_UTAUT == 'Helemaal mee oneens'| BI1a_UTAUT == 'Oneens'| BI1a_UTAUT == 'Een beetje oneens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`%) geeft aan niet van plan te zijn de CoronaMelder te gaan gebruiken.  
-
-Van de respondenten die de CoronaMelder op dit moment al gebruiken, gaf een overgrote meerderheid (`r round((nrow(filter(data, (BI1b_UTAUT == 'Helemaal mee eens'| BI1b_UTAUT == 'Mee eens'| BI1b_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)`%) aan van plan te zijn de CoronaMelder te blijven gebruiken in de komende 2 maanden. Een kleine hoeveelheid respondenten gaf aan hier neutraal in te staan (`r round((nrow(filter(data, (BI1b_UTAUT == 'Neutraal') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)`%) Slechts `r round((nrow(filter(data, (BI1b_UTAUT == 'Helemaal mee oneens'| BI1b_UTAUT == 'Oneens'| BI1b_UTAUT == 'Een beetje oneens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)` gaf aan niet van plan te zijn de CoronaMelder te blijven gebruiken. 
-
+Er werd gevraagd of de respondenten de intentie hadden om de CoronaMelder de komende twee maanden te (blijven) gebruiken. Van de respondenten die de CoronaMelder app nooit hebben gebruikt, gaf `r round((nrow(filter(data, (BI1a_UTAUT == 'Helemaal mee eens'| BI1a_UTAUT == 'Mee eens'| BI1a_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`% aan van plan te zijn om de CoronaMelder te gebruiken in de komende twee maanden. Ongeveer een kwart geeft aan hier neutraal in te staan (`r round((nrow(filter(data, (BI1a_UTAUT == 'Neutraal') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`%). Bijna 6 op de 10 respondenten (`r round((nrow(filter(data, (BI1a_UTAUT == 'Helemaal mee oneens'| BI1a_UTAUT == 'Oneens'| BI1a_UTAUT == 'Een beetje oneens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`%) geeft aan niet van plan te zijn de CoronaMelder te gaan gebruiken.  
 ```{r intentiontousenonusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot gebruik bij respondenten die de CoronaMelder op dit moment niet gebruiken", tab.cap="Intentie tot gebruik bij respondenten die de CoronaMelder op dit moment niet gebruiken"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -998,8 +1009,10 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 ```
 
+Van de respondenten die de CoronaMelder op dit moment al gebruiken, gaf een overgrote meerderheid (`r round((nrow(filter(data, (BI1b_UTAUT == 'Helemaal mee eens'| BI1b_UTAUT == 'Mee eens'| BI1b_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)`%) aan van plan te zijn de CoronaMelder te blijven gebruiken in de komende 2 maanden. Een kleine hoeveelheid respondenten gaf aan hier neutraal in te staan (`r round((nrow(filter(data, (BI1b_UTAUT == 'Neutraal') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)`%) Slechts `r round((nrow(filter(data, (BI1b_UTAUT == 'Helemaal mee oneens'| BI1b_UTAUT == 'Oneens'| BI1b_UTAUT == 'Een beetje oneens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)`% gaf aan niet van plan te zijn de CoronaMelder te blijven gebruiken. 
 
-```{r intentiontousecurrentusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot gebruik bij respondenten die de CoronaMelder op dit moment al gebruiken", tab.cap="Intentie tot gebruik bij respondenten die de CoronaMelder op dit moment al gebruiken"}
+
+```{r intentiontousecurrentusers, eval=FALSE, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot gebruik bij respondenten die de CoronaMelder op dit moment al gebruiken", tab.cap="Intentie tot gebruik bij respondenten die de CoronaMelder op dit moment al gebruiken"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("BI1b_UTAUT", 
@@ -1110,23 +1123,6 @@ ft_out
 ```
 
 
-```{r Intentiehelesample, echo=FALSE}
-###Intentie gesplitst op wel + niet gebruik
-
-# Dataframe voor intentie + antwoordopties terugzetten
-df_intentie <- data %>% gather("intentie", "value", contains("BI1a_UTAUT"), contains("BI1b_UTAUT"))
-df_intentie <- mutate(df_intentie, value = factor(value, levels=rev(levels(data$BI1a_UTAUT))))
-
-# De grote plot. Deze doet meerdere dingen:
-# - Onze gecombineerde kolommen gebruiken op de x-as
-# - De frequentie van alle antwoorden omzetten in percentages, dat is die (..count..)/sum(..count..)
-# - Omdat we de 2 kolommen hebben samengevoegd is onze dataframe 2x zo lang geworden (zie df_adherence in de Environment voor meer info), waardoor we het percentage moeten verdubbelen: vandaar de *2 (normaal gesproken is die count/sum count voldoende voor totaal van 100%)
-# - Schalen en labels goed zetten
-# - Inkleuren
-ggplot(data=df_intentie, aes(fill=value, x=intentie)) + geom_bar(aes(y = (..count..)/sum(..count..)*2)) + scale_y_continuous(labels=percent) + coord_flip() + scale_x_discrete(labels=c("Niet-gebruiker", "Gebruiker")) + labs(x = "", y = "", fill = "") + ggtitle("Intenties gesplitst op huidig gebruik") + scale_fill_manual(values=my_palette7)
-```
-
-
 ```{r IntentieHL, echo=FALSE}
 #Plot intenties gesplitst op HL (mensen die de CoronaMelder al gebruiken)
 #df_PSev %>% filter(!is.na(Value))
@@ -1143,7 +1139,7 @@ rm(data_nona1a)
 rm(data_nona1b)
 ```
 
-Opsplitsing Gedrag en intentie (2.2.2):   
+--> To do: verdere opsplitsing Gedrag en intentie:   
 1) Vergelijking gebruikers vs niet gebruikers (deze wave laten we de groep die het gebruikt hebben maar nu niet meer buiten beschouwing agz dat er nog vrij weinig zijn)  
 2) Van de niet gebruikers: vergelijking van intentie eens (beetjemee eens + eens + helemaal mee eens), neutraal, oneens (beetje mee oneens + eens + helemaal oneens).   
 --> Vergelijk deze groepen op alle variabelen in:   
@@ -1153,11 +1149,12 @@ Deze opsplitsing naar demografie geeft inzicht in welke groepen vd bevolking de 
 
 ## Verklarende variabelen voor adoptie
 
-Opspliting verklarende variabelen (alle subsectie 2.3): 
-Allemaal opsplitsen naar 1) gebruikers vs niet gebruikers en 2) Van de niet gebruikers: vergelijking van eens, neutraal, oneens. In zijn totaliteit geeft deze sectie dan een beeld van wat de gebruikers onderscheid van de niet gebruikers, en welke beliefs veranderd kunnen worden bij de groep die de CoronaMelder niet gebruikt maar er neutraal tegenover staat (obv deze verklarende variabelen)
+--> To do: Opspliting verklarende variabelen: 
+Allemaal opsplitsen naar 1) gebruikers vs niet gebruikers en 2) Van de niet gebruikers: vergelijking van eens, neutraal, oneens. In zijn totaliteit geeft deze sectie dan een beeld van wat de gebruikers onderscheid van de niet gebruikers, en welke beliefs met communicatie/campagnes veranderd kunnen worden bij de groep die de CoronaMelder niet gebruikt maar er neutraal tegenover staat (obv deze verklarende variabelen)
 
 
 ### Verwachte effectiviteit CoronaMelder in bestrijding coronavirus
+In kaart is gebracht in welke mate men denkt dat de CoronaMelder bijdraagt aan de bestrijding van het coronavirus. 
 ```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Verwachte effeciviteit CoronaMelder", tab.cap="Verwachte effeciviteit CoronaMelder"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -1266,9 +1263,9 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 
 ft_out
 ```
-De meeste respondenten (`r round(nrow(filter(data, Beliefs_ResponseefficasyOther == '76-90%'))/nrow(data)*100, digits = 1)`%) dachten dat 76-90% van de Nederlandse bevolking de CoronaMelder moet gebruiken om de verspreiding van het coronavirus tegen te gaan. In totaal dacht `r round(((nrow(filter(data, Beliefs_ResponseefficasyOther == '51-75%')) + nrow(filter(data, Beliefs_ResponseefficasyOther == '76-90%')) + nrow(filter(data, Beliefs_ResponseefficasyOther == '91-100%')))/nrow(data)*100), digits = 1)`% van de respondenten dat meer dan 50% van de Nederlandse bevolking de CoronaMelder app moet gebruiken om effectief te zijn. Het aandeel respondenten dat aan gaf niet te weten hoeveel mensen de CoronaMelder app zouden moeten gebruiken is `r round(nrow(filter(data, Beliefs_ResponseefficasyOther == 'Weet ik niet'))/nrow(data)*100, digits = 1)`%. 
+Er is ook gevraagd hoeveel procent van de Nederlandse bevolking volgens de respondent de CoronaMelder app zou moeten gebruiken om de verspreiding van het coronavirus tegen te gaan. De meeste respondenten (`r round(nrow(filter(data, Beliefs_ResponseefficasyOther == '76-90%'))/nrow(data)*100, digits = 1)`%) dachten dat 76-90% van de Nederlandse bevolking de CoronaMelder moet gebruiken om de verspreiding van het coronavirus tegen te gaan. In totaal dacht `r round(((nrow(filter(data, Beliefs_ResponseefficasyOther == '51-75%')) + nrow(filter(data, Beliefs_ResponseefficasyOther == '76-90%')) + nrow(filter(data, Beliefs_ResponseefficasyOther == '91-100%')))/nrow(data)*100), digits = 1)`% van de respondenten dat meer dan 50% van de Nederlandse bevolking de CoronaMelder app moet gebruiken om effectief te zijn. Het aandeel respondenten dat aan gaf niet te weten hoeveel mensen de CoronaMelder app zouden moeten gebruiken is `r round(nrow(filter(data, Beliefs_ResponseefficasyOther == 'Weet ik niet'))/nrow(data)*100, digits = 1)`%. 
 
-```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Percentage bevolking dat de CoronaMelder moet gebruiken om verspreiding van het virus tegen te gaan"}
+```{r, echo=FALSE, fig.width=7, fig.cap="Percentage bevolking dat de CoronaMelder moet gebruiken om verspreiding van het virus tegen te gaan"}
 # Beliefs_ResponseefficasyOther
 Beliefs_ResponseefficasyOther <- table(data$Beliefs_ResponseefficasyOther)
 pl <- barplot(Beliefs_ResponseefficasyOther, xaxt="n")
@@ -1278,10 +1275,9 @@ text(cex=0.8, x=pl+0.25, y=-25, labels=labs, xpd=TRUE, srt=45, pos=2)
 ```
 
 ### Vertrouwen in adequaatheid techniek
+In de vragenlijst werd gepeild in welke mate men vertrouwen heeft in de adequaatheid van de techniek. 
 
-Beliefs_technologyperformance
-
-```{r technology, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Geloof in techniek", tab.cap="Geloof in techniek"}
+```{r technology, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Vertrouwen in techniek", tab.cap="Vertrouwen in techniek"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Beliefs_technologyperformance")
                         
@@ -1391,8 +1387,7 @@ ft_out
 ```
 
 ### Maatschappelijke gevolgen gebruik CoronaMelder
-
-Beliefs_benefiteconomic
+Aan de deelnemers werd gevraagd in hoeverre zij dachten dat gebruik van de CoronaMelder de Nederlandse economie helpt. 
 
 ```{r beneficteconomic, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Geloof dat de CoronaMelder de Nederlandse economie helpt", tab.cap="Geloof dat de CoronaMelder de Nederlandse economie helpt"}
 
@@ -1500,8 +1495,7 @@ ft_out
 
 
 ### Verwachte gebruiksvriendelijkheid en zelfeffectiviteit
-
-EE1a_UTAUT
+--> To do: nog uitwerken: EE1a_UTAUT
 EE2a_UTAUT
 EE1b_UTAUT
 EE2b_UTAUT
@@ -1514,11 +1508,9 @@ HBM_selfefficacy_CoronaMelder
 ```
 
 ### Technologie gerelateerde belemmeringen
+Vanuit het UTAUT is bekend dat technologie gerelateerde belemmeringen een rol kunnen spelen in de adoptie van nieuwe technologie. 
 
-FC1_UTAUT
-FC2_UTAUT
-
-```{r , echo=FALSE, fig.width=7, fig.height=2, fig.cap="", tab.cap=""}
+```{r , echo=FALSE, fig.width=7, fig.height=2, fig.cap="Technologie gerelateerde belemmeringen", tab.cap="Technologie gerelateerde belemmeringen"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("FC1_UTAUT", 
@@ -1626,9 +1618,7 @@ ft_out
 
 
 ### Persoonlijke nadelen van gebruik en verplichting tot gebruik
-
-HBM_ barriers _CoronaMelder 
-Beliefs_voluntariness
+Belangrijke variabelen uit het UTAUT en het HBM zijn de verwachte nadelen van het gebruik en de mate waarin iemand een verplichting voelt om de techniek te gebruiken. 
 
 ```{r Barriersvoluntariness, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Persoonlijke nadelen en verplichting tot gebruik", tab.cap="Persoonlijke nadelen en verplichting tot gebruik"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -1737,9 +1727,7 @@ ft_out
 
 
 ### Affectieve reacties
-
-Beliefs_fear
-Beliefs_notificationfear
+In kaart is gebracht in welke mate de CoronaMelder in het algemeen en meer specifiek het ontvangen van een melding een emotionele reaktie opwekt. 
 
 ```{r Affective, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Affectieve reacties", tab.cap="Affectieve reacties"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -1849,12 +1837,8 @@ ft_out
 
 
 ### Sociale invloeden
-
-
-Beliefs_AppAdoption
-SI1_UTAUT
-SI2_UTAUT
-Beliefs_civicduty
+Om de sociale invloeden in kaart te brengen is gevraagd naar descriptieve en injunctieve normen en is gevraagd om een indicatie te geven van welk percentage van de Nederlandse bevolking de CoronaMelder gebruikt. Opvallend is dat een relatief laag percentage mensen het eens is met de stelling dat veel mensen in hun omgeving de CoronaMelder gebruiken. Dit kan liggen aan het feit dat gebruik van de CoronaMelder redelijk onzichtbaar is (in tegenstelling tot het gebruik van bijvoorbeeld een mondkapje).   
+--> To do: uitwerken: Beliefs_AppAdoption
 
 
 ```{r Beliefsappadoption, echo=FALSE, fig.width=7, fig.height=2, fig.cap=""}
@@ -1972,21 +1956,13 @@ ft_out
 
 
 ### Privacy en dataveiligheid 
-
-Beliefs_datasafety
+--> To do: uitwerken Beliefs_datasafety
 Beliefs_locationmonitoring
 Beliefs_identitymonitoring
 
 
 ## Effecten
 ### Meldingen en reacties op adviezen gegeven in de melding
-
-notifications_1: hoeveel hebben 1 keer of meerdere keren een melding gehad? 
-Van degenen die een of meerder meldingen hebben gehad:in welke mate rapporteren ze zich aan de adviezen te houden? 
-notification_behavior_quarantaine
-Notification_behavior_test
-Notification_symptoms
-
 
 ```{r adherenceappnotification, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Thuisblijven na melding"}
 
@@ -2017,7 +1993,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 # To check: also create the plot with variable labels
 #ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
@@ -2026,18 +2002,10 @@ ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + g
 
 
 #### Ontvangen meldingen en opvolging van de adviezen
-#### Intentie tot opvolgen adviezen gegeven in de melding
-AdherenceNotificationMeasuresSymptoms_Test
-AdherenceNotificationMeasuresSymptoms_Quarantaine
-AdherenceNotificationMeasuresSymptoms_Visits
-AdherenceNotificationMeasuresSymptoms_CallGP
-AdherenceNotificationMeasuresNosymptoms_Test
-AdherenceNotificationMeasuresNosymptoms_Quarantaine
-AdherenceNotificationMeasuresNoSymptoms_Visits
-AdherenceNotificationMeasuresNosymptoms_CallGP  
+In totaal hebben `r nrow(filter(data, (Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment' | Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer') & (notifications_1 == 'Ja, 1 keer' | notifications_1 == 'Ja, al meerdere keren')))` deelnemers die de app nu gebruikten, of gebruikt hadden, minstens één melding gehad vanuit de app; dat is `r round(nrow(filter(data, (Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment' | Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer') & (notifications_1 == 'Ja, 1 keer' | notifications_1 == 'Ja, al meerdere keren')))/nrow(filter(data, (Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment' | Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer')))*100, digits = 1)`%.Vanwege dit lage aantal zijn de vervolgvragen voor deelnemers die een melding hebben ontvangen (opvolging van de adviezen, etc.) niet verder bekeken. 
 
-Opsplitsing intentie tot opvolgen adviezen gegeven in melding: 2.4.1.2.   
-Demografische factoren, gezondheidsmotivatie en algemene opvattingen over het coronavirus 
+#### Intentie tot opvolgen adviezen gegeven in de melding
+Aan de respondenten is gevraagd in hoeverre zij de intentie hebben om zich te houden aan de adviezen die in een melding van de CoronaMelder worden gegeven. Om dit te onderzoeken werd proefpersonen twee sitaties voorgelegd (situatie waarin men wel of geen symptomen had) en een screenshot van een melding getoond.
 
 ``` {r adherencenotificationsnosymp, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot opvolgen adviezen zonder symptomen", tab.cap="Intentie tot opvolgen adviezen zonder symptomen"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -2263,10 +2231,7 @@ ft_out
 
 #### Verklarende factoren opvolging adviezen gegeven in melding
 ##### Eigen effectiviteit opvolging adviezen
-HBM_ selfefficacy _Test
-HBM_ selfefficacy _Quarantaine
-HBM_ selfefficacy _Visits
-HBM_ selfefficacy _GP
+Om de eigen effectivietit in kaart te brengen werd gevraagd in welke mate men dacht in staat te zijn o de adviezen uit de melding op te volgen. 
 
 ```{r adherencenotificationsselfefficacy, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Eigen effectiviteit om adviezen op te volgen", tab.cap="Eigen effectiviteit om adviezen op te volgen"}
 
@@ -2378,16 +2343,7 @@ ft_out
 
 
 ##### Gepercipieerde persoonlijke voor- en nadelen van opvolgen adviezen
-
-HBM_ benefits _Test
-HBM_ benefits _Quarantaine
-HBM_ benefits _Visits
-HBM_ benefits _GP
-
-HBM_ barriers _Test
-HBM_ barriers _Quarantaine
-HBM_ barriers _Visits
-HBM_ barriers _GP
+Uit het Health Belief Model is bekend dat de mate waarin men verwacht dat een gedrag persoonlijke voor- of nadelen heeft een rol kan spelen in de adoptie van het gedrag. 
 
 
 ```{r HBMbenefits, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Persoonlijke voordelen om adviezen op te volgen", tab.cap="Persoonlijke voordelen om adviezen op te volgen"}
@@ -2598,8 +2554,8 @@ ft_out
 
 
 ### Intentie tot doorgeven GGD-sleutel na positieve test
+Als iemand positief is getest op het coronavirus kan men dit daarna via de app laten weten door de GGD-sleutel door te geven aan de GGD medewerker. Dan waarschuwt de app weer mensen bij wie de positief gesteste persoon in de buurt is geweest. Er is gevraagd in hoeverre men van plan is om deze GGD-sleutel door te geven. 
 
-Intention_reportinfection
 
 ```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot doorgeven GGD-sleutel", tab.cap="Intentie tot doorgeven GGD-sleutel"}
 
@@ -2702,12 +2658,8 @@ ft_out
 
 
 ### Onbeoogde effecten: schijnveiligheid
-
-Beliefs_falsesecurity1
+--> To do: uitwerken: Beliefs_falsesecurity1
 Beliefs_falsesecurity2  
-
-
-Opsplitsing Onbeoogde effecten: schijnveiligheid 2.4.3: naar Demografische factoren  
 
 \newpage
 # Conclusie en aanbevelingen
@@ -2728,38 +2680,6 @@ Opsplitsing Onbeoogde effecten: schijnveiligheid 2.4.3: naar Demografische facto
 
 
 
-## Meldingen en reacties op adviezen gegeven in de melding
-
-### Ontvangen meldingen en opvolging adviezen
-```{r meldingen, echo=FALSE}
-# Om onderstaande tekst wat duidelijker te maken zouden we ook hier variabelen kunnen aanmaken, en alleen die in de tekst terug laten komen, bv.
-num_users <- nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))
-
-# NB: hieronder doe ik een ingewikkelde filter over het krijgen van een melding, die is eigenlijk ook te doen met simpelweg notifications_1 == 'Ja', maar ik wilde even complexe filters demonstreren ;)
-```
-
-Van de `r nrow(data)` deelnemers, hadden er `r nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))` de app geïnstalleerd, en `r nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer'))` hadden hem nu niet meer geïnstalleerd, maar wel gehad. In totaal hebben `r nrow(filter(data, (Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment' | Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer') & (notifications_1 == 'Ja, 1 keer' | notifications_1 == 'Ja, al meerdere keren')))` deelnemers die de app nu gebruikten, of gebruikt hadden, minstens één melding gehad vanuit de app.
-
-# Bekendheid met Coronamelder [vooral om te proberen]
-### Bekendheid_Splitsing leeftijd
-
-
-
-# Bekendheid_Splitsing geslacht
-
-
-
-
-
-
-###Performance expectancy
-
-
-
-# Overige analyses
-
-## Opvolging van advies om je te laten testen
-
 ``` {r adherence, echo=FALSE, fig.width=7, fig.cap="Test"}
 # Geavanceerd dingetje hier. We moeten 2 kolommen samenvoegen in een dataframe 
 # zodat ze in één grafiek terug kunnen komen. Effectief hebben we nu dubbel zo veel rijen.
@@ -2775,8 +2695,7 @@ df_adherence <- mutate(df_adherence, Value = factor(Value, levels=rev(levels(dat
 # - Omdat we de 2 kolommen hebben samengevoegd is onze dataframe 2x zo lang geworden (zie df_adherence in de Environment voor meer info), waardoor we het percentage moeten verdubbelen: vandaar de *2 (normaal gesproken is die count/sum count voldoende voor totaal van 100%)
 # - Schalen en labels goed zetten
 # - Inkleuren
-ggplot(data=df_adherence, aes(fill=Value, x=Symptoms)) + geom_bar(aes(y = (..count..)/sum(..count..)*2)) + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("Geen symptomen", "Wel symptomen")) + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette_nonuse, labels=c("Ik zou de app niet gebruiken", "Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal oneens")) + coord_flip() + theme(plot.margin = margin(0.2, 0.2, 0, 0, "cm"), legend.position = "bottom", legend.text=element_text(size=8))
+#ggplot(data=df_adherence, aes(fill=Value, x=Symptoms)) + geom_bar(aes(y = (..count..)/sum(..count..)*2)) + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("Geen symptomen", "Wel symptomen")) + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette_nonuse, labels=c("Ik zou de app niet gebruiken", "Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal oneens")) + coord_flip() + theme(plot.margin = margin(0.2, 0.2, 0, 0, "cm"), legend.position = "bottom", legend.text=element_text(size=8))
 
 ```
 
-Zoals te zien in figuur \@ref(fig:adherence), gebeuren er interessante dingen.
