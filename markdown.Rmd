@@ -539,9 +539,6 @@ Notification_symptoms
 
 #### Ontvangen meldingen en opvolging van de adviezen
 #### Intentie tot opvolgen adviezen gegeven in de melding
-
- 
-
 AdherenceNotificationMeasuresSymptoms_Test
 AdherenceNotificationMeasuresSymptoms_Quarantaine
 AdherenceNotificationMeasuresSymptoms_Visits
@@ -551,9 +548,80 @@ AdherenceNotificationMeasuresNosymptoms_Quarantaine
 AdherenceNotificationMeasuresNoSymptoms_Visits
 AdherenceNotificationMeasuresNosymptoms_CallGP  
 
-
 Opsplitsing intentie tot opvolgen adviezen gegeven in melding: 2.4.1.2.   
 Demografische factoren, gezondheidsmotivatie en algemene opvattingen over het coronavirus 
+
+``` {r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot opvolgen adviezen zonder symptomen"}
+# Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
+graph_variablenames = c("AdherenceNotificationMeasuresNosymptoms_Test", 
+                        "AdherenceNotificationMeasuresNosymptoms_Quarantaine", 
+                        "AdherenceNotificationMeasuresNoSymptoms_Visits", 
+                        "AdherenceNotificationMeasuresNosymptoms_CallGP")
+graph_questionlabels = c("Bellen om coronatest\n aan te vragen", 
+                         "Thuisblijven zo lang\n de melding adviseert", 
+                         "Geen bezoek ontvangen", 
+                         "De huisarts bellen"); 
+
+# Order of the question categories: first = most green, last = most red
+graph_answercategories = c("Ik zou de CoronaMelder app niet gebruiken", "Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
+
+# Create a dataframe for the plot
+#First only keep the variables you wish to keep. Note: nomem_enc is the participant id
+data_graph_wideformat = select(data, nomem_encr, all_of(graph_variablenames))
+
+#Convert it to long format
+data_graph_longformat = melt(data_graph_wideformat, id.vars = c('nomem_encr'), measure.vars = graph_variablenames)
+
+# Set the correct ordering of the questions (by default the first variable is placed on the bottom)
+# It is not needed to reverse the order of the questionlabels. 
+data_graph_longformat$variable <- factor(data_graph_longformat$variable,levels = rev(graph_variablenames))
+
+# Set the correct ordering of the answer categories (by default on alphabetic order)
+data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
+View(data_graph_longformat)
+
+# Create the plot
+ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette_nonuse) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+```
+
+
+```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot opvolgen adviezen zonder symptomen"}
+# Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
+graph_variablenames = c("AdherenceNotificationMeasuresSymptoms_Test", 
+                        "AdherenceNotificationMeasuresSymptoms_Quarantaine", 
+                        "AdherenceNotificationMeasuresSymptoms_Visits", 
+                        "AdherenceNotificationMeasuresSymptoms_CallGP")
+graph_questionlabels = c("Bellen om coronatest\n aan te vragen", 
+                         "Thuisblijven zo lang\n de melding adviseert", 
+                         "Geen bezoek ontvangen", 
+                         "De huisarts bellen"); 
+
+# Order of the question categories: first = most green, last = most red
+graph_answercategories = c("Ik zou de CoronaMelder app niet gebruiken", "Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
+
+# Create a dataframe for the plot
+#First only keep the variables you wish to keep. Note: nomem_enc is the participant id
+data_graph_wideformat = select(data, nomem_encr, all_of(graph_variablenames))
+
+#Convert it to long format
+data_graph_longformat = melt(data_graph_wideformat, id.vars = c('nomem_encr'), measure.vars = graph_variablenames)
+
+# Set the correct ordering of the questions (by default the first variable is placed on the bottom)
+# It is not needed to reverse the order of the questionlabels. 
+data_graph_longformat$variable <- factor(data_graph_longformat$variable,levels = rev(graph_variablenames))
+
+# Set the correct ordering of the answer categories (by default on alphabetic order)
+data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
+View(data_graph_longformat)
+
+# Create the plot
+ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette_nonuse) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+# Create the plot
+ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette_nonuse) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+```
 
 
 #### Verklarende factoren opvolging adviezen gegeven in melding
