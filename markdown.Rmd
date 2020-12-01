@@ -197,7 +197,7 @@ Behavior_AdherenceGeneralMeasures_avoidbusyplaces
 Behavior_AdherenceGeneralMeasures_quarantaine
 Corona_complaints + Behavior_AdherenceGeneralMeasures_quarantaine
 
-```{r behavior adherence general measures, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Naleving algemene gedragsregels"}
+```{r behavioradhgenmeasures, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Naleving algemene gedragsregels"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Behavior_AdherenceGeneralMeasures_handwashing", 
@@ -241,7 +241,7 @@ Intention_AdherenceGeneralMeasures_distance
 Intention_AdherenceGeneralMeasures_avoidbusyplaces
 Intention_AdherenceGeneralMeasures_quarantaine
 
-```{r intention adherence general measures, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Naleving algemene gedragsregels"}
+```{r intentionadhgenmeasures, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Naleving algemene gedragsregels"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Intention_AdherenceGeneralMeasures_handwashing", 
@@ -251,7 +251,7 @@ graph_variablenames = c("Intention_AdherenceGeneralMeasures_handwashing",
 graph_questionlabels = c("... mijn handen regelmatig te wassen", 
                          "... 1,5 meter afstand te houden van\n mensen buiten mijn huishouden", 
                          "... drukke plekken te vermijden", 
-                         "... thuis te blijven als ik last heb\n van klachten die passen bij het coronavirus"); 
+                         "... thuis te blijven als ik last\n heb van klachten die\n passen bij het coronavirus"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7
@@ -393,7 +393,7 @@ data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph
 ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 ```
 
-```{r perceived susceptibility and severity, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - Niet gebruikers"}
+```{r perceivedsuscsev, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - Niet gebruikers"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("HBM_PSus_self1", 
@@ -435,7 +435,7 @@ ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + g
 ```
 
 ### Intentie tot (blijvend) gebruik CoronaMelder
-```{r Intentie hele sample, echo=FALSE}
+```{r Intentiehelesample, echo=FALSE}
 ###Intentie gesplitst op wel + niet gebruik
 
 # Dataframe voor intentie + antwoordopties terugzetten
@@ -452,7 +452,7 @@ ggplot(data=df_intentie, aes(fill=value, x=intentie)) + geom_bar(aes(y = (..coun
 ```
 
 
-```{r Intentie gesplitst op HL, echo=FALSE}
+```{r IntentieHL, echo=FALSE}
 #Plot intenties gesplitst op HL (mensen die de CoronaMelder al gebruiken)
 #df_PSev %>% filter(!is.na(Value))
 
@@ -548,7 +548,7 @@ HBM_selfefficacy_CoronaMelder
 
 
 
-```{r UTAUT_PE, echo=FALSE}
+```{r UTAUTPE, echo=FALSE}
 # Dataframe maken voor Perceived Expectancy + antwoordopties terugzetten
 df_utaut_pe <- data %>% gather("UTAUT_PE", "value", contains("PE1_UTAUT"), contains("PE2_UTAUT"))
 df_utaut_pe <- mutate(df_utaut_pe, value = factor(value, levels=rev(levels(data$PE1_UTAUT))))
@@ -604,7 +604,7 @@ Notification_behavior_test
 Notification_symptoms
 
 
-```{r adherence to notifications in the app, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Thuisblijven na melding"}
+```{r adherenceappnotification, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Thuisblijven na melding"}
 
 #KLOPT NOG NIET!!! NAs staan er nog in
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -655,7 +655,7 @@ AdherenceNotificationMeasuresNosymptoms_CallGP
 Opsplitsing intentie tot opvolgen adviezen gegeven in melding: 2.4.1.2.   
 Demografische factoren, gezondheidsmotivatie en algemene opvattingen over het coronavirus 
 
-``` {r adherence to notifications no symptoms, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot opvolgen adviezen zonder symptomen"}
+``` {r adherencenotificationsnosymp, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot opvolgen adviezen zonder symptomen"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("AdherenceNotificationMeasuresNosymptoms_Test", 
                         "AdherenceNotificationMeasuresNosymptoms_Quarantaine", 
@@ -693,7 +693,7 @@ ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + g
 ```
 
 
-```{r adherence to notifications symptoms, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot opvolgen adviezen zonder symptomen"}
+```{r adherencenotificationssympt, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot opvolgen adviezen zonder symptomen"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("AdherenceNotificationMeasuresSymptoms_Test", 
                         "AdherenceNotificationMeasuresSymptoms_Quarantaine", 
@@ -738,7 +738,7 @@ HBM_ selfefficacy _Quarantaine
 HBM_ selfefficacy _Visits
 HBM_ selfefficacy _GP
 
-```{r adherence notifications self efficacy, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Eigen effectiviteit om adviezen op te volgen"}
+```{r adherencenotificationsselfefficacy, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Eigen effectiviteit om adviezen op te volgen"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("HBM_selfefficacy_CoronaMelder", 
@@ -795,7 +795,7 @@ HBM_ barriers _Visits
 HBM_ barriers _GP
 
 
-```{r HBM benefits, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Persoonlijke voordelen om adviezen op te volgen"}
+```{r HBMbenefits, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Persoonlijke voordelen om adviezen op te volgen"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("HBM_perceivedbenefits_CoronaMelder", 
@@ -835,7 +835,7 @@ ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + g
 
 ```
 
-```{r HBM barriers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Persoonlijke nadelen om adviezen op te volgen"}
+```{r HBMbarriers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Persoonlijke nadelen om adviezen op te volgen"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("HBM_barriers_CoronaMelder", 
