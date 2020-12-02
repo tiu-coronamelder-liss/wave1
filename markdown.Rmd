@@ -154,12 +154,9 @@ Riskgroup_contact
 variable.names <- c("lftdcat")
 
 ggplot(data=data, aes(x = lftdcat)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent_format(accuracy = 1))+ ylab("Percentage") + xlab("Leeftijdscategorie") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0, 0, 0))
-
 ```
 
 
-
-```
 
 ### Gezondheidsmotivatie en risicoperceptie corona besmetting
 
@@ -176,6 +173,7 @@ In totaal `r round(nrow(filter(data, (CoronaInfectionOther_1 == 'Ja' | CoronaInf
 
 #### Corona risicoperceptie en ernst
 Uit gedragswetenschappelijke literatuur is bekend dat gepercipieerde ernst en vatbaarheid voor een ziekte een rol kan spelen in de acceptatie van gezondheidsadviezen. 
+
 ```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - hele populatie", tab.cap="Waargenomen ernst en vatbaarheid - hele populatie"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
