@@ -133,7 +133,8 @@ Riskgroup_contact
 
 ```{r demographics, echo=FALSE}
 # Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-ggplot(data=data, aes(x = lftdcat)) + geom_bar(aes(y = (..count..)/sum(..count..)*100)) + xlab("Leeftijdscategorie") + ylab("Percentage") + geom_bar(fill = "#add8e6", color = "#6fbbd3")
+ggplot(data=data, aes(x = lftdcat)) + geom_bar(aes(y = (..count..)/sum(..count..)*100)) + xlab("Leeftijdscategorie") + ylab("Percentage") + theme_bw() + geom_bar(fill = "#bdd7e7", color = "#6baed6") + scale_y_continuous(limits = c(0,40), breaks=seq(0,100, by= 10)) 
+
 
 ```
 
