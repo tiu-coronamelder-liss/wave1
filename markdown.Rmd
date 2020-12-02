@@ -163,7 +163,11 @@ In totaal `r round(nrow(filter(data, (CoronaInfectionOther_1 == 'Ja' | CoronaInf
 
 ```{r coronainfectionother, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Relatie geïnfecteerde personen tot de respondent"}
 
-#LUKT NOG NIET
+
+# Set the correct ordering of the answer categories (by default on alphabetic order)
+data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
+
+# Create the plot#LUKT NOG NIET
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("CoronaInfectionOther_1", 
                         "CoronaInfectionOther_2", 
@@ -184,8 +188,6 @@ graph_questionlabels = c("Ja, mijn partner",
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7
-# Order of the question categories: first = most green, last = most red # Check if the answer categories match with the codebook (e.g, sometimes also 'weet ik niet is one of the answeroptions')
-graph_answercategories = c("Ja"); 
 
 # Create a dataframe for the plot
 #First only keep the variables you wish to keep. Note: nomem_enc is the participant id
@@ -200,11 +202,12 @@ data_graph_longformat$variable <- factor(data_graph_longformat$variable,levels =
 # Also invert the order of the question labels (as default is that the first element of the vector is placed on the bottom)
 graph_questionlabels = rev(graph_questionlabels)
 
-# Set the correct ordering of the answer categories (by default on alphabetic order)
-data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
-
-# Create the plot
 ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+
+
+ggplot(data=data, aes(x = Beliefs_AppAdoption)) + theme_bw() + xlab(paste(names(table(data$Beliefs_AppAdoption)))) + ylab(" ") + xlab("Hoeveel procent van de Nederlandse bevolking denkt u dat de CoronaMelder gebruikt?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0, 0, 0)) + theme(,axis.title=element_text(size=10)) 
+
 
 # To check: also create the plot with variable labels
 #ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
@@ -215,7 +218,7 @@ ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + g
 #### Corona risicoperceptie en ernst
 Uit gedragswetenschappelijke literatuur is bekend dat gepercipieerde ernst en vatbaarheid voor een ziekte een rol kan spelen in de acceptatie van gezondheidsadviezen. 
 
-```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - hele populatie", tab.cap="Waargenomen ernst en vatbaarheid - hele populatie"}
+```{r riskperception, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - hele populatie", tab.cap="Waargenomen ernst en vatbaarheid - hele populatie"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("HBM_PSus_self1", 
