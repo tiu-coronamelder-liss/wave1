@@ -2548,7 +2548,7 @@ Om de sociale invloeden in kaart te brengen is gevraagd naar descriptieve en inj
 Beliefs_AppAdoption
 
 ```{r Beliefsappadoption, echo=FALSE, fig.width=7, fig.height=2, fig.cap=""}
-ggplot(data=data, aes(x = Beliefs_AppAdoption)) + theme_bw() + xlab(paste(names(table(data$Beliefs_AppAdoption)))) + ylab(" ") + xlab("Hoeveel procent van de Nederlandse bevolking denkt u dat de CoronaMelder gebruikt?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0, 0, 0)) + theme(,axis.title=element_text(size=10)) 
+ggplot(data=data, aes(x = Beliefs_AppAdoption)) + theme_bw() + xlab(paste(names(table(data$Beliefs_AppAdoption)))) + ylab(" ") + xlab("Hoeveel procent van de Nederlandse bevolking denkt u dat de CoronaMelder gebruikt?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0, 0, 0)) + theme(aspect.ratio = 0.35,axis.title=element_text(size=10))
 
 ```
 
