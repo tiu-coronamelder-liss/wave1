@@ -59,7 +59,15 @@ my_palette5blue <- c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "Blues")[c(6,
 data$user_status[data$Behavior_UTAUT == "Ik gebruik de CoronaMelder app op dit moment"] <- "Gebruiker"
 data$user_status[data$Behavior_UTAUT == "Ik heb de CoronaMelder app nooit gebruikt"] <- "Niet gebruiker"
 data$user_status[data$Behavior_UTAUT == "Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer"] <- "Voormalig gebruiker"
-#View(data[,c("Behavior_UTAUT","user_status")])
+
+## User status and intention. 
+# Of interest is the comparison of current users and the non users that are neutral when it comes to intention.  
+data$user_status_intention[data$Behavior_UTAUT == "Ik gebruik de CoronaMelder app op dit moment"] <- "Gebruiker"
+data$user_status_intention[(data$Behavior_UTAUT == "Ik heb de CoronaMelder app nooit gebruikt") & (data$BI1a_UTAUT == 'Helemaal mee oneens'| data$BI1a_UTAUT == 'Oneens'| data$BI1a_UTAUT == 'Een beetje oneens')] <- "Nooit gebruikt en niet van plan"
+data$user_status_intention[(data$Behavior_UTAUT == "Ik heb de CoronaMelder app nooit gebruikt") & (data$BI1a_UTAUT == 'Neutraal')] <- "Nooit gebruikt en neutraal"
+data$user_status_intention[(data$Behavior_UTAUT == "Ik heb de CoronaMelder app nooit gebruikt") & (data$BI1a_UTAUT == 'Helemaal mee eens'| data$BI1a_UTAUT == 'Mee eens'| data$BI1a_UTAUT == 'Een beetje mee eens')] <- "Nooit gebruikt en wel van plan"
+data$user_status_intention[data$Behavior_UTAUT == "Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer"] <- "Voormalig gebruiker"
+View(data[,c("Behavior_UTAUT","BI1a_UTAUT","user_status_intention")])
 
 ## Health literacy
 # To enable a median split, labels are first recoded to numbers 
@@ -2663,6 +2671,7 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 ```
 
+#### Sociale invloeden naar gebruikersstatus
 
 
 ### Privacy en dataveiligheid 
