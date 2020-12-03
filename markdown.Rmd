@@ -59,7 +59,7 @@ my_palette5blue <- c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "Blues")[c(6,
 data$user_status[data$Behavior_UTAUT == "Ik gebruik de CoronaMelder app op dit moment"] <- "Gebruiker"
 data$user_status[data$Behavior_UTAUT == "Ik heb de CoronaMelder app nooit gebruikt"] <- "Niet gebruiker"
 data$user_status[data$Behavior_UTAUT == "Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer"] <- "Voormalig gebruiker"
-View(data[,c("Behavior_UTAUT","user_status")])
+#View(data[,c("Behavior_UTAUT","user_status")])
 
 ## Health literacy
 # To enable a median split, labels are first recoded to numbers 
@@ -1446,7 +1446,8 @@ Allemaal opsplitsen naar 1) gebruikers vs niet gebruikers en 2) Van de niet gebr
 
 
 ### Verwachte effectiviteit CoronaMelder in bestrijding coronavirus
-In kaart is gebracht in welke mate men denkt dat de CoronaMelder bijdraagt aan de bestrijding van het coronavirus. 
+In kaart is gebracht in welke mate men denkt dat de CoronaMelder bijdraagt aan de bestrijding van het coronavirus. In totaal gaf `r round((nrow(filter(data, (PE1_UTAUT == 'Helemaal mee eens'| PE1_UTAUT == 'Mee eens'| PE1_UTAUT == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`% aan het eens te zijn met de stelling dat men door het gebruiken van de CoronaMelder bijdraagt aan de bestrijding van het coronavirus. Daarnaast gaf `r round((nrow(filter(data, (PE2_UTAUT == 'Helemaal mee eens'| PE2_UTAUT == 'Mee eens'| PE2_UTAUT == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`% aan dat de CoronaMelder nuttig is om ervoor te zorgen dat het coronavirus zich minder verspreidt en geeft `r round((nrow(filter(data, (Beliefs_Protectriskgroups == 'Helemaal mee eens'| Beliefs_Protectriskgroups == 'Mee eens'| Beliefs_Protectriskgroups == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`% aan dat de CoronaMelder helpt om mensen met een kwetsbare gezondheid te beschermen. 
+
 ```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Verwachte effeciviteit CoronaMelder", tab.cap="Verwachte effeciviteit CoronaMelder"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
