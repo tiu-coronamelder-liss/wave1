@@ -211,7 +211,6 @@ In totaal `r round(nrow(filter(data, (CoronaInfectionOther_1 == 'Ja' | CoronaInf
 
 --> To do: nog uitwerken: CoronaInfectionOther_1-8 - In onderstaande grafiek is te zien welke relatie deze personen tot de respondent hadden (grafiek nog maken) (zie figuur \@ref(fig:coronainfectionother)). 
 
-
 ```{r coronainfectionother, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Relatie geïnfecteerde personen tot de respondent"}
 # Create the plot#LUKT NOG NIET
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -256,12 +255,10 @@ ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + g
 
 ```
 
-
 #### Corona risicoperceptie en ernst
 Uit gedragswetenschappelijke literatuur is bekend dat gepercipieerde ernst en vatbaarheid voor een ziekte een rol kan spelen in de acceptatie van gezondheidsadviezen. Ongeveer de helft van de steekproef acht zichzelf vatbaar voor het coronavirus: `r round((nrow(filter(data, (HBM_PSus_self1 == 'Helemaal mee eens'| HBM_PSus_self1 == 'Mee eens'| HBM_PSus_self1 == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`% gaf aan het eens te zijn met de stelling dat men risico loopt op een besmetting in de komende twee maanden (zie figuur \@ref(fig:riskperception)). Daarnaast was een vergelijkbaar percentage (`r round((nrow(filter(data, (HBM_PSus_other2 == 'Helemaal mee eens'| HBM_PSus_other2 == 'Mee eens'| HBM_PSus_other2 == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%) het in meer of mindere mate eens met de stelling dat de kans groot is om een ander te besmetten indien men zelf besmet raakt.
 
 De gepercipieerde ernst lag hoger onder de respondenten, met name de ernst van het besmetten van anderen (`r round((nrow(filter(data, (HBM_PSev_other2 == 'Helemaal mee eens'| HBM_PSev_other2 == 'Mee eens'| HBM_PSev_other2 == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%). Daarnaast vindt `r round((nrow(filter(data, (HBM_PSev_self1 == 'Helemaal mee eens'| HBM_PSev_self1 == 'Mee eens'| HBM_PSev_self1 == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`% het erg om zelf besmet te raken met het coronavirus.
-
 
 ```{r riskperception, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - hele populatie", tab.cap="Waargenomen ernst en vatbaarheid - hele populatie"}
 
@@ -379,7 +376,6 @@ ft_out
 
 #### Naleven algemene gedragsregels
 In kaart is gebracht in hoeverre de respondenten zich in de afgelopen 2 maanden aan een aantal van de algemene gedragsregels hebben gehouden (zie figuur \@ref(fig:behavioradhgenmeasures)). `r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_handwashing == 'Altijd'| Behavior_AdherenceGeneralMeasures_handwashing == 'Meestal'| Behavior_AdherenceGeneralMeasures_handwashing == 'Vaak'))) /nrow(data))*100, digits = 1)`% Gaf aan, regelmatig, vaak of altijd handen te wassen. Ongeveer de helft van de respondenten (`r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_distance == 'Nooit'| Behavior_AdherenceGeneralMeasures_distance == 'Zelden'| Behavior_AdherenceGeneralMeasures_distance == 'Soms'))) /nrow(data))*100, digits = 1)`%) gaf aan nooit, zelden of soms op minder dan 1,5 afstand van mensen buiten het huishouden te zijn geweest. Tot slot gaf `r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Nooit'| Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Zelden'| Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Soms'))) /nrow(data))*100, digits = 1)`% aan nooit, zelden of soms op een plek te zijn geweest waar anderhalve meter afstand houden eigenlijk niet mogelijk was. 
-
 
 ```{r behavioradhgenmeasures, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Naleving algemene gedragsregels", tab.cap="Naleving algemene gedragsregels"}
 
@@ -601,10 +597,8 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 ```
 
-
 #### Intentie tot naleving algemene gedragsregels
-Er is gevraagd naar in welke mate men van plan is om zich de komende twee maanden te houden aan een aantal van de algemene gedragsregels. Het percentage respondenten dat aangeeft de intentie te hebben om zich aan de voorgestelde gedragsregels te houden ligt hoog (handen regelmatig wassen: `r round((nrow(filter(data, (Intention_AdherenceGeneralMeasures_handwashing == 'Helemaal mee eens'| Intention_AdherenceGeneralMeasures_handwashing == 'Mee eens'| Intention_AdherenceGeneralMeasures_handwashing == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%; afstand houden: `r round((nrow(filter(data, (Intention_AdherenceGeneralMeasures_distance == 'Helemaal mee eens'| Intention_AdherenceGeneralMeasures_distance == 'Mee eens'| Intention_AdherenceGeneralMeasures_distance == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%; drukke plekken vermijden: `r round((nrow(filter(data, (Intention_AdherenceGeneralMeasures_avoidbusyplaces == 'Helemaal mee eens'| Intention_AdherenceGeneralMeasures_avoidbusyplaces == 'Mee eens'| Intention_AdherenceGeneralMeasures_avoidbusyplaces == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%; thuisblijven bij klachten: `r round((nrow(filter(data, (Intention_AdherenceGeneralMeasures_quarantaine == 'Helemaal mee eens'| Intention_AdherenceGeneralMeasures_quarantaine == 'Mee eens'| Intention_AdherenceGeneralMeasures_quarantaine == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%). Onderstaande figuur geeft de intenties weer ((figuur \@ref(fig:intentionadhgenmeasures))
-
+Er is gevraagd naar in welke mate men van plan is om zich de komende twee maanden te houden aan een aantal van de algemene gedragsregels. Het percentage respondenten dat aangeeft de intentie te hebben om zich aan de voorgestelde gedragsregels te houden ligt hoog (handen regelmatig wassen: `r round((nrow(filter(data, (Intention_AdherenceGeneralMeasures_handwashing == 'Helemaal mee eens'| Intention_AdherenceGeneralMeasures_handwashing == 'Mee eens'| Intention_AdherenceGeneralMeasures_handwashing == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%; afstand houden: `r round((nrow(filter(data, (Intention_AdherenceGeneralMeasures_distance == 'Helemaal mee eens'| Intention_AdherenceGeneralMeasures_distance == 'Mee eens'| Intention_AdherenceGeneralMeasures_distance == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%; drukke plekken vermijden: `r round((nrow(filter(data, (Intention_AdherenceGeneralMeasures_avoidbusyplaces == 'Helemaal mee eens'| Intention_AdherenceGeneralMeasures_avoidbusyplaces == 'Mee eens'| Intention_AdherenceGeneralMeasures_avoidbusyplaces == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%; thuisblijven bij klachten: `r round((nrow(filter(data, (Intention_AdherenceGeneralMeasures_quarantaine == 'Helemaal mee eens'| Intention_AdherenceGeneralMeasures_quarantaine == 'Mee eens'| Intention_AdherenceGeneralMeasures_quarantaine == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%). Onderstaande figuur geeft de intenties weer (figuur \@ref(fig:intentionadhgenmeasures)).
 
 ```{r intentionadhgenmeasures, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot naleving algemene gedragsregels", tab.cap="Intentie tot naleving algemene gedragsregels"}
 
@@ -716,14 +710,10 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 ```
 
-
-
-
 ### Algemene opvattingen over het coronavirus
 
-
 #### Complottheorieën
-Om in kaart te brengen in hoeverre complottheorieën een rol spelen is gevraagd of men dacht dat onderstaande stellingen waar of onwaar zijn (zie figuur \@ref(fig:complot)). Van de respondenten beoordeelt `r round((nrow(filter(data, (Beliefs_Conspiracy1 == 'Zeker waar'| Beliefs_Conspiracy1 == 'Misschien waar'))) /nrow(data))*100, digits = 1)`% de stelling 'Het coronavirus is een biologisch wapen dat in een laboratorium is gemaakt' met misschien waar of zeker waar. Een kleiner percentage beoordeelt de stelling 'De uitbraak van het coronavirus heeft te maken met het 5G netwerk' als misschien waar of zeker waar (`r round((nrow(filter(data, (Beliefs_Conspiracy2 == 'Zeker waar'| Beliefs_Conspiracy2 == 'Misschien waar'))) /nrow(data))*100, digits = 1)`%)
+Om in kaart te brengen in hoeverre complottheorieën een rol spelen is gevraagd of men dacht dat onderstaande stellingen waar of onwaar zijn (zie figuur \@ref(fig:complot)). Van de respondenten beoordeelt `r round((nrow(filter(data, (Beliefs_Conspiracy1 == 'Zeker waar'| Beliefs_Conspiracy1 == 'Misschien waar'))) /nrow(data))*100, digits = 1)`% de stelling 'Het coronavirus is een biologisch wapen dat in een laboratorium is gemaakt' met misschien waar of zeker waar. Een kleiner percentage beoordeelt de stelling 'De uitbraak van het coronavirus heeft te maken met het 5G netwerk' als misschien waar of zeker waar (`r round((nrow(filter(data, (Beliefs_Conspiracy2 == 'Zeker waar'| Beliefs_Conspiracy2 == 'Misschien waar'))) /nrow(data))*100, digits = 1)`%).
 
 ```{r complot, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Geloof in complottheorien", tab.cap="Geloof in complottheorien"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -838,7 +828,7 @@ ft_out
 ```
 
 #### Vertrouwen in aanpak van de overheid
-Respondenten zijn verdeeld wat betreft vertrouwen in de overheid met betrekking tot de aanpak van de coronacrisis (zie figuur \@ref(fig:trustgovernment). Ongeveeer de helft is het eens met de stelling stelling 'Ik heb vertrouwen in de manier waarop de Nederlandse ovreheid probeert het coronavirus onder controle te houden' (`r round((nrow(filter(data, (Beliefs_TrustGovernment == 'Helemaal mee eens'| Beliefs_TrustGovernment == 'Mee eens'| Beliefs_TrustGovernment == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%).
+Respondenten zijn verdeeld wat betreft vertrouwen in de overheid met betrekking tot de aanpak van de coronacrisis (zie figuur \@ref(fig:trustgovernment)). Ongeveeer de helft is het eens met de stelling stelling 'Ik heb vertrouwen in de manier waarop de Nederlandse ovreheid probeert het coronavirus onder controle te houden' (`r round((nrow(filter(data, (Beliefs_TrustGovernment == 'Helemaal mee eens'| Beliefs_TrustGovernment == 'Mee eens'| Beliefs_TrustGovernment == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%).
 
 ```{r trustgovernment, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Geloof dat de CoronaMelder de Nederlandse economie helpt", tab.cap="Vertrouwen in de Nederlandse overheid"}
 
@@ -944,10 +934,9 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 ```
 
-
 ## Bekendheid en gebruik
 ### Bekendheid met CoronaMelder
-In de vragenlijst werd gevraagd hoe bekend men (voor het openen van de vragenlijst) was met de CoronaMelder app. In totaal gaf `r round(((nrow(filter(data, Awareness == 'Heel erg bekend')) + nrow(filter(data, Awareness == 'Bekend')) + nrow(filter(data, Awareness == 'Redelijk bekend'))+ nrow(filter(data, Awareness == 'Een beetje bekend')))/nrow(data)*100), digits = 1)`% aan in meer of mindere mate bekend te zijn met de CoronaMelder (zie figuur \@ref(fig:awareness). Ruim 1 op de 10 `r round(nrow(filter(data, Awareness == 'Niet bekend'))/nrow(data)*100, digits = 1)`% gaf aan niet bekend te zijn met de CoronaMelder.   
+In de vragenlijst werd gevraagd hoe bekend men (voor het openen van de vragenlijst) was met de CoronaMelder app. In totaal gaf `r round(((nrow(filter(data, Awareness == 'Heel erg bekend')) + nrow(filter(data, Awareness == 'Bekend')) + nrow(filter(data, Awareness == 'Redelijk bekend'))+ nrow(filter(data, Awareness == 'Een beetje bekend')))/nrow(data)*100), digits = 1)`% aan in meer of mindere mate bekend te zijn met de CoronaMelder (zie figuur \@ref(fig:awareness)). Ruim 1 op de 10 (`r round(nrow(filter(data, Awareness == 'Niet bekend'))/nrow(data)*100, digits = 1)`%) gaf aan niet bekend te zijn met de CoronaMelder.   
 
 --> To do: Verdere uitplitsingen. 
 
@@ -972,6 +961,7 @@ Van alle respondenten gaf `r round(nrow(filter(data, Behavior_UTAUT == 'Ik gebru
 #### Vergelijking gebruikers en niet gebruikers
 Om inzicht te krijgen in welke factoren (demografisch, persoonlijk, sociaal, omgevingsfactoren) worden gebruikers vergeleken met niet gebruikers. 
 --> To do: verdere uitsplitsingen en bijbehorende statistische tests.   
+
 ```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - Gebruikers", tab.cap="Waargenomen ernst en vatbaarheid - Gebruikers"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -1201,7 +1191,7 @@ ft_out
 ```
 
 ### Intentie tot (blijvend) gebruik CoronaMelder
-Er werd gevraagd of de respondenten de intentie hadden om de CoronaMelder de komende twee maanden te (blijven) gebruiken. Van de respondenten die de CoronaMelder app nooit hebben gebruikt, gaf `r round((nrow(filter(data, (BI1a_UTAUT == 'Helemaal mee eens'| BI1a_UTAUT == 'Mee eens'| BI1a_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`% aan van plan te zijn om de CoronaMelder te gebruiken in de komende twee maanden. Ongeveer een kwart geeft aan hier neutraal in te staan (`r round((nrow(filter(data, (BI1a_UTAUT == 'Neutraal') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`%). Bijna 6 op de 10 respondenten (`r round((nrow(filter(data, (BI1a_UTAUT == 'Helemaal mee oneens'| BI1a_UTAUT == 'Oneens'| BI1a_UTAUT == 'Een beetje oneens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`%) geeft aan niet van plan te zijn de CoronaMelder te gaan gebruiken.  
+Er werd gevraagd of de respondenten de intentie hadden om de CoronaMelder de komende twee maanden te (blijven) gebruiken. Van de respondenten die de CoronaMelder app nooit hebben gebruikt, gaf `r round((nrow(filter(data, (BI1a_UTAUT == 'Helemaal mee eens'| BI1a_UTAUT == 'Mee eens'| BI1a_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`% aan van plan te zijn om de CoronaMelder te gebruiken in de komende twee maanden (zie figuur \@ref(fig:intentiontousenonusers)). Ongeveer een kwart geeft aan hier neutraal in te staan (`r round((nrow(filter(data, (BI1a_UTAUT == 'Neutraal') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`%). Bijna 6 op de 10 respondenten (`r round((nrow(filter(data, (BI1a_UTAUT == 'Helemaal mee oneens'| BI1a_UTAUT == 'Oneens'| BI1a_UTAUT == 'Een beetje oneens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`%) geeft aan niet van plan te zijn de CoronaMelder te gaan gebruiken.  
 
 ```{r intentiontousenonusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot gebruik bij respondenten die de CoronaMelder op dit moment niet gebruiken", tab.cap="Intentie tot gebruik bij respondenten die de CoronaMelder op dit moment niet gebruiken"}
 
@@ -1313,8 +1303,7 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 ```
 
-Van de respondenten die de CoronaMelder op dit moment al gebruiken, gaf een overgrote meerderheid (`r round((nrow(filter(data, (BI1b_UTAUT == 'Helemaal mee eens'| BI1b_UTAUT == 'Mee eens'| BI1b_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)`%) aan van plan te zijn de CoronaMelder te blijven gebruiken in de komende 2 maanden. Een kleine hoeveelheid respondenten gaf aan hier neutraal in te staan (`r round((nrow(filter(data, (BI1b_UTAUT == 'Neutraal') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)`%) Slechts `r round((nrow(filter(data, (BI1b_UTAUT == 'Helemaal mee oneens'| BI1b_UTAUT == 'Oneens'| BI1b_UTAUT == 'Een beetje oneens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)`% gaf aan niet van plan te zijn de CoronaMelder te blijven gebruiken. 
-
+Van de respondenten die de CoronaMelder op dit moment al gebruiken, gaf een overgrote meerderheid (`r round((nrow(filter(data, (BI1b_UTAUT == 'Helemaal mee eens'| BI1b_UTAUT == 'Mee eens'| BI1b_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)`%) aan van plan te zijn de CoronaMelder te blijven gebruiken in de komende 2 maanden (zie figuur \@ref(fig:intentiontousecurrentusers)). Een kleine hoeveelheid respondenten gaf aan hier neutraal in te staan (`r round((nrow(filter(data, (BI1b_UTAUT == 'Neutraal') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)`%) Slechts `r round((nrow(filter(data, (BI1b_UTAUT == 'Helemaal mee oneens'| BI1b_UTAUT == 'Oneens'| BI1b_UTAUT == 'Een beetje oneens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)`% gaf aan niet van plan te zijn de CoronaMelder te blijven gebruiken. 
 
 ```{r intentiontousecurrentusers, eval=FALSE, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot gebruik bij respondenten die de CoronaMelder op dit moment al gebruiken", tab.cap="Intentie tot gebruik bij respondenten die de CoronaMelder op dit moment al gebruiken"}
 
@@ -2339,7 +2328,7 @@ Belangrijke variabelen uit het UTAUT en het HBM zijn de verwachte nadelen van he
 
 ```{r Barriersvoluntariness, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Persoonlijke nadelen en verplichting tot gebruik", tab.cap="Persoonlijke nadelen en verplichting tot gebruik"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
-graph_variablenames = c("HBM_perceivedbenefits_CoronaMelder", 
+graph_variablenames = c("HBM_barriers_CoronaMelder", 
                         "Beliefs_voluntariness")
 graph_questionlabels = c("Het heeft voor mij\n persoonlijke nadelen om\n de CoronaMelder te\n gebruiken", 
                          "Ik voel me verplicht\n om de CoronaMelder\n te gebruiken"); 
@@ -3363,7 +3352,7 @@ ft_out
 
 #### Verklarende factoren opvolging adviezen gegeven in melding
 ##### Eigen effectiviteit opvolging adviezen
-Om de eigen effectivietit in kaart te brengen werd gevraagd in welke mate men dacht in staat te zijn o de adviezen uit de melding op te volgen. 
+Om de eigen effectiviteit in kaart te brengen werd gevraagd in welke mate men dacht in staat te zijn om de adviezen uit de melding op te volgen. 
 
 ```{r adherencenotificationsselfefficacy, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Eigen effectiviteit om adviezen op te volgen", tab.cap="Eigen effectiviteit om adviezen op te volgen"}
 
@@ -3473,8 +3462,7 @@ ft_out
 
 
 ##### Gepercipieerde persoonlijke voor- en nadelen van opvolgen adviezen
-Uit het Health Belief Model is bekend dat de mate waarin men verwacht dat een gedrag persoonlijke voor- of nadelen heeft een rol kan spelen in de adoptie van het gedrag. 
-
+Uit het Health Belief Model is bekend dat de mate waarin men verwacht dat een gedrag persoonlijke voor- of nadelen heeft een rol kan spelen in de adoptie van het gedrag. Voor een aantal gedragingen omtrent de opvolging van adviezen zijn deze voor- en nadelen uitgevraagd. Het blijkt dat ongeveer de helft van de respondenten deze persoonlijke voordelen inziet (bellen voor een test: `r round((nrow(filter(data, (HBM_perceivedbenefits_Test == 'Helemaal mee eens'| HBM_perceivedbenefits_Test == 'Mee eens'| HBM_perceivedbenefits_Test == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%; thuisblijven zolang geadviseerd is: `r round((nrow(filter(data, (HBM_perceivedbenefits_Quarantaine == 'Helemaal mee eens'| HBM_perceivedbenefits_Quarantaine == 'Mee eens'| HBM_perceivedbenefits_Quarantaine == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%; geen bezoek ontvangen: `r round((nrow(filter(data, (HBM_perceivedbenefits_Visits == 'Helemaal mee eens'| HBM_perceivedbenefits_Visits == 'Mee eens'| HBM_perceivedbenefits_Visits == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%; de huisarts bellen: `r round((nrow(filter(data, (HBM_perceivedbenefits_GP == 'Helemaal mee eens'| HBM_perceivedbenefits_GP == 'Mee eens'| HBM_perceivedbenefits_GP == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%), zie figuur \@ref(fig:HBMbenefits). Een aanzienlijke groep staat neutraal tegenover de voordelen om adviezen op te volgen ((bellen voor een test: `r round((nrow(filter(data, (HBM_perceivedbenefits_Test == 'Neutraal'))) /nrow(data))*100, digits = 1)`%; thuisblijven zolang geadviseerd is: `r round((nrow(filter(data, (HBM_perceivedbenefits_Quarantaine == 'Neutraal'))) /nrow(data))*100, digits = 1)`%; geen bezoek ontvangen: `r round((nrow(filter(data, (HBM_perceivedbenefits_Visits == 'Neutraal'))) /nrow(data))*100, digits = 1)`%; de huisarts bellen: `r round((nrow(filter(data, (HBM_perceivedbenefits_GP == 'Neutraal'))) /nrow(data))*100, digits = 1)`%.
 
 ```{r HBMbenefits, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Persoonlijke voordelen om adviezen op te volgen", tab.cap="Persoonlijke voordelen om adviezen op te volgen"}
 
@@ -3578,16 +3566,17 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 ```
 
+Ook met betrekking tot persoonlijke nadelen van het opvolgen van de adviezen blijkt een groot aandeel neutraal te zijn (bellen voor een test: `r round((nrow(filter(data, (HBM_barriers_Test == 'Neutraal'))) /nrow(data))*100, digits = 1)`%; thuisblijven zolang geadviseerd is: `r round((nrow(filter(data, (HBM_barriers_Quarantaine == 'Neutraal'))) /nrow(data))*100, digits = 1)`%; geen bezoek ontvangen: `r round((nrow(filter(data, (HBM_barriers_Visits == 'Neutraal'))) /nrow(data))*100, digits = 1)`%; de huisarts bellen: `r round((nrow(filter(data, (HBM_barriers_GP == 'Neutraal'))) /nrow(data))*100, digits = 1)`%). Er zit variatie in de mate waarin men het eens is met de stellingen of bepaalde acties persoonlijke nadelen hebben. Het percentage mensen dat het eens is met nadelige gevolgen is het grootst voor thuisblijven (`r round((nrow(filter(data, (HBM_barriers_Quarantaine == 'Helemaal mee eens'| HBM_barriers_Quarantaine == 'Mee eens'| HBM_barriers_Quarantaine == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%) en het niet kunnen ontvangen van bezoek (`r round((nrow(filter(data, (HBM_barriers_Visits == 'Helemaal mee eens'| HBM_barriers_Visits == 'Mee eens'| HBM_barriers_Visits == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%). Het bellen voor een test (`r round((nrow(filter(data, (HBM_barriers_Test == 'Helemaal mee eens'| HBM_barriers_Test == 'Mee eens'| HBM_barriers_Test == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%) of de huisarts bellen (`r round((nrow(filter(data, (HBM_barriers_GP == 'Helemaal mee eens'| HBM_barriers_GP == 'Mee eens'| HBM_barriers_GP == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%) wordt als minder nadelig gezien (zie figuur \@ref(fig:HBMbarriers)).
+
+
 ```{r HBMbarriers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Persoonlijke nadelen om adviezen op te volgen", tab.cap="Persoonlijke nadelen om adviezen op te volgen"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
-graph_variablenames = c("HBM_barriers_CoronaMelder", 
-                        "HBM_barriers_Test", 
+graph_variablenames = c("HBM_barriers_Test", 
                         "HBM_barriers_Quarantaine", 
                         "HBM_barriers_Visits",
                         "HBM_barriers_GP")
-graph_questionlabels = c("... de CoronaMelder te gebruiken", 
-                         "... te bellen voor een test", 
+graph_questionlabels = c("... te bellen voor een test", 
                          "... zo lang thuis te blijven\n als wordt geadviseerd", 
                          "... geen bezoek te ontvangen",
                          "... de huisarts te bellen"); 
@@ -3682,10 +3671,8 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 ```
 
-
 ### Intentie tot doorgeven GGD-sleutel na positieve test
-Als iemand positief is getest op het coronavirus kan men dit daarna via de app laten weten door de GGD-sleutel door te geven aan de GGD medewerker. Dan waarschuwt de app weer mensen bij wie de positief gesteste persoon in de buurt is geweest. Er is gevraagd in hoeverre men van plan is om deze GGD-sleutel door te geven. 
-
+Als iemand positief is getest op het coronavirus kan men dit daarna via de app laten weten door de GGD-sleutel door te geven aan de GGD medewerker. Dan waarschuwt de app weer mensen bij wie de positief gesteste persoon in de buurt is geweest. Van de respondenten heeft `r round((nrow(filter(data, (Intention_reportinfection == 'Helemaal mee eens'| Intention_reportinfection == 'Mee eens'| Intention_reportinfection == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%  de intentie om de GGD-sleutel door te geven. 
 
 ```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot doorgeven GGD-sleutel", tab.cap="Intentie tot doorgeven GGD-sleutel"}
 
@@ -3783,16 +3770,10 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 ```
 
-
-
-
-
 ### Onbeoogde effecten: schijnveiligheid
-Beliefs_falsesecurity1
-Beliefs_falsesecurity2  
+Een gevoel van schijnveiligheid zou kunnen optreden bij de adoptie van de CoronaMelder, wat ervoor zou kunnen zorgen dat andere maatregelen minder nodig worden geacht. Uit de antwoorden op de stelling of men zich minder aan andere maatregelen kan houden bij het gebruik van de CoronaMelder, blijkt dat slechts een klein aandeel denkt dat dit het geval is. Het aandeel dat op deze vraag 'zeker waar' of 'misschien waar' antwoordt, is `r round((nrow(filter(data, (Beliefs_falsesecurity1 == 'Zeker waar'| Beliefs_falsesecurity1 == 'Misschien waar'))) /nrow(data))*100, digits = 1)`%. Een iets groter percentage denkt dat de CoronaMelder ervoor zorgt dat je niet besmet kunt raken (`r round((nrow(filter(data, (Beliefs_falsesecurity2 == 'Zeker waar'| Beliefs_falsesecurity2 == 'Misschien waar'))) /nrow(data))*100, digits = 1)`%).
 
-
-```{r falsesecurity, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Schijnveiligheid"}
+```{r falsesecurity, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Schijnveiligheid", tab.cap="Schijnveiligheid"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Beliefs_falsesecurity1",
                         "Beliefs_falsesecurity2")
