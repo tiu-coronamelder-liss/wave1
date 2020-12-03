@@ -3115,7 +3115,7 @@ ft_out
 ```
 
 #### Intentie tot opvolgen adviezen gegeven in de melding - alleen huidig gebruikers
-Dezelfde bepalingen zijn ook gedaan in allen de subsample (n = `r nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))`) die momenteel de CoronaMelder gebruikt. 
+Dezelfde bepalingen zijn ook gedaan in alleen de subsample (n = `r nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))`) die momenteel de CoronaMelder gebruikt. 
 ``` {r adherencenotificationsnosympcurrentusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot opvolgen adviezen zonder symptomen - alleen huidig gebruikers", tab.cap="Intentie tot opvolgen adviezen zonder symptomen - alleen huidig gebruikers"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("AdherenceNotificationMeasuresNosymptoms_Test", 
