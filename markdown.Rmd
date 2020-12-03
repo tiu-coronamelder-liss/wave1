@@ -2323,14 +2323,16 @@ ft_out
 ```
 
 
-### Persoonlijke nadelen van gebruik en verplichting tot gebruik
+### Persoonlijke voor- en nadelen van gebruik en verplichting tot gebruik
 Belangrijke variabelen uit het UTAUT en het HBM zijn de verwachte nadelen van het gebruik en de mate waarin iemand een verplichting voelt om de techniek te gebruiken. 
 
-```{r Barriersvoluntariness, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Persoonlijke nadelen en verplichting tot gebruik", tab.cap="Persoonlijke nadelen en verplichting tot gebruik"}
+```{r Motivationsbarriersvoluntariness, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Persoonlijke voor- en nadelen van gebruik en verplichting tot gebruik", tab.cap="Persoonlijke nadelen en verplichting tot gebruik", tab.cap="Persoonlijke voor- en nadelen van gebruik en verplichting tot gebruik", tab.cap="Persoonlijke nadelen en verplichting tot gebruik"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
-graph_variablenames = c("HBM_barriers_CoronaMelder", 
+graph_variablenames = c("HBM_perceivedbenefits_CoronaMelder",
+                        "HBM_barriers_CoronaMelder", 
                         "Beliefs_voluntariness")
-graph_questionlabels = c("Het heeft voor mij\n persoonlijke nadelen om\n de CoronaMelder te\n gebruiken", 
+graph_questionlabels = c("Het heeft voor mij\n persoonlijke voordelen om\n de CoronaMelder te\n gebruiken",
+                         "Het heeft voor mij\n persoonlijke nadelen om\n de CoronaMelder te\n gebruiken", 
                          "Ik voel me verplicht\n om de CoronaMelder\n te gebruiken"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
