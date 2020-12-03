@@ -73,6 +73,43 @@ cronbach(data[, c("HealthLiteracy1nr", "HealthLiteracy2n", "HealthLiteracy3nr")]
 # Data splitsen hoge vs. midden. vs lage health literacy
 #data$CatHL <- cut(data$HealthLiteracy, breaks = c(0,1.333333,3.66666,5), labels = c("Laag", "Midden", "Hoog"))
 
+# Calculate size of 6 user subgroups
+# Lookup table for totals of different user groups
+usergroup_variablenames = c("user_woulduse",
+                            "user_neutral",
+                            "user_wouldnotuse",
+                            "nonuser_woulduse",
+                            "nonuser_neutral",
+                            "nonuser_wouldnotuse")
+
+usergroup_variablelabels = c("Blijvend",
+                             "Neutraal",
+                             "Stoppend",
+                             "Met intentie",
+                             "Neutraal",
+                             "Geen intentie")
+
+# Create dataframe
+user_totals <- data.frame(matrix(ncol = length(usergroup_variablenames), nrow = 1))
+colnames(user_totals) <- usergroup_variablenames
+
+# 1. Current user of app, would keep using
+user_totals[1] <- nrow(filter(data, (BI1b_UTAUT == 'Helemaal mee eens'| BI1b_UTAUT == 'Mee eens'| BI1b_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))
+
+# 2. Current user of app, neutral about continuing use
+user_totals[2] <- nrow(filter(data, BI1b_UTAUT == 'Neutraal' & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))
+
+# 3. Current user of app, intends to stop using
+user_totals[3] <- nrow(filter(data, (BI1b_UTAUT == 'Helemaal mee oneens'| BI1b_UTAUT == 'Oneens'| BI1b_UTAUT == 'Een beetje oneens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))
+
+# 4. Current non-user, intends to start using
+user_totals[4] <- nrow(filter(data, (BI1a_UTAUT == 'Helemaal mee eens' | BI1a_UTAUT == 'Mee eens'| BI1a_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt'))
+
+# 5. Current non-user, neutral about starting use -- interesting target for promotion
+user_totals[5] <- nrow(filter(data, BI1a_UTAUT == 'Neutraal' & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt'))
+
+# 6. Current non-user, does not intend to start using
+user_totals[6] <- nrow(filter(data, (BI1a_UTAUT == 'Helemaal mee oneens' | BI1a_UTAUT == 'Oneens'| BI1a_UTAUT == 'Een beetje oneens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt'))
 ```
 \newpage
 # Samenvatting {.unlisted .unnumbered}
@@ -1276,6 +1313,98 @@ Beliefs_ResponseefficasyOther <- table(data$Beliefs_ResponseefficasyOther)
 pl <- barplot(Beliefs_ResponseefficasyOther, xaxt="n")
 labs <- paste(names(table(data$Beliefs_ResponseefficasyOther)))
 text(cex=0.8, x=pl+0.25, y=-25, labels=labs, xpd=TRUE, srt=45, pos=2)
+
+```
+
+#### Per (potentiële) gebruikersgroep
+```{r, echo=FALSE}
+
+# Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
+graph_variablenames = c("PE1_UTAUT", 
+                        "PE2_UTAUT", 
+                        "Beliefs_Protectriskgroups")
+graph_questionlabels = c("Door de CoronaMelder app te \n gebruiken help ik mee bij de \n bestrijding van het coronavirus", 
+                         "De CoronaMelder app is nuttig \n om ervoor te zorgen dat het \n coronavirus zich minder verspreidt", 
+                         "De CoronaMelder app helpt om \nmensen met een kwetsbare \n gezondheid te beschermen") 
+
+# Split by 6 user groups
+data_grouptable = data.frame(matrix(ncol = length(colnames(user_totals))+1, nrow = length(graph_variablenames)))
+colnames(data_grouptable) <- c("variable", usergroup_variablenames)
+
+# Set the values for each variable. Note: this still contains too much logic right now, the values that are counted 
+# as correct (in this case "Helemaal mee eens", "Mee eens", and "Een beetje mee eens") are manually added
+# and will not apply to all variables (sometimes it is "Waar", or a different likert-scale)
+for(idx in 1:length(graph_variablenames)) {
+  data_grouptable[idx,1] = graph_variablenames[idx]
+  
+  # Current user of app, would keep using
+  data_grouptable[idx,2] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx])) == 'Helemaal mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Een beetje mee eens') & (BI1b_UTAUT == 'Helemaal mee eens'| BI1b_UTAUT == 'Mee eens'| BI1b_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))
+  
+  # Current user of app, neutral
+  data_grouptable[idx,3] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx])) == 'Helemaal mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Een beetje mee eens') & BI1b_UTAUT == 'Neutraal' & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))
+  
+  # Current user of app, would stop using
+  data_grouptable[idx,4] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx])) == 'Helemaal mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Een beetje mee eens') & (BI1b_UTAUT == 'Helemaal mee oneens'| BI1b_UTAUT == 'Oneens'| BI1b_UTAUT == 'Een beetje oneens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))
+  
+  # Current non-user, intend to start using
+  data_grouptable[idx,5] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx])) == 'Helemaal mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Een beetje mee eens') & (BI1a_UTAUT == 'Helemaal mee eens' | BI1a_UTAUT == 'Mee eens'| BI1a_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt'))
+  
+  # Current non-user, neutral
+  data_grouptable[idx,6] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx])) == 'Helemaal mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Een beetje mee eens') & BI1a_UTAUT == 'Neutraal' & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt'))  
+  
+  # Current non-user, no intention to start using
+  data_grouptable[idx,7] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx])) == 'Helemaal mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Een beetje mee eens') & (BI1a_UTAUT == 'Helemaal mee oneens' | BI1a_UTAUT == 'Oneens'| BI1a_UTAUT == 'Een beetje oneens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt'))
+}
+
+# Build the basic table
+ft <- flextable(
+  head(data_grouptable, n = nrow(data_grouptable))
+)
+
+# Header labels
+#ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal", user_totals)
+totals[-1] <- paste(totals[-1], " (100.0%)")
+
+# Percentages and totals
+for(colname in colnames(data_grouptable)) {
+  if(colname != "variable") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", ifelse(user_totals[1,colname]==0,0,eval(parse(text=colname))/user_totals[1,colname]*100)), "%)"))
+    
+    # Add total to footer
+    #tablecolumn = paste("data_table$", colname)
+    #totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_grouptable))-1))
+
+ft_out
 
 ```
 
