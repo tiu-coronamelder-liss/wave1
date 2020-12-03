@@ -250,7 +250,10 @@ ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + g
 
 
 #### Corona risicoperceptie en ernst
-Uit gedragswetenschappelijke literatuur is bekend dat gepercipieerde ernst en vatbaarheid voor een ziekte een rol kan spelen in de acceptatie van gezondheidsadviezen. 
+Uit gedragswetenschappelijke literatuur is bekend dat gepercipieerde ernst en vatbaarheid voor een ziekte een rol kan spelen in de acceptatie van gezondheidsadviezen. Ongeveer de helft van de steekproef acht zichzelf vatbaar voor het coronavirus: `r round((nrow(filter(data, (HBM_PSus_self1 == 'Helemaal mee eens'| HBM_PSus_self1 == 'Mee eens'| HBM_PSus_self1 == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`% gaf aan het eens te zijn met de stelling dat men risico loopt op een besmetting in de komende twee maanden. Daarnaast was een vergelijkbaar percentage (`r round((nrow(filter(data, (HBM_PSus_other2 == 'Helemaal mee eens'| HBM_PSus_other2 == 'Mee eens'| HBM_PSus_other2 == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%) het in meer of mindere mate eens met de stelling dat de kans groot is om een ander te besmetten indien men zelf besmet raakt.
+
+De gepercipieerde ernst lag hoger onder de respondenten, met name de ernst van het besmetten van anderen (`r round((nrow(filter(data, (HBM_PSev_other2 == 'Helemaal mee eens'| HBM_PSev_other2 == 'Mee eens'| HBM_PSev_other2 == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%). Daarnaast vindt `r round((nrow(filter(data, (HBM_PSev_self1 == 'Helemaal mee eens'| HBM_PSev_self1 == 'Mee eens'| HBM_PSev_self1 == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`% het erg om zelf besmet te raken met het coronavirus.
+
 
 ```{r riskperception, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - hele populatie", tab.cap="Waargenomen ernst en vatbaarheid - hele populatie"}
 
@@ -367,7 +370,9 @@ ft_out
 ```
 
 #### Naleven algemene gedragsregels
-In kaart is gebracht in hoeverre de respondenten zich in de afgelopen 2 maanden aan een aantal van de algemene gedragsregels hebben gehouden.    
+In kaart is gebracht in hoeverre de respondenten zich in de afgelopen 2 maanden aan een aantal van de algemene gedragsregels hebben gehouden. `r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_handwashing == 'Altijd'| Behavior_AdherenceGeneralMeasures_handwashing == 'Meestal'| Behavior_AdherenceGeneralMeasures_handwashing == 'Vaak'))) /nrow(data))*100, digits = 1)`% geeft aan, regelmatig, vaak of altijd handen te wassen. Ongeveer de helft van de respondenten (`r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_distance == 'Nooit'| Behavior_AdherenceGeneralMeasures_distance == 'Zelden'| Behavior_AdherenceGeneralMeasures_distance == 'Soms'))) /nrow(data))*100, digits = 1)`%) geeft aan nooit, zelden of soms op minder dan 1,5 afstand van mensen buiten het huishouden te zijn geweest. Tot slot geeft `r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Nooit'| Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Zelden'| Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Soms'))) /nrow(data))*100, digits = 1)`% aan nooit, zelden of soms op een plek te zijn geweest waar anderhalve meter afstand houden eigenlijk niet mogelijk was. 
+
+
 ```{r behavioradhgenmeasures, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Naleving algemene gedragsregels", tab.cap="Naleving algemene gedragsregels"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -477,7 +482,7 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 ```
 
-Van alle respondenten gaf `r round(nrow(filter(data, Corona_complaints == "Ja"))/nrow(data)*100, digits =1)`% aan klachten te hebben gehad die passen bij het coronavirus in de afgelopen twee maanden. Onderstaande grafiek laat zien in hoeverre deze respondenten in quarantaine bleven.  
+Van alle respondenten gaf `r round(nrow(filter(data, Corona_complaints == "Ja"))/nrow(data)*100, digits =1)`% aan klachten te hebben gehad die passen bij het coronavirus in de afgelopen twee maanden. Onderstaande grafiek laat zien in hoeverre deze respondenten in quarantaine bleven: in totaal gaf `r round((nrow(filter(data, Corona_complaints == "Ja" & (Behavior_AdherenceGeneralMeasures_quarantaine == 'Nooit'| Behavior_AdherenceGeneralMeasures_quarantaine == 'Zelden'| Behavior_AdherenceGeneralMeasures_quarantaine == 'Soms'))) /nrow(data))*100, digits = 1)`% PERCENTAGE KLOPT NIET!!! aan nooit, zelden of soms naar buiten te gaan met klachten. 
 
 
 ```{r coronacomplaintsquarantaine, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Naleving algemene gedragsregels bij klachten"}
@@ -590,7 +595,8 @@ ft_out
 
 
 #### Intentie tot naleving algemene gedragsregels
-Er is gevraagd naar in welke mate men van plan is om zich de komende twee maanden te houden aan een aantal van de algemene gedragsregels. 
+Er is gevraagd naar in welke mate men van plan is om zich de komende twee maanden te houden aan een aantal van de algemene gedragsregels. Het percentage respondenten dat aangeeft de intentie te hebben om zich aan de voorgestelde gedragsregels te houden ligt hoog (handen regelmatig wassen: `r round((nrow(filter(data, (Intention_AdherenceGeneralMeasures_handwashing == 'Helemaal mee eens'| Intention_AdherenceGeneralMeasures_handwashing == 'Mee eens'| Intention_AdherenceGeneralMeasures_handwashing == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%; afstand houden: `r round((nrow(filter(data, (Intention_AdherenceGeneralMeasures_distance == 'Helemaal mee eens'| Intention_AdherenceGeneralMeasures_distance == 'Mee eens'| Intention_AdherenceGeneralMeasures_distance == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%; drukke plekken vermijden: `r round((nrow(filter(data, (Intention_AdherenceGeneralMeasures_avoidbusyplaces == 'Helemaal mee eens'| Intention_AdherenceGeneralMeasures_avoidbusyplaces == 'Mee eens'| Intention_AdherenceGeneralMeasures_avoidbusyplaces == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%; thuisblijven bij klachten: `r round((nrow(filter(data, (Intention_AdherenceGeneralMeasures_quarantaine == 'Helemaal mee eens'| Intention_AdherenceGeneralMeasures_quarantaine == 'Mee eens'| Intention_AdherenceGeneralMeasures_quarantaine == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%).
+
 
 ```{r intentionadhgenmeasures, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot naleving algemene gedragsregels", tab.cap="Intentie tot naleving algemene gedragsregels"}
 
