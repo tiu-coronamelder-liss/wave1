@@ -370,7 +370,7 @@ ft_out
 ```
 
 #### Naleven algemene gedragsregels
-In kaart is gebracht in hoeverre de respondenten zich in de afgelopen 2 maanden aan een aantal van de algemene gedragsregels hebben gehouden ((zie figuur \@ref(fig:behavioradhgenmeasures). `r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_handwashing == 'Altijd'| Behavior_AdherenceGeneralMeasures_handwashing == 'Meestal'| Behavior_AdherenceGeneralMeasures_handwashing == 'Vaak'))) /nrow(data))*100, digits = 1)`% geeft aan, regelmatig, vaak of altijd handen te wassen. Ongeveer de helft van de respondenten (`r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_distance == 'Nooit'| Behavior_AdherenceGeneralMeasures_distance == 'Zelden'| Behavior_AdherenceGeneralMeasures_distance == 'Soms'))) /nrow(data))*100, digits = 1)`%) geeft aan nooit, zelden of soms op minder dan 1,5 afstand van mensen buiten het huishouden te zijn geweest. Tot slot geeft `r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Nooit'| Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Zelden'| Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Soms'))) /nrow(data))*100, digits = 1)`% aan nooit, zelden of soms op een plek te zijn geweest waar anderhalve meter afstand houden eigenlijk niet mogelijk was. 
+In kaart is gebracht in hoeverre de respondenten zich in de afgelopen 2 maanden aan een aantal van de algemene gedragsregels hebben gehouden (zie figuur \@ref(fig:behavioradhgenmeasures)). `r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_handwashing == 'Altijd'| Behavior_AdherenceGeneralMeasures_handwashing == 'Meestal'| Behavior_AdherenceGeneralMeasures_handwashing == 'Vaak'))) /nrow(data))*100, digits = 1)`% Gaf aan, regelmatig, vaak of altijd handen te wassen. Ongeveer de helft van de respondenten (`r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_distance == 'Nooit'| Behavior_AdherenceGeneralMeasures_distance == 'Zelden'| Behavior_AdherenceGeneralMeasures_distance == 'Soms'))) /nrow(data))*100, digits = 1)`%) gaf aan nooit, zelden of soms op minder dan 1,5 afstand van mensen buiten het huishouden te zijn geweest. Tot slot gaf `r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Nooit'| Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Zelden'| Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Soms'))) /nrow(data))*100, digits = 1)`% aan nooit, zelden of soms op een plek te zijn geweest waar anderhalve meter afstand houden eigenlijk niet mogelijk was. 
 
 
 ```{r behavioradhgenmeasures, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Naleving algemene gedragsregels", tab.cap="Naleving algemene gedragsregels"}
@@ -482,7 +482,7 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 ```
 
-Van alle respondenten gaf `r round(nrow(filter(data, Corona_complaints == "Ja"))/nrow(data)*100, digits =1)`% aan klachten te hebben gehad die passen bij het coronavirus in de afgelopen twee maanden. Onderstaande grafiek (figuur \@ref(fig:coronacomplaintsquarantaine)) laat zien in hoeverre deze respondenten in quarantaine bleven: in totaal gaf `r round((nrow(filter(data, Corona_complaints == "Ja" & (Behavior_AdherenceGeneralMeasures_quarantaine == 'Nooit'| Behavior_AdherenceGeneralMeasures_quarantaine == 'Zelden'| Behavior_AdherenceGeneralMeasures_quarantaine == 'Soms'))) /nrow(filter(data, Corona_complaints == "Ja")))*100, digits = 1)`% 
+Van alle respondenten gaf `r round(nrow(filter(data, Corona_complaints == "Ja"))/nrow(data)*100, digits =1)`% aan klachten te hebben gehad die passen bij het coronavirus in de afgelopen twee maanden. Onderstaande grafiek (figuur \@ref(fig:coronacomplaintsquarantaine)) laat zien in hoeverre deze respondenten in quarantaine bleven: in totaal gaf `r round((nrow(filter(data, Corona_complaints == "Ja" & (Behavior_AdherenceGeneralMeasures_quarantaine == 'Nooit'| Behavior_AdherenceGeneralMeasures_quarantaine == 'Zelden'| Behavior_AdherenceGeneralMeasures_quarantaine == 'Soms'))) /nrow(filter(data, Corona_complaints == "Ja")))*100, digits = 1)`% nooit, zelden of soms naar buiten te zijn geweest met klachten.
 
 ```{r coronacomplaintsquarantaine, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Naleving algemene gedragsregels bij klachten"}
 
@@ -715,7 +715,7 @@ ft_out
 
 
 #### Complottheorieën
-Om in kaart te brengen in hoeverre complottheorieën een rol spelen is gevraagd of men dacht dat onderstaande stellingen waar of onwaar zijn (zie figuur \@ref(fig:complot)). 
+Om in kaart te brengen in hoeverre complottheorieën een rol spelen is gevraagd of men dacht dat onderstaande stellingen waar of onwaar zijn (zie figuur \@ref(fig:complot)). Van de respondenten beoordeelt `r round((nrow(filter(data, (Beliefs_Conspiracy1 == 'Zeker waar'| Beliefs_Conspiracy1 == 'Misschien waar'))) /nrow(data))*100, digits = 1)`% de stelling 'Het coronavirus is een biologisch wapen dat in een laboratorium is gemaakt' met misschien waar of zeker waar. Een kleiner percentage beoordeelt de stelling 'De uitbraak van het coronavirus heeft te maken met het 5G netwerk' als misschien waar of zeker waar (`r round((nrow(filter(data, (Beliefs_Conspiracy2 == 'Zeker waar'| Beliefs_Conspiracy2 == 'Misschien waar'))) /nrow(data))*100, digits = 1)`%)
 
 ```{r complot, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Geloof in complottheorien", tab.cap="Geloof in complottheorien"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -830,7 +830,7 @@ ft_out
 ```
 
 #### Vertrouwen in aanpak van de overheid
-Beliefs_TrustGovernment
+Respondenten zijn verdeeld wat betreft vertrouwen in de overheid met betrekking tot de aanpak van de coronacrisis (zie figuur \@ref(fig:trustgovernment). Ongeveeer de helft is het eens met de stelling stelling 'Ik heb vertrouwen in de manier waarop de Nederlandse ovreheid probeert het coronavirus onder controle te houden' (`r round((nrow(filter(data, (Beliefs_TrustGovernment == 'Helemaal mee eens'| Beliefs_TrustGovernment == 'Mee eens'| Beliefs_TrustGovernment == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%).
 
 ```{r trustgovernment, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Geloof dat de CoronaMelder de Nederlandse economie helpt", tab.cap="Vertrouwen in de Nederlandse overheid"}
 
@@ -937,13 +937,9 @@ ft_out
 ```
 
 
-
-
-
-
 ## Bekendheid en gebruik
 ### Bekendheid met CoronaMelder
-In de vragenlijst werd gevraagd hoe bekend men (voor het openen van de vragenlijst) was met de CoronaMelder app. In totaal gaven `r round(((nrow(filter(data, Awareness == 'Heel erg bekend')) + nrow(filter(data, Awareness == 'Bekend')) + nrow(filter(data, Awareness == 'Redelijk bekend'))+ nrow(filter(data, Awareness == 'Een beetje bekend')))/nrow(data)*100), digits = 1)`% aan in meer of mindere mate bekend te zijn met de CoronaMelder (Tabel 1). Ruim 1 op de 10 `r round(nrow(filter(data, Awareness == 'Niet bekend'))/nrow(data)*100, digits = 1)`% gaf aan niet bekend te zijn met de CoronaMelder.   
+In de vragenlijst werd gevraagd hoe bekend men (voor het openen van de vragenlijst) was met de CoronaMelder app. In totaal gaf `r round(((nrow(filter(data, Awareness == 'Heel erg bekend')) + nrow(filter(data, Awareness == 'Bekend')) + nrow(filter(data, Awareness == 'Redelijk bekend'))+ nrow(filter(data, Awareness == 'Een beetje bekend')))/nrow(data)*100), digits = 1)`% aan in meer of mindere mate bekend te zijn met de CoronaMelder (zie figuur \@ref(fig:awareness). Ruim 1 op de 10 `r round(nrow(filter(data, Awareness == 'Niet bekend'))/nrow(data)*100, digits = 1)`% gaf aan niet bekend te zijn met de CoronaMelder.   
 
 --> To do: Verdere uitplitsingen. 
 
@@ -952,12 +948,12 @@ In de vragenlijst werd gevraagd hoe bekend men (voor het openen van de vragenlij
 ggplot(data=data, aes(x = Awareness)) + theme_bw() + xlab(paste(names(table(data$Awareness)))) + ylab(" ") + xlab("Hoe bekend bent u met\n de CoronaMelder?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(,axis.title=element_text(size=10))
 ```
 
-```{r awarenesslftd, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Bekendheid met CoronaMelder", tab.cap="Waargenomen ernst en vatbaarheid - Gebruikers"}
+```{r awarenesslftd, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Bekendheid met de CoronaMelder per leeftijdscategorie"}
 # Awareness op leeftijdscategorie, met ook 'reversed' labels en waarden in de bar chart:
 ggplot(data=data, aes(fill=Awareness, x=lftdcat)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("15-24", "25-34", "35-44", "45-54", "55-64", "65+")) + coord_flip() + labs(x = "Leeftijdscategorie", y = "", fill = "") + ggtitle("Bekendheid Coronamelder per leeftijdscategorie") + scale_fill_manual(values=my_palette5) + guides(fill = guide_legend(reverse = TRUE))
 ```
 
-```{r awarenessgender, echo=FALSE}
+```{r awarenessgender, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Bekendheid met de CoronaMelder per geslacht"}
 # Awareness op gender
 ggplot(data=data, aes(fill=Awareness, x=geslacht)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("man", "vrouw")) + coord_flip() + labs(x = " ", y = "", fill = "") + ggtitle("Bekendheid Coronamelder per geslacht") + scale_fill_manual(values=my_palette5) + guides(fill = guide_legend(reverse = TRUE))
 ```
@@ -1198,6 +1194,7 @@ ft_out
 
 ### Intentie tot (blijvend) gebruik CoronaMelder
 Er werd gevraagd of de respondenten de intentie hadden om de CoronaMelder de komende twee maanden te (blijven) gebruiken. Van de respondenten die de CoronaMelder app nooit hebben gebruikt, gaf `r round((nrow(filter(data, (BI1a_UTAUT == 'Helemaal mee eens'| BI1a_UTAUT == 'Mee eens'| BI1a_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`% aan van plan te zijn om de CoronaMelder te gebruiken in de komende twee maanden. Ongeveer een kwart geeft aan hier neutraal in te staan (`r round((nrow(filter(data, (BI1a_UTAUT == 'Neutraal') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`%). Bijna 6 op de 10 respondenten (`r round((nrow(filter(data, (BI1a_UTAUT == 'Helemaal mee oneens'| BI1a_UTAUT == 'Oneens'| BI1a_UTAUT == 'Een beetje oneens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`%) geeft aan niet van plan te zijn de CoronaMelder te gaan gebruiken.  
+
 ```{r intentiontousenonusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot gebruik bij respondenten die de CoronaMelder op dit moment niet gebruiken", tab.cap="Intentie tot gebruik bij respondenten die de CoronaMelder op dit moment niet gebruiken"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -1563,6 +1560,7 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 
 ft_out
 ```
+
 Er is ook gevraagd hoeveel procent van de Nederlandse bevolking volgens de respondent de CoronaMelder app zou moeten gebruiken om de verspreiding van het coronavirus tegen te gaan. De meeste respondenten (`r round(nrow(filter(data, Beliefs_ResponseefficasyOther == '76-90%'))/nrow(data)*100, digits = 1)`%) dachten dat 76-90% van de Nederlandse bevolking de CoronaMelder moet gebruiken om de verspreiding van het coronavirus tegen te gaan. In totaal dacht `r round(((nrow(filter(data, Beliefs_ResponseefficasyOther == '51-75%')) + nrow(filter(data, Beliefs_ResponseefficasyOther == '76-90%')) + nrow(filter(data, Beliefs_ResponseefficasyOther == '91-100%')))/nrow(data)*100), digits = 1)`% van de respondenten dat meer dan 50% van de Nederlandse bevolking de CoronaMelder app moet gebruiken om effectief te zijn. Het aandeel respondenten dat aan gaf niet te weten hoeveel mensen de CoronaMelder app zouden moeten gebruiken is `r round(nrow(filter(data, Beliefs_ResponseefficasyOther == 'Weet ik niet'))/nrow(data)*100, digits = 1)`%. 
 
 ```{r, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Percentage bevolking dat de CoronaMelder moet gebruiken om verspreiding van het virus tegen te gaan"}
@@ -1664,14 +1662,16 @@ ft_out
 ```
 
 ### Vertrouwen in adequaatheid techniek
-In de vragenlijst werd gepeild in welke mate men vertrouwen heeft in de adequaatheid van de techniek. 
+COMMENT: ik snap deze vraag niet helemaal? Dit meet toch niet perse vertrouwen in de adequaatheid, maar is meer een feitelijke kennis-check? 
+
+In de vragenlijst werd gepeild in welke mate men vertrouwen heeft in de adequaatheid van de techniek. Het overgrote deel van de respondenten antwoordde 'zeker waar' of 'misschien waar' op de stelling 'De techniek (Bluetooth) die wordt gebruikt in de CoronaMelder geeft aan wie er in de buurt is geweest van een persoon die besmet is' (`r round((nrow(filter(data, (Beliefs_technologyperformance == 'Zeker waar'| Beliefs_Conspiracy1 == 'Misschien waar'))) /nrow(data))*100, digits = 1)`%). 
 
 
 ```{r technology, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Vertrouwen in techniek", tab.cap="Vertrouwen in techniek"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Beliefs_technologyperformance")
                         
-graph_questionlabels = c("De techniek (bluetooth) die\n wordt gebruikt in de CoronaMelder\n app geeft aan wie er in de\n buurt is geweest van\n een persoon die besmet is"); 
+graph_questionlabels = c("De techniek (bluetooth) die\n wordt gebruikt in de CoronaMelder\n geeft aan wie er in de buurt\n is geweest van\n een persoon die besmet is"); 
 
 # These questions have 5 answer categories: Zeker niet waar - Zeker waar en Weet ik niet. The following color palette should be used:
 color_palette = my_palette5blue
@@ -1777,9 +1777,9 @@ ft_out
 ```
 
 ### Maatschappelijke gevolgen gebruik CoronaMelder
-Aan de deelnemers werd gevraagd in hoeverre zij dachten dat gebruik van de CoronaMelder de Nederlandse economie helpt. 
+Aan de respondenten werd gevraagd in hoeverre zij dachten dat gebruik van de CoronaMelder de Nederlandse economie helpt. Ongeveer één op de drie respondenten heeft de overtuiging dat de CoronaMelder de Nederlandse economie zal helpen (`r round((nrow(filter(data, (Beliefs_benefiteconomic == 'Helemaal mee eens'| Beliefs_benefiteconomic == 'Mee eens'| Beliefs_benefiteconomic == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%).
 
-```{r beneficteconomic, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Geloof dat de CoronaMelder de Nederlandse economie helpt", tab.cap="Geloof dat de CoronaMelder de Nederlandse economie helpt"}
+```{r beneficteconomic, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Overtuiging dat de CoronaMelder de Nederlandse economie helpt", tab.cap="Geloof dat de CoronaMelder de Nederlandse economie helpt"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Beliefs_benefiteconomic")
@@ -1891,7 +1891,7 @@ EE1b_UTAUT
 EE2b_UTAUT
 HBM_selfefficacy_CoronaMelder
 
-```{r effortexpectancynonusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Eigen effectiviteit onder bij respondenten die de CoronaMelder op dit moment niet gebruiken"}
+```{r effortexpectancynonusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Eigen effectiviteit onder bij respondenten die de CoronaMelder op dit moment niet gebruiken", tab.cap="Eigen effectiviteit onder bij respondenten die de CoronaMelder op dit moment niet gebruiken"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("EE1b_UTAUT", 
@@ -2001,7 +2001,7 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 ```
 
-```{r effortexpectancyusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Eigen effectiviteit onder bij respondenten die de CoronaMelder op dit moment gebruiken"}
+```{r effortexpectancyusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Eigen effectiviteit onder bij respondenten die de CoronaMelder op dit moment gebruiken", tab.cap="Eigen effectiviteit onder bij respondenten die de CoronaMelder op dit moment gebruiken"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("EE1a_UTAUT", 
