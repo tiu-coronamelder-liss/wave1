@@ -26,6 +26,7 @@ library(dplyr)
 
 # For tables
 library(flextable)
+library(arsenal)
 
 # Various plotting stuff
 library(ggplot2)
@@ -67,7 +68,7 @@ data$user_status_intention[(data$Behavior_UTAUT == "Ik heb de CoronaMelder app n
 data$user_status_intention[(data$Behavior_UTAUT == "Ik heb de CoronaMelder app nooit gebruikt") & (data$BI1a_UTAUT == 'Neutraal')] <- "Nooit gebruikt en neutraal"
 data$user_status_intention[(data$Behavior_UTAUT == "Ik heb de CoronaMelder app nooit gebruikt") & (data$BI1a_UTAUT == 'Helemaal mee eens'| data$BI1a_UTAUT == 'Mee eens'| data$BI1a_UTAUT == 'Een beetje mee eens')] <- "Nooit gebruikt en wel van plan"
 data$user_status_intention[data$Behavior_UTAUT == "Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer"] <- "Voormalig gebruiker"
-View(data[,c("Behavior_UTAUT","BI1a_UTAUT","user_status_intention")])
+#View(data[,c("Behavior_UTAUT","BI1a_UTAUT","user_status_intention")])
 
 ## Health literacy
 # To enable a median split, labels are first recoded to numbers 
@@ -2663,12 +2664,28 @@ ft_out
 ```
 
 #### Sociale invloeden naar gebruikersstatus
+```{r echo=FALSE}
+graph_variablenames = c("SI1_UTAUT", 
+                        "SI2_UTAUT",
+                        "Beliefs_civicduty")
+graph_questionlabels = c("Veel mensen in mijn\n omgeving gebruiken\n de CoronaMelder", 
+                         "Mensen in mijn directe\n omgeving vinden\n dat ik de CoronaMelder\n moet gebruiken",
+                         "Het gebruiken van de\n CoronaMelder maakt je\n een goede burger")
+# For each of these variables we would like to test if the current users and non users differ in the proportion that agrees with the statement. 
+# First calculate a proportion for the variable. 
+data$SI1_UTAUT_agree[(data$SI1_UTAUT == 'Helemaal mee eens'| data$SI1_UTAUT == 'Mee eens'| data$SI1_UTAUT == 'Een beetje mee eens')] <- "Totaal eens"
+data$SI1_UTAUT_agree[(data$SI1_UTAUT == 'Neutraal'| data$SI1_UTAUT == 'Een beetje oneens'| data$SI1_UTAUT == 'Oneens'| data$SI1_UTAUT == 'Helemaal mee oneens')] <- "Neutraal, niet mee eens" 
+#View(data[,c("SI1_UTAUT","SI1_UTAUT_agree")])
+testtable = table(data$SI1_UTAUT_agree, data$user_status)
+chisq.test(testtable) 
 
+tab1 <- tableby(SI1_UTAUT_agree ~ user_status + geslacht + lftdcat + sted + belbezig, data=data)
+summary(tab1, text = TRUE)
+```
 
 ### Privacy en dataveiligheid 
-Beliefs_datasafety
-Beliefs_locationmonitoring
-Beliefs_identitymonitoring
+Nog een factor die een rol kan spelen in de adoptie is de verwachting met betrekking tot de privacy en dataveiligheid. 
+
 
 ```{r privacy, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Privacy overtuigingen"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
