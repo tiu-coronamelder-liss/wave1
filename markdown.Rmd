@@ -38,23 +38,29 @@ library(RColorBrewer)
 library(psy) # psy for the cronbach function
 library(reshape2) # For converting from wide to long format (function: melt)
 
-# Load dataset (not included on Github)
+##### Load dataset (not included on Github)
 data_in <- read.spss('L_CoronaMelder_wave1_3p.sav', to.data.frame=TRUE, use.missings=FALSE)
 
 # Filter out the ones that didn't complete the entire survey (N = 10)
 data <- data_in[!is.na(data_in$duur),]
 
-# Palettes
+##### Set up color palettes for graphs
 my_palette5 <- brewer.pal(11,"RdYlGn")[c(4, 5, 6, 7, 8, 9, 10)]
 my_palette7 <- brewer.pal(11,"RdYlGn")[c(9,8,7,6,5,4,3)]
 
-# Custom kleurtjes -- we lenen zwart uit 'RdGy' voor "ik ben niet van plan de coronamelder te gebruiken",
-# dan van oranje naar groen voor de overige opties (oneens -> eens):
+# Custom coloring:
 my_palette_nonuse = c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "RdYlGn")[c(9,8,7,6,5,4,3)])
 my_palette5true <- c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "RdYlGn")[c(6,7,8,9)])
 my_palette5blue <- c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "Blues")[c(6,5,4,3)])
 
-# Creating new variables
+##### Creating new variables
+## User status. 
+# Of interest is the comparison of current users and current non users.  
+data$user_status[data$Behavior_UTAUT == "Ik gebruik de CoronaMelder app op dit moment"] <- "Gebruiker"
+data$user_status[data$Behavior_UTAUT == "Ik heb de CoronaMelder app nooit gebruikt"] <- "Niet gebruiker"
+data$user_status[data$Behavior_UTAUT == "Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer"] <- "Voormalig gebruiker"
+View(data[,c("Behavior_UTAUT","user_status")])
+
 ## Health literacy
 # To enable a median split, labels are first recoded to numbers 
 data$HealthLiteracy1n = recode(data$HealthLiteracy1, Nooit=1, 'Af en toe'=2, Soms=3, Vaak=4,  Altijd=5)
