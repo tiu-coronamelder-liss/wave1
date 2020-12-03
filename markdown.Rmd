@@ -60,6 +60,9 @@ data$user_status[data$Behavior_UTAUT == "Ik gebruik de CoronaMelder app op dit m
 data$user_status[data$Behavior_UTAUT == "Ik heb de CoronaMelder app nooit gebruikt"] <- "Niet gebruiker"
 data$user_status[data$Behavior_UTAUT == "Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer"] <- "Voormalig gebruiker"
 
+# Add factor
+data$user_status <- factor(data$user_status,levels = c("Gebruiker", "Niet gebruiker", "Voormalig gebruiker"))
+
 ## User status and intention. 
 # Of interest is the comparison of current users and the non users that are neutral when it comes to intention.  
 data$user_status_intention[data$Behavior_UTAUT == "Ik gebruik de CoronaMelder app op dit moment"] <- "Gebruiker"
@@ -68,6 +71,9 @@ data$user_status_intention[(data$Behavior_UTAUT == "Ik heb de CoronaMelder app n
 data$user_status_intention[(data$Behavior_UTAUT == "Ik heb de CoronaMelder app nooit gebruikt") & (data$BI1a_UTAUT == 'Helemaal mee eens'| data$BI1a_UTAUT == 'Mee eens'| data$BI1a_UTAUT == 'Een beetje mee eens')] <- "Nooit gebruikt en wel van plan"
 data$user_status_intention[data$Behavior_UTAUT == "Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer"] <- "Voormalig gebruiker"
 View(data[,c("Behavior_UTAUT","BI1a_UTAUT","user_status_intention")])
+
+# Add factor
+data$user_status_intention <- factor(data$user_status_intention,levels = c("Gebruiker", "Nooit gebruikt en niet van plan", "Nooit gebruikt en neutraal", "Nooit gebruikt en wel van plan", "Voormalig gebruiker"))
 
 ## Health literacy
 # To enable a median split, labels are first recoded to numbers 
@@ -87,43 +93,31 @@ cronbach(data[, c("HealthLiteracy1nr", "HealthLiteracy2n", "HealthLiteracy3nr")]
 # Data splitsen hoge vs. midden. vs lage health literacy
 #data$CatHL <- cut(data$HealthLiteracy, breaks = c(0,1.333333,3.66666,5), labels = c("Laag", "Midden", "Hoog"))
 
-# Calculate size of 6 user subgroups
+# Calculate size of user subgroups
 # Lookup table for totals of different user groups
-usergroup_variablenames = c("user_woulduse",
-                            "user_neutral",
-                            "user_wouldnotuse",
-                            "nonuser_woulduse",
-                            "nonuser_neutral",
-                            "nonuser_wouldnotuse")
+usergroup_names = c("users", "nonusers", "nonusers_no_intention", "nonusers_neutral", "nonusers_intention")
 
-usergroup_variablelabels = c("Blijvend",
-                             "Neutraal",
-                             "Stoppend",
-                             "Met intentie",
-                             "Neutraal",
-                             "Geen intentie")
+usergroup_labels = c("Gebruikers", "Niet gebruikers", "Niet gebruikers - niet van plan om te gaan gebruiken", "Niet gebruikers - neutraal", "Niet gebruikers - wel van plan om te gaan gebruiken")
 
-# Create dataframe
-user_totals <- data.frame(matrix(ncol = length(usergroup_variablenames), nrow = 1))
-colnames(user_totals) <- usergroup_variablenames
+# Create dataframe for totals of each user group
+user_totals <- data.frame(matrix(ncol = length(usergroup_names), nrow = 1))
+colnames(user_totals) <- usergroup_names
 
-# 1. Current user of app, would keep using
-user_totals[1] <- nrow(filter(data, (BI1b_UTAUT == 'Helemaal mee eens'| BI1b_UTAUT == 'Mee eens'| BI1b_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))
+# Current user
+user_totals[1] <- sum(data$user_status == "Gebruiker")
 
-# 2. Current user of app, neutral about continuing use
-user_totals[2] <- nrow(filter(data, BI1b_UTAUT == 'Neutraal' & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))
+# Non user
+user_totals[2] <- sum(data$user_status == "Niet gebruiker")
 
-# 3. Current user of app, intends to stop using
-user_totals[3] <- nrow(filter(data, (BI1b_UTAUT == 'Helemaal mee oneens'| BI1b_UTAUT == 'Oneens'| BI1b_UTAUT == 'Een beetje oneens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))
+# Non user -- not planning to use
+user_totals[3] <- sum(data$user_status_intention == "Nooit gebruikt en niet van plan")
 
-# 4. Current non-user, intends to start using
-user_totals[4] <- nrow(filter(data, (BI1a_UTAUT == 'Helemaal mee eens' | BI1a_UTAUT == 'Mee eens'| BI1a_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt'))
+# Non user -- neutral
+user_totals[4] <- sum(data$user_status_intention == "Nooit gebruikt en neutraal")
 
-# 5. Current non-user, neutral about starting use -- interesting target for promotion
-user_totals[5] <- nrow(filter(data, BI1a_UTAUT == 'Neutraal' & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt'))
+# Non user -- planning to use
+user_totals[5] <- sum(data$user_status_intention == "Nooit gebruikt en wel van plan")
 
-# 6. Current non-user, does not intend to start using
-user_totals[6] <- nrow(filter(data, (BI1a_UTAUT == 'Helemaal mee oneens' | BI1a_UTAUT == 'Oneens'| BI1a_UTAUT == 'Een beetje oneens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt'))
 ```
 \newpage
 # Samenvatting {.unlisted .unnumbered}
@@ -1569,6 +1563,8 @@ ggplot(data=data, aes(x = Beliefs_ResponseefficasyOther)) + theme_bw() + xlab(pa
 #### Per (potentiële) gebruikersgroep
 ```{r, echo=FALSE}
 
+# === EDIT THESE TO CUSTOMIZE TABLE ===
+
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("PE1_UTAUT", 
                         "PE2_UTAUT", 
@@ -1577,33 +1573,31 @@ graph_questionlabels = c("Door de CoronaMelder app te \n gebruiken help ik mee b
                          "De CoronaMelder app is nuttig \n om ervoor te zorgen dat het \n coronavirus zich minder verspreidt", 
                          "De CoronaMelder app helpt om \nmensen met een kwetsbare \n gezondheid te beschermen") 
 
-# Split by 6 user groups
+# Which values do we want to include in the table cells?
+include_vars = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens")
+
+# === NO MORE EDITS SHOULD BE NEEDED BELOW THIS POINT ===
+
+# Split by user groups
 data_grouptable = data.frame(matrix(ncol = length(colnames(user_totals))+1, nrow = length(graph_variablenames)))
-colnames(data_grouptable) <- c("variable", usergroup_variablenames)
+
+colnames(data_grouptable) <- c("variable", usergroup_names)
 
 # Set the values for each variable. Note: this still contains too much logic right now, the values that are counted 
 # as correct (in this case "Helemaal mee eens", "Mee eens", and "Een beetje mee eens") are manually added
 # and will not apply to all variables (sometimes it is "Waar", or a different likert-scale)
 for(idx in 1:length(graph_variablenames)) {
-  data_grouptable[idx,1] = graph_variablenames[idx]
+  data_grouptable[idx,"variable"] = graph_questionlabels[idx]
   
-  # Current user of app, would keep using
-  data_grouptable[idx,2] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx])) == 'Helemaal mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Een beetje mee eens') & (BI1b_UTAUT == 'Helemaal mee eens'| BI1b_UTAUT == 'Mee eens'| BI1b_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))
+  data_grouptable[idx,2] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status == "Gebruiker"))
   
-  # Current user of app, neutral
-  data_grouptable[idx,3] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx])) == 'Helemaal mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Een beetje mee eens') & BI1b_UTAUT == 'Neutraal' & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))
-  
-  # Current user of app, would stop using
-  data_grouptable[idx,4] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx])) == 'Helemaal mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Een beetje mee eens') & (BI1b_UTAUT == 'Helemaal mee oneens'| BI1b_UTAUT == 'Oneens'| BI1b_UTAUT == 'Een beetje oneens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))
-  
-  # Current non-user, intend to start using
-  data_grouptable[idx,5] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx])) == 'Helemaal mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Een beetje mee eens') & (BI1a_UTAUT == 'Helemaal mee eens' | BI1a_UTAUT == 'Mee eens'| BI1a_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt'))
-  
-  # Current non-user, neutral
-  data_grouptable[idx,6] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx])) == 'Helemaal mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Een beetje mee eens') & BI1a_UTAUT == 'Neutraal' & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt'))  
-  
-  # Current non-user, no intention to start using
-  data_grouptable[idx,7] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx])) == 'Helemaal mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Mee eens' | eval(parse(text=graph_variablenames[idx])) == 'Een beetje mee eens') & (BI1a_UTAUT == 'Helemaal mee oneens' | BI1a_UTAUT == 'Oneens'| BI1a_UTAUT == 'Een beetje oneens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt'))
+  data_grouptable[idx,3] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status == "Niet gebruiker"))
+
+  data_grouptable[idx,4] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status_intention == "Nooit gebruikt en niet van plan"))
+
+  data_grouptable[idx,5] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status_intention == "Nooit gebruikt en neutraal"))
+
+  data_grouptable[idx,6] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status_intention == "Nooit gebruikt en wel van plan"))
 }
 
 # Build the basic table
@@ -1612,7 +1606,9 @@ ft <- flextable(
 )
 
 # Header labels
-#ft <- set_header_labels(ft, values = table_questionlabels)
+tmp_labels = as.data.frame(t(c("", usergroup_labels)))
+colnames(tmp_labels) <- c("variable", usergroup_names)
+ft <- set_header_labels(ft, values = tmp_labels)
 
 # Set up the footer of totals
 totals = c("Totaal", user_totals)
@@ -1624,9 +1620,6 @@ for(colname in colnames(data_grouptable)) {
     # Add percentage to cell
     ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", ifelse(user_totals[1,colname]==0,0,eval(parse(text=colname))/user_totals[1,colname]*100)), "%)"))
     
-    # Add total to footer
-    #tablecolumn = paste("data_table$", colname)
-    #totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
   }
 }
 
