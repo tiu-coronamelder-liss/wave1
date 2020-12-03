@@ -182,6 +182,10 @@ In de resultaten sectie worden de uitkomsten getoond van de 1900 respondenten wa
 ### Demografische factoren
 Aan dit onderzoek hebben 1900 (gemiddelde leeftijd in jaren: 51.8, standaarddeviatie 18.3, range: 17-96); 55.1% vrouw) respondenten deelgenomen. 
 
+```{r, echo=FALSE, results="asis"} 
+tab.noby <- tableby(~ geslacht + lftdcat + sted + belbezig + oplmet + Riskgroup_contact, data=data)
+summary(tab.noby)
+```
 --> To do: nog uitwerken in tabellen:  
 Geslacht
 Lftdcat
@@ -2657,7 +2661,7 @@ ft_out
 ```
 
 #### Sociale invloeden naar gebruikersstatus
-```{r echo=FALSE}
+```{r echo=FALSE, results="asis"}
 graph_variablenames = c("SI1_UTAUT", 
                         "SI2_UTAUT",
                         "Beliefs_civicduty")
@@ -2673,7 +2677,7 @@ testtable = table(data$SI1_UTAUT_agree, data$user_status)
 chisq.test(testtable) 
 
 tab1 <- tableby(SI1_UTAUT_agree ~ user_status + geslacht + lftdcat + sted + belbezig, data=data)
-summary(tab1, text = TRUE)
+summary(tab1)
 ```
 
 ### Privacy en dataveiligheid 
