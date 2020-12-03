@@ -482,7 +482,9 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 ```
 
-Van alle respondenten gaf `r round(nrow(filter(data, Corona_complaints == "Ja"))/nrow(data)*100, digits =1)`% aan klachten te hebben gehad die passen bij het coronavirus in de afgelopen twee maanden. Onderstaande grafiek (figuur \@ref(fig:coronacomplaintsquarantaine)) laat zien in hoeverre deze respondenten in quarantaine bleven: in totaal gaf `r round((nrow(filter(data, Corona_complaints == "Ja" & (Behavior_AdherenceGeneralMeasures_quarantaine == 'Nooit'| Behavior_AdherenceGeneralMeasures_quarantaine == 'Zelden'| Behavior_AdherenceGeneralMeasures_quarantaine == 'Soms'))) /nrow(filter(data, Corona_complaints == "Ja")))*100, digits = 1))`% PERCENTAGE KLOPT NIET!!! aan nooit, zelden of soms naar buiten te gaan met klachten. 
+Van alle respondenten gaf `r round(nrow(filter(data, Corona_complaints == "Ja"))/nrow(data)*100, digits =1)`% aan klachten te hebben gehad die passen bij het coronavirus in de afgelopen twee maanden. Onderstaande grafiek (figuur \@ref(fig:coronacomplaintsquarantaine)) laat zien in hoeverre deze respondenten in quarantaine bleven: in totaal gaf `r round((nrow(filter(data, Corona_complaints == "Ja" & (Behavior_AdherenceGeneralMeasures_quarantaine == 'Nooit'| Behavior_AdherenceGeneralMeasures_quarantaine == 'Zelden'| Behavior_AdherenceGeneralMeasures_quarantaine == 'Soms'))) /nrow(filter(data, Corona_complaints == "Ja")))*100, digits = 1)`% 
+
+!!!! TABEL KLOPT NIET LABELS OMGEKEERD.  
 
 
 ```{r coronacomplaintsquarantaine, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Naleving algemene gedragsregels bij klachten"}
