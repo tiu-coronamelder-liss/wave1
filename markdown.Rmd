@@ -938,16 +938,14 @@ ft_out
 ### Bekendheid met CoronaMelder
 In de vragenlijst werd gevraagd hoe bekend men (voor het openen van de vragenlijst) was met de CoronaMelder app. In totaal gaven `r round(((nrow(filter(data, Awareness == 'Heel erg bekend')) + nrow(filter(data, Awareness == 'Bekend')) + nrow(filter(data, Awareness == 'Redelijk bekend'))+ nrow(filter(data, Awareness == 'Een beetje bekend')))/nrow(data)*100), digits = 1)`% aan in meer of mindere mate bekend te zijn met de CoronaMelder (Tabel 1). Ruim 1 op de 10 `r round(nrow(filter(data, Awareness == 'Niet bekend'))/nrow(data)*100, digits = 1)`% gaf aan niet bekend te zijn met de CoronaMelder.   
 
---> To do: standaard grafiek template toepassen op volgende grafieken. Verdere uitplitsingen. 
+--> To do: Verdere uitplitsingen. 
 
-```{r awarenessleeftijd, echo=FALSE}
+```{r awareness, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Bekendheid met CoronaMelder", tab.cap="Waargenomen ernst en vatbaarheid - Gebruikers"}
 # Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-#Dit is even een test voor grafiek zonder ggplot, laat het even staan als voorbeeld.
-aware <- table(data$Awareness)
-plotaware <- barplot(aware, main="Bekendheid met CoronaMelder", xaxt="n")
-labs <- paste(names(table(data$Awareness)))
-text(cex=0.8, x=plotaware+0.25, y=-25, labels=labs, xpd=TRUE, srt=45, pos=2)
+ggplot(data=data, aes(x = Awareness)) + theme_bw() + xlab(paste(names(table(data$Awareness)))) + ylab(" ") + xlab("Hoe bekend bent u met\n de CoronaMelder?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(,axis.title=element_text(size=10))
+```
 
+```{r awarenesslftd, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Bekendheid met CoronaMelder", tab.cap="Waargenomen ernst en vatbaarheid - Gebruikers"}
 # Awareness op leeftijdscategorie, met ook 'reversed' labels en waarden in de bar chart:
 ggplot(data=data, aes(fill=Awareness, x=lftdcat)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("15-24", "25-34", "35-44", "45-54", "55-64", "65+")) + coord_flip() + labs(x = "Leeftijdscategorie", y = "", fill = "") + ggtitle("Bekendheid Coronamelder per leeftijdscategorie") + scale_fill_manual(values=my_palette5) + guides(fill = guide_legend(reverse = TRUE))
 ```
@@ -1559,12 +1557,9 @@ ft_out
 ```
 Er is ook gevraagd hoeveel procent van de Nederlandse bevolking volgens de respondent de CoronaMelder app zou moeten gebruiken om de verspreiding van het coronavirus tegen te gaan. De meeste respondenten (`r round(nrow(filter(data, Beliefs_ResponseefficasyOther == '76-90%'))/nrow(data)*100, digits = 1)`%) dachten dat 76-90% van de Nederlandse bevolking de CoronaMelder moet gebruiken om de verspreiding van het coronavirus tegen te gaan. In totaal dacht `r round(((nrow(filter(data, Beliefs_ResponseefficasyOther == '51-75%')) + nrow(filter(data, Beliefs_ResponseefficasyOther == '76-90%')) + nrow(filter(data, Beliefs_ResponseefficasyOther == '91-100%')))/nrow(data)*100), digits = 1)`% van de respondenten dat meer dan 50% van de Nederlandse bevolking de CoronaMelder app moet gebruiken om effectief te zijn. Het aandeel respondenten dat aan gaf niet te weten hoeveel mensen de CoronaMelder app zouden moeten gebruiken is `r round(nrow(filter(data, Beliefs_ResponseefficasyOther == 'Weet ik niet'))/nrow(data)*100, digits = 1)`%. 
 
-```{r, echo=FALSE, fig.width=7, fig.cap="Percentage bevolking dat de CoronaMelder moet gebruiken om verspreiding van het virus tegen te gaan"}
+```{r, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Percentage bevolking dat de CoronaMelder moet gebruiken om verspreiding van het virus tegen te gaan"}
 # Beliefs_ResponseefficasyOther
-Beliefs_ResponseefficasyOther <- table(data$Beliefs_ResponseefficasyOther)
-pl <- barplot(Beliefs_ResponseefficasyOther, xaxt="n")
-labs <- paste(names(table(data$Beliefs_ResponseefficasyOther)))
-text(cex=0.8, x=pl+0.25, y=-25, labels=labs, xpd=TRUE, srt=45, pos=2)
+ggplot(data=data, aes(x = Beliefs_ResponseefficasyOther)) + theme_bw() + xlab(paste(names(table(data$Beliefs_ResponseefficasyOther)))) + ylab(" ") + xlab("Hoeveel procent van de Nederlandse bevolking\n zou volgens u de CoronaMelder moeten gebruiken\n om de verspreiding van het coronavirus tegen te gaan?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(,axis.title=element_text(size=10))
 
 ```
 
@@ -2547,8 +2542,8 @@ Om de sociale invloeden in kaart te brengen is gevraagd naar descriptieve en inj
 
 Beliefs_AppAdoption
 
-```{r Beliefsappadoption, echo=FALSE, fig.width=7, fig.height=2, fig.cap=""}
-ggplot(data=data, aes(x = Beliefs_AppAdoption)) + theme_bw() + xlab(paste(names(table(data$Beliefs_AppAdoption)))) + ylab(" ") + xlab("Hoeveel procent van de Nederlandse bevolking denkt u dat de CoronaMelder gebruikt?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0, 0, 0)) + theme(aspect.ratio = 0.35,axis.title=element_text(size=10))
+```{r Beliefsappadoption, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Percentage bevolking dat volgens de respondent de CoronaMelder gebruikt"}
+ggplot(data=data, aes(x = Beliefs_AppAdoption)) + theme_bw() + xlab(paste(names(table(data$Beliefs_AppAdoption)))) + ylab(" ") + xlab("Hoeveel procent van de\n Nederlandse bevolking denkt u\n dat de CoronaMelder gebruikt?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(,axis.title=element_text(size=10))
 
 ```
 
