@@ -484,9 +484,6 @@ ft_out
 
 Van alle respondenten gaf `r round(nrow(filter(data, Corona_complaints == "Ja"))/nrow(data)*100, digits =1)`% aan klachten te hebben gehad die passen bij het coronavirus in de afgelopen twee maanden. Onderstaande grafiek (figuur \@ref(fig:coronacomplaintsquarantaine)) laat zien in hoeverre deze respondenten in quarantaine bleven: in totaal gaf `r round((nrow(filter(data, Corona_complaints == "Ja" & (Behavior_AdherenceGeneralMeasures_quarantaine == 'Nooit'| Behavior_AdherenceGeneralMeasures_quarantaine == 'Zelden'| Behavior_AdherenceGeneralMeasures_quarantaine == 'Soms'))) /nrow(filter(data, Corona_complaints == "Ja")))*100, digits = 1)`% 
 
-!!!! TABEL KLOPT NIET LABELS OMGEKEERD.  
-
-
 ```{r coronacomplaintsquarantaine, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Naleving algemene gedragsregels bij klachten"}
 
 
@@ -523,7 +520,7 @@ data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph
 ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
+table_answercategories = graph_answercategories # For some reason, in this case it does not need to be reverted.
 data_table = data.frame(table_answercategories)
 
 # We need one extra (empty) column label for the row with the possible values
