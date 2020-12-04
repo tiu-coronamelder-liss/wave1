@@ -42,6 +42,9 @@ library(reshape2) # For converting from wide to long format (function: melt)
 # For aligning ggplots vertically
 library(cowplot)
 
+# Other
+library(labelled)
+
 ##### Load dataset (not included on Github)
 data_in <- read.spss('L_CoronaMelder_wave1_3p.sav', to.data.frame=TRUE, use.missings=FALSE)
 
@@ -81,6 +84,17 @@ data$user_status <- factor(data$user_status,levels = c("Gebruiker", "Niet gebrui
 
 # Create a dataset with only the curent users and never users for all analyses in which these groups are compared. 
 data_currentvsneveruser = data[ which(data$user_status=='Gebruiker' | data$user_status=='Niet gebruiker'), ]
+##### Add labels to variables
+attr(data_currentvsneveruser$geslacht,'label')  <- 'Geslacht'
+attr(data_currentvsneveruser$lftdcat,'label')  <- 'Leeftijdscategorie'
+attr(data_currentvsneveruser$sted,'label')  <- 'Stedelijkheid woonplaats'
+attr(data_currentvsneveruser$belbezig,'label')  <- 'Belangrijkste bezigheid'
+attr(data_currentvsneveruser$nettocat,'label')  <- 'Netto maandinkomen'
+attr(data_currentvsneveruser$oplmet,'label')  <- 'Hoogste opleiding met diploma'
+attr(data_currentvsneveruser$burgstat,'label')  <- 'Burgerlijke staat'
+attr(data_currentvsneveruser$woonvorm,'label')  <- 'Woonvorm huishouden'
+attr(data_currentvsneveruser$Riskgroup_contact,'label')  <- 'Frequentie op minder dan 1.5m van ouderen en mensen met een kwetsbare gezondheid zijn vanwege werk en/of (privé) zorgtaken'
+
 
 ## User status and intention. 
 # Of interest is the comparison of current users and the non users that are neutral when it comes to intention.  
@@ -96,6 +110,16 @@ data$user_status_intention <- factor(data$user_status_intention,levels = c("Gebr
 
 # Create a dataset with only the curent users and never users that are neutral on intention for all analyses in which these groups are compared. 
 data_currentvsneveruserneutral = data[ which(data$user_status_intention=='Gebruiker' | data$user_status_intention=='Nooit gebruikt en neutraal'), ]
+##### Add labels to variables
+attr(data_currentvsneveruserneutral$geslacht,'label')  <- 'Geslacht'
+attr(data_currentvsneveruserneutral$lftdcat,'label')  <- 'Leeftijdscategorie'
+attr(data_currentvsneveruserneutral$sted,'label')  <- 'Stedelijkheid woonplaats'
+attr(data_currentvsneveruserneutral$belbezig,'label')  <- 'Belangrijkste bezigheid'
+attr(data_currentvsneveruserneutral$nettocat,'label')  <- 'Netto maandinkomen'
+attr(data_currentvsneveruserneutral$oplmet,'label')  <- 'Hoogste opleiding met diploma'
+attr(data_currentvsneveruserneutral$burgstat,'label')  <- 'Burgerlijke staat'
+attr(data_currentvsneveruserneutral$woonvorm,'label')  <- 'Woonvorm huishouden'
+attr(data_currentvsneveruserneutral$Riskgroup_contact,'label')  <- 'Frequentie op minder dan 1.5m van ouderen en mensen met een kwetsbare gezondheid zijn vanwege werk en/of (privé) zorgtaken'
 
 
 ## Health literacy
@@ -220,7 +244,7 @@ Van de mensen bij wie al minstens een keer een test was afgenomen (`r  nrow(filt
 
 In totaal `r round(nrow(filter(data, (CoronaInfectionOther_1 == 'Ja' | CoronaInfectionOther_2 == 'Ja' | CoronaInfectionOther_3 == 'Ja' | CoronaInfectionOther_4 == 'Ja' | CoronaInfectionOther_5 == 'Ja' | CoronaInfectionOther_6 == 'Ja')))/nrow(data)*100, digits = 1)`% gaf aan dat iemand in hun directe omgeving besmet is (geweest)  met het coronavirus.
 
---> To do: nog uitwerken: CoronaInfectionOther_1-8 - In onderstaande grafiek is te zien welke relatie deze personen tot de respondent hadden (grafiek nog maken) (zie figuur \@ref(fig:coronainfectionother)). 
+--> To do: In onderstaande grafiek is te zien welke relatie deze personen tot de respondent hadden (grafiek nog netjes maken) (zie figuur \@ref(fig:coronainfectionother)). 
 
 ```{r coronainfectionother, echo=FALSE, fig.width=7, fig.height=2.5, fig.cap="Relatie geïnfecteerde personen tot de respondent"}
 # Create the plot#LUKT NOG NIET
@@ -991,13 +1015,12 @@ Van alle respondenten gaf `r round(nrow(filter(data, Behavior_UTAUT == 'Ik gebru
 ##### Demografische gegevens naar gebruikersstatus
 Om inzicht te krijgen in welke factoren (demografisch, persoonlijk, sociaal, omgevingsfactoren) worden respondenten die momenteel de CoronaMelder gebruiken vergeleken met de respondenten die de CoronaMelder nooit hebben gebruikt. 
 ```{r, echo=FALSE, results="asis", tab.cap = "Demografische kenmerken naar gebruikersstatus"} 
-tab.noby <- tableby(user_status~ geslacht + lftdcat + sted + belbezig + oplmet + burgstat + nettocat + woonvorm + Riskgroup_contact, data=data_currentvsneveruser)
+tab.noby <- tableby(user_status ~ geslacht + lftdcat + sted + belbezig + oplmet + burgstat + nettocat + woonvorm + Riskgroup_contact, data=data_currentvsneveruser)
 summary(tab.noby, pfootnote=TRUE)
 ```
 
 
-##### Gezondheidsmotivatie en algemene opvattingen over het coronavirus
---> To do: verdere uitsplitsingen en bijbehorende statistische tests.   
+##### Gezondheidsmotivatie en algemene opvattingen over het coronavirus naar gebruikersstatus
 
 ```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - Gebruikers", tab.cap="Waargenomen ernst en vatbaarheid - Gebruikers"}
 
@@ -1232,6 +1255,139 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 
 ft_out
 ```
+#### Naleving en intentie tot naleving algemene gedragsregels naar gebruikersstatus
+Relevant om te weten is of de mensen die de CoronaMelder momenteel gebruiken, mensen zijn die zich in het algemeen al beter aan de gedragsregels houden. 
+
+Chi kwadraat toetsen zijn uitgevoerd om te bepalen of het totaal aandeel respondenten dat het eens  (een beetje, eens, helemaal mee eens) is met de stellingen verschilt tussen de huidige gebruikers en degenen die de CoronaMelder nooit gebruikt hebben. Daarnaast is gekeken of de subgroep die de CoronaMelder nooit gebruikt heeft en aangaf neutraal te zijn met betrekking tot toekomstig gebruik verschilt van de huidig gebruikers. 
+```{r chiintentiondistancingusernonuser, echo=FALSE}
+# First calculate a proportion for the variable. 
+data$Intention_AdherenceGeneralMeasures_distance_agree[(data$Intention_AdherenceGeneralMeasures_distance == 'Helemaal mee eens'| data$Intention_AdherenceGeneralMeasures_distance == 'Mee eens'| data$Intention_AdherenceGeneralMeasures_distance == 'Een beetje mee eens')] <- "Totaal eens"
+data$Intention_AdherenceGeneralMeasures_distance_agree[(data$Intention_AdherenceGeneralMeasures_distance == 'Neutraal'| data$Intention_AdherenceGeneralMeasures_distance == 'Een beetje oneens'| data$Intention_AdherenceGeneralMeasures_distance == 'Oneens'| data$Intention_AdherenceGeneralMeasures_distance == 'Helemaal mee oneens')] <- "Neutraal, niet mee eens" 
+# Select the data: Only compare the current users and never users
+data_selected = data[data$nomem_encr %in% data_currentvsneveruser$nomem_encr, ]
+data_selected$user_status = droplevels(data_selected$user_status)
+
+# Convert into a table that can be used for the chi square test
+chisq.table = table(data_selected$Intention_AdherenceGeneralMeasures_distance_agree, data_selected$user_status)
+chisqtest = chisq.test(chisq.table) 
+```
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status == 'Gebruiker'& Intention_AdherenceGeneralMeasures_distance_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf de intentie te hebben om 1.5 meter afstand te houden van mensen buiten hun huishouden vergeleken met degenen die de app nooit hebben gebruikt (`r round((nrow(filter(data_selected, (user_status == 'Niet gebruiker' & Intention_AdherenceGeneralMeasures_distance_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Niet gebruiker'))))*100, digits = 1)`%).  
+
+```{r chiIntentionadherencequarantaine, echo=FALSE}
+# First calculate a proportion for the variable. 
+data$Intention_AdherenceGeneralMeasures_quarantaine_agree[(data$Intention_AdherenceGeneralMeasures_quarantaine == 'Helemaal mee eens'| data$Intention_AdherenceGeneralMeasures_quarantaine == 'Mee eens'| data$Intention_AdherenceGeneralMeasures_quarantaine == 'Een beetje mee eens')] <- "Totaal eens"
+data$Intention_AdherenceGeneralMeasures_quarantaine_agree[(data$Intention_AdherenceGeneralMeasures_quarantaine == 'Neutraal'| data$Intention_AdherenceGeneralMeasures_quarantaine == 'Een beetje oneens'| data$Intention_AdherenceGeneralMeasures_quarantaine == 'Oneens'| data$Intention_AdherenceGeneralMeasures_quarantaine == 'Helemaal mee oneens')] <- "Neutraal, niet mee eens" 
+# Select the data: Only compare the current users and never users
+data_selected = data[data$nomem_encr %in% data_currentvsneveruser$nomem_encr, ]
+data_selected$user_status = droplevels(data_selected$user_status)
+
+# Convert into a table that can be used for the chi square test
+chisq.table = table(data_selected$Intention_AdherenceGeneralMeasures_quarantaine_agree, data_selected$user_status)
+chisqtest = chisq.test(chisq.table) 
+```
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status == 'Gebruiker'& Intention_AdherenceGeneralMeasures_quarantaine_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf intentie te hebben om in quarantaine te gaan in geval van klachten vergeleken met degenen die de app nooit hebben gebruikt (`r round((nrow(filter(data_selected, (user_status == 'Niet gebruiker' & Intention_AdherenceGeneralMeasures_quarantaine_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Niet gebruiker'))))*100, digits = 1)`%).  
+
+
+```{r, echo=FALSE, tab.cap = "Intentie tot houden aan algemene gedragsadviezen naar gebruikersstatus. Aantal en totaal percentage eens (beetje mee eens, eens, helemaal mee eens) per gedragsadvies. Ik ben van plan om de komende 2 maanden ..."}
+
+# === EDIT THESE TO CUSTOMIZE TABLE ===
+
+# Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
+graph_variablenames = c("Intention_AdherenceGeneralMeasures_handwashing", 
+                        "Intention_AdherenceGeneralMeasures_distance",
+                        "Intention_AdherenceGeneralMeasures_avoidbusyplaces",
+                        "Intention_AdherenceGeneralMeasures_quarantaine"
+                        )                     
+graph_questionlabels = c("... mijn handen regelmatig te wassen", 
+                         "... 1,5 meter afstand te houden van mensen buiten mijn huishouden",
+                         "... drukke plekken te vermijden", 
+                         "... thuis te blijven als ik last heb van klachten die passen bij het coronavirus"
+                         ) 
+
+# Which values do we want to include in the table cells?
+include_vars = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens")
+
+# === NO MORE EDITS SHOULD BE NEEDED BELOW THIS POINT ===
+
+# Split by user groups
+data_grouptable = data.frame(matrix(ncol = length(colnames(user_totals))+1, nrow = length(graph_variablenames)))
+
+colnames(data_grouptable) <- c("variable", usergroup_names)
+
+# Set the values for each variable. Note: this still contains too much logic right now, the values that are counted 
+# as correct (in this case "Helemaal mee eens", "Mee eens", and "Een beetje mee eens") are manually added
+# and will not apply to all variables (sometimes it is "Waar", or a different likert-scale)
+for(idx in 1:length(graph_variablenames)) {
+  data_grouptable[idx,"variable"] = graph_questionlabels[idx]
+  
+  data_grouptable[idx,2] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status == "Gebruiker"))
+  
+  data_grouptable[idx,3] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status == "Niet gebruiker"))
+
+  data_grouptable[idx,4] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status_intention == "Nooit gebruikt en niet van plan"))
+
+  data_grouptable[idx,5] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status_intention == "Nooit gebruikt en neutraal"))
+
+  data_grouptable[idx,6] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status_intention == "Nooit gebruikt en wel van plan"))
+}
+
+# Build the basic table
+ft <- flextable(
+  head(data_grouptable, n = nrow(data_grouptable))
+)
+
+# Header labels
+tmp_labels = as.data.frame(t(c("", usergroup_labels)))
+colnames(tmp_labels) <- c("variable", usergroup_names)
+ft <- set_header_labels(ft, values = tmp_labels)
+
+# Set up the footer of totals
+totals = c("Totaal", user_totals)
+totals[-1] <- paste(totals[-1], " (100.0%)")
+
+# Percentages and totals
+for(colname in colnames(data_grouptable)) {
+  if(colname != "variable") {
+    # Add percentage to cell
+    if (user_totals[1,colname]==0) {
+      ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (0.0%)"))
+    }
+    else {
+      ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/user_totals[1,colname]*100), "%)"))
+    }
+    
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_grouptable))-1))
+
+ft_out
+
+```
+
+
 
 ### Intentie tot (blijvend) gebruik CoronaMelder
 Er werd gevraagd of de respondenten de intentie hadden om de CoronaMelder de komende twee maanden te (blijven) gebruiken. Van de respondenten die de CoronaMelder app nooit hebben gebruikt, gaf `r round((nrow(filter(data, (BI1a_UTAUT == 'Helemaal mee eens'| BI1a_UTAUT == 'Mee eens'| BI1a_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`% aan van plan te zijn om de CoronaMelder te gebruiken in de komende twee maanden (zie figuur \@ref(fig:intentiontousenonusers)). Ongeveer een kwart geeft aan hier neutraal in te staan (`r round((nrow(filter(data, (BI1a_UTAUT == 'Neutraal') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`%). Bijna 6 op de 10 respondenten (`r round((nrow(filter(data, (BI1a_UTAUT == 'Helemaal mee oneens'| BI1a_UTAUT == 'Oneens'| BI1a_UTAUT == 'Een beetje oneens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`%) geeft aan niet van plan te zijn de CoronaMelder te gaan gebruiken.  
