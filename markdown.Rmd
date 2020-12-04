@@ -273,7 +273,7 @@ graph_questionlabels = c("Ik loop in de komende \n twee maanden risico op een \n
                          "Ik vind het erg als ik \n andere mensen besmet"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
-color_palette = my_palette7blue
+color_palette = my_palette7
 # Order of the question categories: first = most green, last = most red # Check if the answer categories match with the codebook (e.g, sometimes also 'weet ik niet is one of the answeroptions')
 graph_answercategories = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
 
@@ -389,7 +389,7 @@ graph_questionlabels = c("... hebt u uw handen gewassen?",
 plot_title = "In de afgelopen 2 maanden, hoe vaak..."
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
-color_palette = my_palette7
+color_palette = my_palette7blue
 # Order of the question categories: first = most green, last = most red # Check if the answer categories match with the codebook (e.g, sometimes also 'weet ik niet is one of the answeroptions')
 graph_answercategories = c("Altijd", "Meestal", "Vaak", "Regelmatig", "Soms", "Zelden", "Nooit"); 
 
