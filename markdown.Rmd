@@ -1631,7 +1631,12 @@ totals[-1] <- paste(totals[-1], " (100.0%)")
 for(colname in colnames(data_grouptable)) {
   if(colname != "variable") {
     # Add percentage to cell
-    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", ifelse(user_totals[1,colname]==0,0,eval(parse(text=colname))/user_totals[1,colname]*100)), "%)"))
+    if (user_totals[1,colname]==0) {
+      ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (0.0%)"))
+    }
+    else {
+      ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/user_totals[1,colname]*100), "%)"))
+    }
     
   }
 }
@@ -2554,7 +2559,7 @@ ft_out
 ### Sociale invloeden
 Om de sociale invloeden in kaart te brengen is gevraagd naar descriptieve en injunctieve normen en is gevraagd om een indicatie te geven van welk percentage van de Nederlandse bevolking de CoronaMelder gebruikt. Opvallend is dat een relatief laag percentage mensen het eens is met de stelling dat veel mensen in hun omgeving de CoronaMelder gebruiken (`r round((nrow(filter(data, (SI1_UTAUT == 'Helemaal mee eens'| SI1_UTAUT == 'Mee eens'| SI1_UTAUT == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%). Dit kan liggen aan het feit dat gebruik van de CoronaMelder redelijk onzichtbaar is (in tegenstelling tot het gebruik van bijvoorbeeld een mondkapje). Daarnaast staat een groot percentage neutraal tegenover deze stelling (`r round((nrow(filter(data, (SI1_UTAUT == 'Neutraal'))) /nrow(data))*100, digits = 1)`%), wat zou kunnen betekenen dat men hier niet van op de hoogte is.
 
-Ook de injunctieve norm is nauwelijks aanwezig, bijna de helft is het oneeens met de stelling 'Mensen in mijn directe omgeving vinden dat ik de CoronaMelder moet gebruiken' (`r round((nrow(filter(data, (SI2_UTAUT == 'Helemaal mee oneens'| SI2_UTAUT == 'Oneens'| SI2_UTAUT == 'Een beetje oneens'))) /nrow(data))*100, digits = 1)`%), en ook een aanzienlijk percentage staat hier neutraal in (`r round((nrow(filter(data, (SI2_UTAUT == 'Neutraal'))) /nrow(data))*100, digits = 1)`%). Van de respondenten is `r round((nrow(filter(data, (Beliefs_civicduty == 'Helemaal mee eens'| Beliefs_civicduty == 'Mee eens'| Beliefs_civicduty == 'Een beetje mee eens'`% het eens met de stelling dat de CoronaMelder je een goede burger maakt.
+Ook de injunctieve norm is nauwelijks aanwezig, bijna de helft is het oneeens met de stelling 'Mensen in mijn directe omgeving vinden dat ik de CoronaMelder moet gebruiken' (`r round((nrow(filter(data, (SI2_UTAUT == 'Helemaal mee oneens'| SI2_UTAUT == 'Oneens'| SI2_UTAUT == 'Een beetje oneens'))) /nrow(data))*100, digits = 1)`%), en ook een aanzienlijk percentage staat hier neutraal in (`r round((nrow(filter(data, (SI2_UTAUT == 'Neutraal'))) /nrow(data))*100, digits = 1)`%). Van de respondenten is `r round((nrow(filter(data, (Beliefs_civicduty == 'Helemaal mee eens'| Beliefs_civicduty == 'Mee eens'| Beliefs_civicduty == 'Een beetje mee eens')))))`% het eens met de stelling dat de CoronaMelder je een goede burger maakt.
 
 
 ```{r Beliefsappadoption, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Percentage bevolking dat volgens de respondent de CoronaMelder gebruikt"}
