@@ -53,6 +53,7 @@ my_palette7 <- brewer.pal(11,"RdYlGn")[c(9,8,7,6,5,4,3)]
 my_palette_nonuse = c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "RdYlGn")[c(9,8,7,6,5,4,3)])
 my_palette5true <- c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "RdYlGn")[c(6,7,8,9)])
 my_palette5blue <- c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "Blues")[c(6,5,4,3)])
+my_palette7blue <- brewer.pal(11, "Blues")[c(7,6,5,4,3,2,1)]
 
 ##### Creating new variables
 ## User status. 
@@ -272,7 +273,7 @@ graph_questionlabels = c("Ik loop in de komende \n twee maanden risico op een \n
                          "Ik vind het erg als ik \n andere mensen besmet"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
-color_palette = my_palette7
+color_palette = my_palette7blue
 # Order of the question categories: first = most green, last = most red # Check if the answer categories match with the codebook (e.g, sometimes also 'weet ik niet is one of the answeroptions')
 graph_answercategories = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
 
@@ -374,7 +375,7 @@ ft_out
 ```
 
 #### Naleven algemene gedragsregels
-In kaart is gebracht in hoeverre de respondenten zich in de afgelopen 2 maanden aan een aantal van de algemene gedragsregels hebben gehouden (zie figuur \@ref(fig:behavioradhgenmeasures)). `r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_handwashing == 'Altijd'| Behavior_AdherenceGeneralMeasures_handwashing == 'Meestal'| Behavior_AdherenceGeneralMeasures_handwashing == 'Vaak'))) /nrow(data))*100, digits = 1)`% Gaf aan, regelmatig, vaak of altijd handen te wassen. Ongeveer de helft van de respondenten (`r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_distance == 'Nooit'| Behavior_AdherenceGeneralMeasures_distance == 'Zelden'| Behavior_AdherenceGeneralMeasures_distance == 'Soms'))) /nrow(data))*100, digits = 1)`%) gaf aan nooit, zelden of soms op minder dan 1,5 afstand van mensen buiten het huishouden te zijn geweest. Tot slot gaf `r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Nooit'| Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Zelden'| Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Soms'))) /nrow(data))*100, digits = 1)`% aan nooit, zelden of soms op een plek te zijn geweest waar anderhalve meter afstand houden eigenlijk niet mogelijk was. 
+In kaart is gebracht in hoeverre de respondenten zich in de afgelopen 2 maanden aan een aantal van de algemene gedragsregels hebben gehouden (zie figuur \@ref(fig:behavioradhgenmeasures)). `r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_handwashing == 'Altijd'| Behavior_AdherenceGeneralMeasures_handwashing == 'Meestal'| Behavior_AdherenceGeneralMeasures_handwashing == 'Vaak'))) /nrow(data))*100, digits = 1)`% gaf aan, regelmatig, vaak of altijd handen te wassen. Ongeveer de helft van de respondenten (`r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_distance == 'Nooit'| Behavior_AdherenceGeneralMeasures_distance == 'Zelden'| Behavior_AdherenceGeneralMeasures_distance == 'Soms'))) /nrow(data))*100, digits = 1)`%) gaf aan nooit, zelden of soms op minder dan 1,5 afstand van mensen buiten het huishouden te zijn geweest. Tot slot gaf `r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Nooit'| Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Zelden'| Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Soms'))) /nrow(data))*100, digits = 1)`% aan nooit, zelden of soms op een plek te zijn geweest waar anderhalve meter afstand houden eigenlijk niet mogelijk was. 
 
 ```{r behavioradhgenmeasures, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Naleving algemene gedragsregels", tab.cap="Naleving algemene gedragsregels"}
 
@@ -2914,6 +2915,8 @@ In totaal hebben `r nrow(filter(data, (Behavior_UTAUT == 'Ik gebruik de CoronaMe
 #### Intentie tot opvolgen adviezen gegeven in de melding
 Aan de respondenten is gevraagd in hoeverre zij de intentie hebben om, na ontvangen van een melding, zich te houden aan de adviezen die in een melding van de CoronaMelder worden gegeven. Om dit te onderzoeken werd proefpersonen twee sitaties voorgelegd (situatie waarin men wel of geen symptomen had) en een screenshot van de melding getoond. Een belangrijke noot bij deze resultaten is dat ten tijde van deze enquete het testbeleid zo was dat men na het ontvangen van een melding alleen kon laten testen indien symptomen aawezig waren (in de appendix kan de vragenlijst inclusief screenshot van melding gevonden worden). 
 
+In figuur \@ref(fig:adherencenotificationsnosymp) is te zien dat respondenten over het algemeen de juiste intenties hebben wat betreft het opvolgen van geadviseerd gedrag wanneer men geen symptomen heeft. Zo zou ruim twee derde thuisblijven zolang geadviseerd (`r round((nrow(filter(data, (AdherenceNotificationMeasuresNosymptoms_Quarantaine == 'Helemaal mee eens'| AdherenceNotificationMeasuresNosymptoms_Quarantaine == 'Mee eens'| AdherenceNotificationMeasuresNosymptoms_Quarantaine == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%), en geen bezoek ontvangen (`r round((nrow(filter(data, (AdherenceNotificationMeasuresNoSymptoms_Visits == 'Helemaal mee eens'| AdherenceNotificationMeasuresNoSymptoms_Visits == 'Mee eens'| AdherenceNotificationMeasuresNoSymptoms_Visits == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%). Iets meer dan één vierde geeft aan een coronatest aan te zullen vragen (`r round((nrow(filter(data, (AdherenceNotificationMeasuresNosymptoms_Test == 'Helemaal mee eens'| AdherenceNotificationMeasuresNosymptoms_Test == 'Mee eens'| AdherenceNotificationMeasuresNosymptoms_Test == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%) of de huisarts te bellen (`r round((nrow(filter(data, (AdherenceNotificationMeasuresNosymptoms_CallGP == 'Helemaal mee eens'| AdherenceNotificationMeasuresNosymptoms_CallGP == 'Mee eens'| AdherenceNotificationMeasuresNosymptoms_CallGP == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%).
+
 ``` {r adherencenotificationsnosymp, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot opvolgen adviezen zonder symptomen", tab.cap="Intentie tot opvolgen adviezen zonder symptomen"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("AdherenceNotificationMeasuresNosymptoms_Test", 
@@ -2924,6 +2927,7 @@ graph_questionlabels = c("Bellen om coronatest\n aan te vragen",
                          "Thuisblijven zo lang\n de melding adviseert", 
                          "Geen bezoek ontvangen", 
                          "De huisarts bellen"); 
+
 
 # These questions have 8 answer categories: Helemaal mee eens - Helemaal mee oneens and no use. The following color palette should be used:
 color_palette = my_palette_nonuse
@@ -3024,6 +3028,7 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 ```
 
+Figuur \@ref(fig:adherencenotificationssympt) laat zien dat respondenten over het algemeen ook de juiste intenties hebben wanneer men wel symptomen heeft. Van de respondenten geeft `r round((nrow(filter(data, (AdherenceNotificationMeasuresSymptoms_Test == 'Helemaal mee eens'| AdherenceNotificationMeasuresSymptoms_Test == 'Mee eens'| AdherenceNotificationMeasuresSymptoms_Test == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`% aan te bellen voor een coronatest, `r round((nrow(filter(data, (AdherenceNotificationMeasuresSymptoms_Quarantaine == 'Helemaal mee eens'| AdherenceNotificationMeasuresSymptoms_Quarantaine == 'Mee eens'| AdherenceNotificationMeasuresSymptoms_Quarantaine == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`% aan thuis te blijven zolang geadviseerd, en `r round((nrow(filter(data, (AdherenceNotificationMeasuresSymptoms_Visits == 'Helemaal mee eens'| AdherenceNotificationMeasuresSymptoms_Visits == 'Mee eens'| AdherenceNotificationMeasuresSymptoms_Visits == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%. Toch geeft ook nog bijna de helft aan de huisarts te zullen bellen (`r round((nrow(filter(data, (AdherenceNotificationMeasuresSymptoms_CallGP == 'Helemaal mee eens'| AdherenceNotificationMeasuresSymptoms_CallGP == 'Mee eens'| AdherenceNotificationMeasuresSymptoms_CallGP == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%).
 
 ```{r adherencenotificationssympt, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot opvolgen adviezen met symptomen", tab.cap="Intentie tot opvolgen adviezen met symptomen"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -3137,6 +3142,7 @@ ft_out
 
 #### Intentie tot opvolgen adviezen gegeven in de melding - alleen huidig gebruikers
 Dezelfde bepalingen zijn ook gedaan in alleen de subsample (n = `r nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))`) die momenteel de CoronaMelder gebruikt. 
+
 ``` {r adherencenotificationsnosympcurrentusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot opvolgen adviezen zonder symptomen - alleen huidig gebruikers", tab.cap="Intentie tot opvolgen adviezen zonder symptomen - alleen huidig gebruikers"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("AdherenceNotificationMeasuresNosymptoms_Test", 
