@@ -48,6 +48,17 @@ data_in <- read.spss('L_CoronaMelder_wave1_3p.sav', to.data.frame=TRUE, use.miss
 # Filter out the ones that didn't complete the entire survey (N = 10)
 data <- data_in[!is.na(data_in$duur),]
 
+##### Add labels to variables
+attr(data$geslacht,'label')  <- 'Geslacht'
+attr(data$lftdcat,'label')  <- 'Leeftijdscategorie'
+attr(data$sted,'label')  <- 'Stedelijkheid woonplaats'
+attr(data$belbezig,'label')  <- 'Belangrijkste bezigheid'
+attr(data$nettocat,'label')  <- 'Netto maandinkomen'
+attr(data$oplmet,'label')  <- 'Hoogste opleiding met diploma'
+attr(data$burgstat,'label')  <- 'Burgerlijke staat'
+attr(data$woonvorm,'label')  <- 'Woonvorm huishouden'
+attr(data$Riskgroup_contact,'label')  <- 'Frequentie op minder dan 1.5m van ouderen en mensen met een kwetsbare gezondheid zijn vanwege werk en/of (privé) zorgtaken'
+
 ##### Set up color palettes for graphs
 my_palette5 <- brewer.pal(11,"RdYlGn")[c(4, 5, 6, 7, 8, 9, 10)]
 my_palette7 <- brewer.pal(11,"RdYlGn")[c(9,8,7,6,5,4,3)]
@@ -191,22 +202,12 @@ In de resultaten sectie worden de uitkomsten getoond van de 1900 respondenten wa
 # Resultaten
 ## Karakteristieken van de steekproef
 ### Demografische factoren
-Aan dit onderzoek hebben 1900 (gemiddelde leeftijd in jaren: 51.8, standaarddeviatie 18.3, range: 17-96); 55.1% vrouw) respondenten deelgenomen. 
+Aan dit onderzoek hebben `r nrow(data)` (gemiddelde leeftijd in jaren: `r round(mean(data$leeftijd), digits = 1)`, standaarddeviatie: `r round(sd(data$leeftijd), digits = 1)`, range: `r min(data$leeftijd)`-`r max(data$leeftijd)`); `r round((nrow(filter(data, geslacht == 'Vrouw'))/nrow(data))*100, digits = 2)`% vrouw) respondenten deelgenomen. 
 
 ```{r, echo=FALSE, results="asis"} 
-tab.noby <- tableby(~ geslacht + lftdcat + sted + belbezig + oplmet + Riskgroup_contact, data=data)
+tab.noby <- tableby(~ geslacht + lftdcat + sted + belbezig + oplmet + burgstat + nettocat + woonvorm + Riskgroup_contact, data=data)
 summary(tab.noby)
 ```
---> To do: nog uitwerken in tabellen:  
-Geslacht
-Lftdcat
-sted
-belbezig
-oplmet
-DS_mobile
-HealthLiteracy
-Riskgroup_contact
-
 
 ### Gezondheidsmotivatie en risicoperceptie corona besmetting
 
@@ -987,7 +988,15 @@ ggplot(data=data, aes(fill=Awareness, x=geslacht)) + geom_bar(position=position_
 Van alle respondenten gaf `r round(nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))/nrow(data)*100, digits = 1)`% aan dat hij/zij de CoronaMelder op dit moment gebruikt en `r round(nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt'))/nrow(data)*100, digits = 1)`% geeft aan de CoronaMelder niet te gebruiken. Slechts `r round(nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer'))/nrow(data)*100, digits = 1)`% gaf aan de CoronaMelder in het verleden gebruikt te hebben maar op dit moment niet meer. 
 
 #### Vergelijking gebruikers en niet gebruikers
-Om inzicht te krijgen in welke factoren (demografisch, persoonlijk, sociaal, omgevingsfactoren) worden gebruikers vergeleken met niet gebruikers. 
+##### Demografische gegevens naar gebruikersstatus
+Om inzicht te krijgen in welke factoren (demografisch, persoonlijk, sociaal, omgevingsfactoren) worden respondenten die momenteel de CoronaMelder gebruiken vergeleken met de respondenten die de CoronaMelder nooit hebben gebruikt. 
+```{r, echo=FALSE, results="asis", tab.cap = "Demografische kenmerken naar gebruikersstatus"} 
+tab.noby <- tableby(user_status~ geslacht + lftdcat + sted + belbezig + oplmet + burgstat + nettocat + woonvorm + Riskgroup_contact, data=data_currentvsneveruser)
+summary(tab.noby, pfootnote=TRUE)
+```
+
+
+##### Gezondheidsmotivatie en algemene opvattingen over het coronavirus
 --> To do: verdere uitsplitsingen en bijbehorende statistische tests.   
 
 ```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - Gebruikers", tab.cap="Waargenomen ernst en vatbaarheid - Gebruikers"}
