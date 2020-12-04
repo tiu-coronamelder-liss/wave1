@@ -39,6 +39,9 @@ library(RColorBrewer)
 library(psy) # psy for the cronbach function
 library(reshape2) # For converting from wide to long format (function: melt)
 
+# For aligning ggplots vertically
+library(cowplot)
+
 ##### Load dataset (not included on Github)
 data_in <- read.spss('L_CoronaMelder_wave1_3p.sav', to.data.frame=TRUE, use.missings=FALSE)
 
@@ -218,7 +221,7 @@ In totaal `r round(nrow(filter(data, (CoronaInfectionOther_1 == 'Ja' | CoronaInf
 
 --> To do: nog uitwerken: CoronaInfectionOther_1-8 - In onderstaande grafiek is te zien welke relatie deze personen tot de respondent hadden (grafiek nog maken) (zie figuur \@ref(fig:coronainfectionother)). 
 
-```{r coronainfectionother, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Relatie geïnfecteerde personen tot de respondent"}
+```{r coronainfectionother, echo=FALSE, fig.width=7, fig.height=2.5, fig.cap="Relatie geïnfecteerde personen tot de respondent"}
 # Create the plot#LUKT NOG NIET
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("CoronaInfectionOther_1", 
@@ -230,13 +233,13 @@ graph_variablenames = c("CoronaInfectionOther_1",
                         "CoronaInfectionOther_7",
                         "CoronaInfectionOther_8")
 graph_questionlabels = c("Ja, mijn partner", 
-                         "Ja, een of meerdere\n familieleden", 
-                         "Ja, een of meerdere\n vrienden", 
-                         "Ja, een of meerdere\n collega’s/studiegenoten",
-                         "Ja, een of meerdere\n kennissen",
+                         "Ja, een of meerdere familieleden", 
+                         "Ja, een of meerdere vrienden", 
+                         "Ja, een of meerdere collega’s/studiegenoten",
+                         "Ja, een of meerdere kennissen",
                          "Anders",
                          "Nee, niemand",
-                         "Weet ik niet/wil ik\n niet zeggen"); 
+                         "Weet ik niet/wil ik niet zeggen"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7
@@ -254,11 +257,11 @@ data_graph_longformat$variable <- factor(data_graph_longformat$variable,levels =
 # Also invert the order of the question labels (as default is that the first element of the vector is placed on the bottom)
 graph_questionlabels = rev(graph_questionlabels)
 
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 
 # To check: also create the plot with variable labels
-#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 ```
 
@@ -267,17 +270,17 @@ Uit gedragswetenschappelijke literatuur is bekend dat gepercipieerde ernst en va
 
 De gepercipieerde ernst lag hoger onder de respondenten, met name de ernst van het besmetten van anderen (`r round((nrow(filter(data, (HBM_PSev_other2 == 'Helemaal mee eens'| HBM_PSev_other2 == 'Mee eens'| HBM_PSev_other2 == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%). Daarnaast vindt `r round((nrow(filter(data, (HBM_PSev_self1 == 'Helemaal mee eens'| HBM_PSev_self1 == 'Mee eens'| HBM_PSev_self1 == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`% het erg om zelf besmet te raken met het coronavirus.
 
-```{r riskperception, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - hele populatie", tab.cap="Waargenomen ernst en vatbaarheid - hele populatie"}
+```{r riskperception, echo=FALSE, fig.width=7, fig.height=2.2, fig.cap="Waargenomen ernst en vatbaarheid - hele populatie", tab.cap="Waargenomen ernst en vatbaarheid - hele populatie"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("HBM_PSus_self1", 
                         "HBM_PSus_other2", 
                         "HBM_PSev_self1", 
                         "HBM_PSev_other2")
-graph_questionlabels = c("Ik loop in de komende \n twee maanden risico op een \n besmetting met het coronavirus", 
-                         "Als ik besmet raak \n is de kans  groot dat ik anderen \n zal besmetten", 
-                         "Ik vind het erg om \n besmet te raken", 
-                         "Ik vind het erg als ik \n andere mensen besmet"); 
+graph_questionlabels = c("Ik loop in de komende twee maanden risico op een besmetting met het coronavirus", 
+                         "Als ik besmet raak is de kans  groot dat ik anderen zal besmetten", 
+                         "Ik vind het erg om besmet te raken", 
+                         "Ik vind het erg als ik andere mensen besmet"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7
@@ -301,10 +304,12 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+baseplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+ggdraw(baseplot)
 
 # To check: also create the plot with variable labels
-#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 
 # Create the table. Step 1: new data frame containing counts
@@ -391,8 +396,8 @@ graph_variablenames = c("Behavior_AdherenceGeneralMeasures_handwashing",
                         "Behavior_AdherenceGeneralMeasures_distance", 
                         "Behavior_AdherenceGeneralMeasures_avoidbusyplaces")
 graph_questionlabels = c("... hebt u uw handen gewassen?", 
-                         "... bent u minder dan op 1,5m\n afstand geweest van mensen\n buiten uw huishouden?", 
-                         "... bent u op een plek geweest\n waar het eigenlijk te druk was\n om 1,5m afstand te houden?"); 
+                         "... bent u minder dan op 1,5m afstand geweest van mensen buiten uw huishouden?", 
+                         "... bent u op een plek geweest waar het eigenlijk te druk was om 1,5m afstand te houden?"); 
 plot_title = "In de afgelopen 2 maanden, hoe vaak..."
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
@@ -417,7 +422,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle(plot_title) + theme(plot.title = element_text(size=11))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle(plot_title) + theme(plot.title = element_text(size=11))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -500,7 +508,7 @@ Van alle respondenten gaf `r round(nrow(filter(data, Corona_complaints == "Ja"))
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Behavior_AdherenceGeneralMeasures_quarantaine")
-graph_questionlabels = c("Bent u, toen u\n deze klachten\n had, naar buiten\n geweest?"); 
+graph_questionlabels = c("Bent u, toen u deze klachten had, naar buiten geweest?"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7
@@ -528,7 +536,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = graph_answercategories # For some reason, in this case it does not need to be reverted.
@@ -615,9 +626,9 @@ graph_variablenames = c("Intention_AdherenceGeneralMeasures_handwashing",
                         "Intention_AdherenceGeneralMeasures_avoidbusyplaces", 
                         "Intention_AdherenceGeneralMeasures_quarantaine")
 graph_questionlabels = c("... mijn handen regelmatig te wassen", 
-                         "... 1,5 meter afstand te houden van\n mensen buiten mijn huishouden", 
+                         "... 1,5 meter afstand te houden van mensen buiten mijn huishouden", 
                          "... drukke plekken te vermijden", 
-                         "... thuis te blijven als ik last\n heb van klachten die\n passen bij het coronavirus"); 
+                         "... thuis te blijven als ik last heb van klachten die passen bij het coronavirus"); 
 plot_title = "Ik ben van plan om de komende 2 maanden..."
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7
@@ -641,7 +652,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle(plot_title) + theme(plot.title = element_text(size=11))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle(plot_title) + theme(plot.title = element_text(size=11))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -726,8 +740,8 @@ Om in kaart te brengen in hoeverre complottheorieën een rol spelen is gevraagd 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Beliefs_Conspiracy1", 
                         "Beliefs_Conspiracy2")
-graph_questionlabels = c("Het coronavirus is een \n biologisch wapen dat in een \n laboratorium is gemaakt", 
-                         "De uitbraak van het \n coronavirus heeft te maken met \n (de aanleg van) het 5G netwerk"); 
+graph_questionlabels = c("Het coronavirus is een biologisch wapen dat in een laboratorium is gemaakt", 
+                         "De uitbraak van het coronavirus heeft te maken met (de aanleg van) het 5G netwerk"); 
 
 # These questions have 5 answer categories: Zeker niet waar - Zeker waar en Weet ik niet. The following color palette should be used:
 color_palette = my_palette5blue
@@ -753,10 +767,13 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # To check: also create the plot with variable labels
-#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 #table(data$Beliefs_Conspiracy1)
 
@@ -841,7 +858,7 @@ Respondenten zijn verdeeld wat betreft vertrouwen in de overheid met betrekking 
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Beliefs_TrustGovernment")
-graph_questionlabels = c("Ik heb vertrouwen\n in de manier waarop\n de Nederlandse overheid\n probeert het coronavirus\n onder controle te houden"); 
+graph_questionlabels = c("Ik heb vertrouwen in de manier waarop de Nederlandse overheid probeert het coronavirus onder controle te houden"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7
@@ -865,7 +882,11 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) 
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) 
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
+
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -949,7 +970,7 @@ In de vragenlijst werd gevraagd hoe bekend men (voor het openen van de vragenlij
 
 ```{r awareness, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Bekendheid met CoronaMelder", tab.cap="Waargenomen ernst en vatbaarheid - Gebruikers"}
 # Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-ggplot(data=data, aes(x = Awareness)) + theme_bw() + xlab(paste(names(table(data$Awareness)))) + ylab(" ") + xlab("Hoe bekend bent u met\n de CoronaMelder?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(,axis.title=element_text(size=10))
+ggplot(data=data, aes(x = Awareness)) + theme_bw() + xlab(paste(names(table(data$Awareness)))) + ylab(" ") + xlab("Hoe bekend bent u met de CoronaMelder?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(,axis.title=element_text(size=10))
 ```
 
 ```{r awarenesslftd, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Bekendheid met de CoronaMelder per leeftijdscategorie"}
@@ -976,10 +997,10 @@ graph_variablenames = c("HBM_PSus_self1",
                         "HBM_PSus_other2", 
                         "HBM_PSev_self1", 
                         "HBM_PSev_other2")
-graph_questionlabels = c("Ik loop in de komende \n twee maanden risico op een \n besmetting met het coronavirus", 
-                         "Als ik besmet raak \n is de kans  groot dat ik anderen \n zal besmetten", 
-                         "Ik vind het erg om \n besmet te raken", 
-                         "Ik vind het erg als ik \n andere mensen besmet"); 
+graph_questionlabels = c("Ik loop in de komende twee maanden risico op een besmetting met het coronavirus", 
+                         "Als ik besmet raak is de kans  groot dat ik anderen zal besmetten", 
+                         "Ik vind het erg om besmet te raken", 
+                         "Ik vind het erg als ik andere mensen besmet"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7
@@ -1007,7 +1028,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -1090,10 +1114,10 @@ graph_variablenames = c("HBM_PSus_self1",
                         "HBM_PSus_other2", 
                         "HBM_PSev_self1", 
                         "HBM_PSev_other2")
-graph_questionlabels = c("Ik loop in de komende \n twee maanden risico op een \n besmetting met het coronavirus", 
-                         "Als ik besmet raak \n is de kans  groot dat ik anderen \n zal besmetten", 
-                         "Ik vind het erg om \n besmet te raken", 
-                         "Ik vind het erg als ik \n andere mensen besmet"); 
+graph_questionlabels = c("Ik loop in de komende twee maanden risico op een besmetting met het coronavirus", 
+                         "Als ik besmet raak is de kans  groot dat ik anderen zal besmetten", 
+                         "Ik vind het erg om besmet te raken", 
+                         "Ik vind het erg als ik andere mensen besmet"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7
@@ -1121,7 +1145,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -1205,8 +1232,8 @@ Er werd gevraagd of de respondenten de intentie hadden om de CoronaMelder de kom
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("BI1a_UTAUT", 
                         "BI2a_UTAUT")
-graph_questionlabels = c("Ik ben van plan de \n CoronaMelder in de komende  \n 2 maanden te gebruiken", 
-                         "Het is waarschijnlijk dat \nik de CoronaMelder in de komende  \n 2 maanden zal gebruiken"); 
+graph_questionlabels = c("Ik ben van plan de CoronaMelder in de komende 2 maanden te gebruiken", 
+                         "Het is waarschijnlijk dat ik de CoronaMelder in de komende 2 maanden zal gebruiken"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7
@@ -1234,7 +1261,11 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
+
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -1317,8 +1348,8 @@ Van de respondenten die de CoronaMelder op dit moment al gebruiken, gaf een over
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("BI1b_UTAUT", 
                         "BI2b_UTAUT")
-graph_questionlabels = c("Ik ben van plan de \n CoronaMelder in de komende  \n 2 maanden te blijven gebruiken", 
-                         "Het is waarschijnlijk dat \nik de CoronaMelder de komende  \n 2 maanden zal blijven gebruiken"); 
+graph_questionlabels = c("Ik ben van plan de CoronaMelder in de komende 2 maanden te blijven gebruiken", 
+                         "Het is waarschijnlijk dat ik de CoronaMelder de komende 2 maanden zal blijven gebruiken"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7
@@ -1346,7 +1377,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -1462,9 +1496,9 @@ In kaart is gebracht in welke mate men denkt dat de CoronaMelder bijdraagt aan d
 graph_variablenames = c("PE1_UTAUT", 
                         "PE2_UTAUT", 
                         "Beliefs_Protectriskgroups")
-graph_questionlabels = c("Door de CoronaMelder app te \n gebruiken help ik mee bij de \n bestrijding van het coronavirus", 
-                         "De CoronaMelder app is nuttig \n om ervoor te zorgen dat het \n coronavirus zich minder verspreidt", 
-                         "De CoronaMelder app helpt om \nmensen met een kwetsbare \n gezondheid te beschermen") 
+graph_questionlabels = c("Door de CoronaMelder app te gebruiken help ik mee bij de bestrijding van het coronavirus", 
+                         "De CoronaMelder app is nuttig om ervoor te zorgen dat het coronavirus zich minder verspreidt", 
+                         "De CoronaMelder app helpt om mensen met een kwetsbare gezondheid te beschermen") 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7
@@ -1489,7 +1523,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -1569,7 +1606,7 @@ Er is ook gevraagd hoeveel procent van de Nederlandse bevolking volgens de respo
 
 ```{r, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Percentage bevolking dat de CoronaMelder moet gebruiken om verspreiding van het virus tegen te gaan"}
 # Beliefs_ResponseefficasyOther
-ggplot(data=data, aes(x = Beliefs_ResponseefficasyOther)) + theme_bw() + xlab(paste(names(table(data$Beliefs_ResponseefficasyOther)))) + ylab(" ") + xlab("Hoeveel procent van de Nederlandse bevolking\n zou volgens u de CoronaMelder moeten gebruiken\n om de verspreiding van het coronavirus tegen te gaan?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(,axis.title=element_text(size=10))
+ggplot(data=data, aes(x = Beliefs_ResponseefficasyOther)) + theme_bw() + xlab(paste(names(table(data$Beliefs_ResponseefficasyOther)))) + ylab(" ") + xlab("Hoeveel procent van de Nederlandse bevolking zou volgens u de CoronaMelder moeten gebruiken om de verspreiding van het coronavirus tegen te gaan?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(,axis.title=element_text(size=10))
 
 ```
 
@@ -1582,9 +1619,9 @@ ggplot(data=data, aes(x = Beliefs_ResponseefficasyOther)) + theme_bw() + xlab(pa
 graph_variablenames = c("PE1_UTAUT", 
                         "PE2_UTAUT", 
                         "Beliefs_Protectriskgroups")
-graph_questionlabels = c("Door de CoronaMelder app te \n gebruiken help ik mee bij de \n bestrijding van het coronavirus", 
-                         "De CoronaMelder app is nuttig \n om ervoor te zorgen dat het \n coronavirus zich minder verspreidt", 
-                         "De CoronaMelder app helpt om \nmensen met een kwetsbare \n gezondheid te beschermen") 
+graph_questionlabels = c("Door de CoronaMelder app te gebruiken help ik mee bij de bestrijding van het coronavirus", 
+                         "De CoronaMelder app is nuttig om ervoor te zorgen dat het coronavirus zich minder verspreidt", 
+                         "De CoronaMelder app helpt om mensen met een kwetsbare gezondheid te beschermen") 
 
 # Which values do we want to include in the table cells?
 include_vars = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens")
@@ -1679,7 +1716,7 @@ In de vragenlijst werd gepeild in welke mate men vertrouwen heeft in de adequaat
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Beliefs_technologyperformance")
                         
-graph_questionlabels = c("De techniek (bluetooth) die\n wordt gebruikt in de CoronaMelder\n geeft aan wie er in de buurt\n is geweest van\n een persoon die besmet is"); 
+graph_questionlabels = c("De techniek (bluetooth) die wordt gebruikt in de CoronaMelder geeft aan wie er in de buurt is geweest van een persoon die besmet is"); 
 
 # These questions have 5 answer categories: Zeker niet waar - Zeker waar en Weet ik niet. The following color palette should be used:
 color_palette = my_palette5blue
@@ -1705,10 +1742,13 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # To check: also create the plot with variable labels
-#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -1791,7 +1831,7 @@ Aan de respondenten werd gevraagd in hoeverre zij dachten dat gebruik van de Cor
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Beliefs_benefiteconomic")
-graph_questionlabels = c("Gebruik van de CoronaMelder \n helpt de Nederlandse economie"); 
+graph_questionlabels = c("Gebruik van de CoronaMelder helpt de Nederlandse economie"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7
@@ -1815,7 +1855,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) 
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) 
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -1904,8 +1947,8 @@ HBM_selfefficacy_CoronaMelder
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("EE1b_UTAUT", 
                         "EE2b_UTAUT")
-graph_questionlabels = c("Ik denk dat het mij veel\n tijd en energie kost\n om de CoronaMelder\n te gebruiken", 
-                         "Ik denk dat de\n CoronaMelder\n makkelijk te\n gebruiken is"); 
+graph_questionlabels = c("Ik denk dat het mij veel tijd en energie kost om de CoronaMelder te gebruiken", 
+                         "Ik denk dat de CoronaMelder makkelijk te gebruiken is"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7
@@ -1933,7 +1976,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -2014,8 +2060,8 @@ ft_out
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("EE1a_UTAUT", 
                         "EE2a_UTAUT")
-graph_questionlabels = c("Het kost(te) mij veel\n tijd en energie\n om de CoronaMelder\n te gebruiken", 
-                         "De CoronaMelder is\n makkelijk te gebruiken"); 
+graph_questionlabels = c("Het kost(te) mij veel tijd en energie om de CoronaMelder te gebruiken", 
+                         "De CoronaMelder is makkelijk te gebruiken"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7
@@ -2042,7 +2088,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -2123,7 +2172,7 @@ ft_out
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("HBM_selfefficacy_CoronaMelder")
-graph_questionlabels = c("Ik ben in \n staat om de\n CoronaMelder\n te gebruiken"); 
+graph_questionlabels = c("Ik ben in staat om de CoronaMelder te gebruiken"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7
@@ -2146,7 +2195,10 @@ graph_questionlabels = rev(graph_questionlabels)
 # Set the correct ordering of the answer categories (by default on alphabetic order)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + theme(plot.title = element_text(size=11))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + theme(plot.title = element_text(size=11))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -2232,8 +2284,8 @@ Vanuit het UTAUT is bekend dat technologie gerelateerde belemmeringen een rol ku
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("FC1_UTAUT", 
                         "FC2_UTAUT")
-graph_questionlabels = c("Ik heb een smartphone tot\n mijn beschikking met\n toegang tot het internet\n waarmee ik de\n CoronaMelder kan gebruiken", 
-                         "Ik heb genoeg (technische)\n kennis om de CoronaMelder\n te gebruiken"); 
+graph_questionlabels = c("Ik heb een smartphone tot mijn beschikking met toegang tot het internet waarmee ik de CoronaMelder kan gebruiken", 
+                         "Ik heb genoeg (technische) kennis om de CoronaMelder te gebruiken"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7
@@ -2257,7 +2309,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -2342,9 +2397,9 @@ Belangrijke variabelen uit het UTAUT en het HBM zijn de verwachte voor- en nadel
 graph_variablenames = c("HBM_perceivedbenefits_CoronaMelder",
                         "HBM_barriers_CoronaMelder", 
                         "Beliefs_voluntariness")
-graph_questionlabels = c("Het heeft voor mij\n persoonlijke voordelen om\n de CoronaMelder te\n gebruiken",
-                         "Het heeft voor mij\n persoonlijke nadelen om\n de CoronaMelder te\n gebruiken", 
-                         "Ik voel me verplicht\n om de CoronaMelder\n te gebruiken"); 
+graph_questionlabels = c("Het heeft voor mij persoonlijke voordelen om de CoronaMelder te gebruiken",
+                         "Het heeft voor mij persoonlijke nadelen om de CoronaMelder te gebruiken", 
+                         "Ik voel me verplicht om de CoronaMelder te gebruiken"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7
@@ -2368,7 +2423,11 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
+
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -2453,8 +2512,8 @@ In kaart is gebracht in welke mate de CoronaMelder in het algemeen en meer speci
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Beliefs_fear", 
                         "Beliefs_notificationfear")
-graph_questionlabels = c("Ik vind de\n CoronaMelder eng", 
-                         "Ik zou angstig\n worden als ik een\n melding ontvang van\n de CoronaMelder"); 
+graph_questionlabels = c("Ik vind de CoronaMelder eng", 
+                         "Ik zou angstig worden als ik een melding ontvang van de CoronaMelder"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7
@@ -2478,7 +2537,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -2563,7 +2625,7 @@ Ook de injunctieve norm is nauwelijks aanwezig, bijna de helft is het oneeens me
 
 
 ```{r Beliefsappadoption, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Percentage bevolking dat volgens de respondent de CoronaMelder gebruikt"}
-ggplot(data=data, aes(x = Beliefs_AppAdoption)) + theme_bw() + xlab(paste(names(table(data$Beliefs_AppAdoption)))) + ylab(" ") + xlab("Hoeveel procent van de\n Nederlandse bevolking denkt u\n dat de CoronaMelder gebruikt?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(,axis.title=element_text(size=10))
+ggplot(data=data, aes(x = Beliefs_AppAdoption)) + theme_bw() + xlab(paste(names(table(data$Beliefs_AppAdoption)))) + ylab(" ") + xlab("Hoeveel procent van de Nederlandse bevolking denkt u dat de CoronaMelder gebruikt?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(,axis.title=element_text(size=10))
 
 ```
 
@@ -2573,9 +2635,9 @@ ggplot(data=data, aes(x = Beliefs_AppAdoption)) + theme_bw() + xlab(paste(names(
 graph_variablenames = c("SI1_UTAUT", 
                         "SI2_UTAUT",
                         "Beliefs_civicduty")
-graph_questionlabels = c("Veel mensen in mijn\n omgeving gebruiken\n de CoronaMelder", 
-                         "Mensen in mijn directe\n omgeving vinden\n dat ik de CoronaMelder\n moet gebruiken",
-                         "Het gebruiken van de\n CoronaMelder maakt je\n een goede burger"); 
+graph_questionlabels = c("Veel mensen in mijn omgeving gebruiken de CoronaMelder", 
+                         "Mensen in mijn directe omgeving vinden dat ik de CoronaMelder moet gebruiken",
+                         "Het gebruiken van de CoronaMelder maakt je een goede burger"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7
@@ -2599,7 +2661,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -2695,9 +2760,9 @@ De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statist
 graph_variablenames = c("SI1_UTAUT", 
                         "SI2_UTAUT",
                         "Beliefs_civicduty")
-graph_questionlabels = c("Veel mensen in mijn\n omgeving gebruiken\n de CoronaMelder", 
-                         "Mensen in mijn directe\n omgeving vinden\n dat ik de CoronaMelder\n moet gebruiken",
-                         "Het gebruiken van de\n CoronaMelder maakt je\n een goede burger")
+graph_questionlabels = c("Veel mensen in mijn omgeving gebruiken de CoronaMelder", 
+                         "Mensen in mijn directe omgeving vinden dat ik de CoronaMelder moet gebruiken",
+                         "Het gebruiken van de CoronaMelder maakt je een goede burger")
 # For each of these variables we would like to test if the current users and non users differ in the proportion that agrees with the statement. 
 # First calculate a proportion for the variable. 
 data$SI1_UTAUT_agree[(data$SI1_UTAUT == 'Helemaal mee eens'| data$SI1_UTAUT == 'Mee eens'| data$SI1_UTAUT == 'Een beetje mee eens')] <- "Totaal eens"
@@ -2719,9 +2784,9 @@ Nog een factor die een rol kan spelen in de adoptie is de verwachting met betrek
 graph_variablenames = c("Beliefs_datasafety",
                         "Beliefs_locationmonitoring", 
                         "Beliefs_identitymonitoring")
-graph_questionlabels = c("Alle informatie die\n ik geef in de\n CoronaMelder wordt\n vertrouwelijk behandeld",
-                         "De CoronaMelder houdt\n mijn locatie bij", 
-                         "De CoronaMelder slaat\n mijn naam of\n persoonsgegevens op"); 
+graph_questionlabels = c("Alle informatie die ik geef in de CoronaMelder wordt vertrouwelijk behandeld",
+                         "De CoronaMelder houdt mijn locatie bij", 
+                         "De CoronaMelder slaat mijn naam of persoonsgegevens op"); 
 
 # These questions have 5 answer categories: Zeker niet waar - Zeker waar en Weet ik niet. The following color palette should be used:
 color_palette = my_palette5blue
@@ -2747,7 +2812,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -2833,7 +2901,7 @@ ft_out
 #KLOPT NOG NIET!!! NAs staan er nog in
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Notification_behavior_quarantaine")
-graph_questionlabels = c("Bent u nadat u\n deze melding(en)\n kreeg zo lang\n thuisgebleven als\n de melding adviseert?"); 
+graph_questionlabels = c("Bent u nadat u deze melding(en) kreeg zo lang thuisgebleven als de melding adviseert?"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7
@@ -2857,10 +2925,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 # To check: also create the plot with variable labels
-#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -2952,8 +3020,8 @@ graph_variablenames = c("AdherenceNotificationMeasuresNosymptoms_Test",
                         "AdherenceNotificationMeasuresNosymptoms_Quarantaine", 
                         "AdherenceNotificationMeasuresNoSymptoms_Visits", 
                         "AdherenceNotificationMeasuresNosymptoms_CallGP")
-graph_questionlabels = c("Bellen om coronatest\n aan te vragen", 
-                         "Thuisblijven zo lang\n de melding adviseert", 
+graph_questionlabels = c("Bellen om coronatest aan te vragen", 
+                         "Thuisblijven zo lang de melding adviseert", 
                          "Geen bezoek ontvangen", 
                          "De huisarts bellen"); 
 
@@ -2980,7 +3048,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -3065,8 +3136,8 @@ graph_variablenames = c("AdherenceNotificationMeasuresSymptoms_Test",
                         "AdherenceNotificationMeasuresSymptoms_Quarantaine", 
                         "AdherenceNotificationMeasuresSymptoms_Visits", 
                         "AdherenceNotificationMeasuresSymptoms_CallGP")
-graph_questionlabels = c("Bellen om coronatest\n aan te vragen", 
-                         "Thuisblijven zo lang\n de melding adviseert", 
+graph_questionlabels = c("Bellen om coronatest aan te vragen", 
+                         "Thuisblijven zo lang de melding adviseert", 
                          "Geen bezoek ontvangen", 
                          "De huisarts bellen"); 
 
@@ -3092,7 +3163,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -3178,8 +3252,8 @@ graph_variablenames = c("AdherenceNotificationMeasuresNosymptoms_Test",
                         "AdherenceNotificationMeasuresNosymptoms_Quarantaine", 
                         "AdherenceNotificationMeasuresNoSymptoms_Visits", 
                         "AdherenceNotificationMeasuresNosymptoms_CallGP")
-graph_questionlabels = c("Bellen om coronatest\n aan te vragen", 
-                         "Thuisblijven zo lang\n de melding adviseert", 
+graph_questionlabels = c("Bellen om coronatest aan te vragen", 
+                         "Thuisblijven zo lang de melding adviseert", 
                          "Geen bezoek ontvangen", 
                          "De huisarts bellen"); 
 
@@ -3209,7 +3283,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -3293,8 +3370,8 @@ graph_variablenames = c("AdherenceNotificationMeasuresSymptoms_Test",
                         "AdherenceNotificationMeasuresSymptoms_Quarantaine", 
                         "AdherenceNotificationMeasuresSymptoms_Visits", 
                         "AdherenceNotificationMeasuresSymptoms_CallGP")
-graph_questionlabels = c("Bellen om coronatest\n aan te vragen", 
-                         "Thuisblijven zo lang\n de melding adviseert", 
+graph_questionlabels = c("Bellen om coronatest aan te vragen", 
+                         "Thuisblijven zo lang de melding adviseert", 
                          "Geen bezoek ontvangen", 
                          "De huisarts bellen"); 
 
@@ -3323,7 +3400,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -3414,7 +3494,7 @@ graph_variablenames = c("HBM_selfefficacy_Test",
                         "HBM_selfefficacy_Visits",
                         "HBM_selfefficacy_GP")
 graph_questionlabels = c("... te bellen voor een test", 
-                         "... zo lang thuis te blijven\n als wordt geadviseerd", 
+                         "... zo lang thuis te blijven als wordt geadviseerd", 
                          "... geen bezoek te ontvangen",
                          "... de huisarts te bellen"); 
 
@@ -3440,10 +3520,13 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle("Ik ben in staat om...") + theme(plot.title = element_text(size=11))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle("Ik ben in staat om...") + theme(plot.title = element_text(size=11))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # To check: also create the plot with variable labels
-#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -3524,7 +3607,7 @@ graph_variablenames = c("HBM_perceivedbenefits_Test",
                         "HBM_perceivedbenefits_Visits",
                         "HBM_perceivedbenefits_GP")
 graph_questionlabels = c("... te bellen voor een test", 
-                         "... zo lang thuis te blijven\n als wordt geadviseerd", 
+                         "... zo lang thuis te blijven als wordt geadviseerd", 
                          "... geen bezoek te ontvangen",
                          "... de huisarts te bellen"); 
 
@@ -3550,7 +3633,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle("Het heeft voor mij persoonlijke voordelen om...") + theme(plot.title = element_text(size=11))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle("Het heeft voor mij persoonlijke voordelen om...") + theme(plot.title = element_text(size=11))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -3629,7 +3715,7 @@ graph_variablenames = c("HBM_barriers_Test",
                         "HBM_barriers_Visits",
                         "HBM_barriers_GP")
 graph_questionlabels = c("... te bellen voor een test", 
-                         "... zo lang thuis te blijven\n als wordt geadviseerd", 
+                         "... zo lang thuis te blijven als wordt geadviseerd", 
                          "... geen bezoek te ontvangen",
                          "... de huisarts te bellen"); 
 
@@ -3655,7 +3741,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle("Het heeft voor mij persoonlijke nadelen om...") + theme(plot.title = element_text(size=11))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle("Het heeft voor mij persoonlijke nadelen om...") + theme(plot.title = element_text(size=11))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -3730,7 +3819,7 @@ Als iemand positief is getest op het coronavirus kan men dit daarna via de app l
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Intention_reportinfection")
-graph_questionlabels = c("Als ik besmet ben, \n ben ik van plan om dit door\n  te geven via de CoronaMelder app"); 
+graph_questionlabels = c("Als ik besmet ben, ben ik van plan om dit door te geven via de CoronaMelder app"); 
 
 # These questions have 8 answer categories: Helemaal mee eens - Helemaal mee oneens and no use. The following color palette should be used:
 color_palette = my_palette_nonuse
@@ -3754,7 +3843,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette_nonuse) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette_nonuse) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -3829,8 +3921,8 @@ Een gevoel van schijnveiligheid zou kunnen optreden bij de adoptie van de Corona
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Beliefs_falsesecurity1",
                         "Beliefs_falsesecurity2")
-graph_questionlabels = c("Als ik de CoronaMelder\n gebruik, hoef ik me\n minder aan de andere\n maatregelen te houden",
-                         "De CoronaMelder zorgt\n ervoor dat ik niet\n besmet raak met het\n coronavirus"); 
+graph_questionlabels = c("Als ik de CoronaMelder gebruik, hoef ik me minder aan de andere maatregelen te houden",
+                         "De CoronaMelder zorgt ervoor dat ik niet besmet raak met het coronavirus"); 
 
 # These questions have 5 answer categories: Zeker niet waar - Zeker waar en Weet ik niet. The following color palette should be used:
 color_palette = my_palette5blue
@@ -3856,7 +3948,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=graph_questionlabels) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
