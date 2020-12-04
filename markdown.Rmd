@@ -2323,7 +2323,7 @@ ft_out
 
 
 ### Persoonlijke voor- en nadelen van gebruik en verplichting tot gebruik
-Belangrijke variabelen uit het UTAUT en het HBM zijn de verwachte nadelen van het gebruik en de mate waarin iemand een verplichting voelt om de techniek te gebruiken. 
+Belangrijke variabelen uit het UTAUT en het HBM zijn de verwachte voor- en nadelen van het gebruik en de mate waarin iemand een verplichting voelt om de techniek te gebruiken. Het percentage van de respondenten dat voordelen ziet van het gebruik ligt vrij laag (`r round((nrow(filter(data, (HBM_perceivedbenefits_CoronaMelder == 'Helemaal mee eens'| HBM_perceivedbenefits_CoronaMelder == 'Mee eens'| HBM_perceivedbenefits_CoronaMelder == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%), evenals het percentage dat nadelen ziet van het gebruik (`r round((nrow(filter(data, (HBM_barriers_CoronaMelder == 'Helemaal mee eens'| HBM_barriers_CoronaMelder == 'Mee eens'| HBM_barriers_CoronaMelder == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%). Slechts `r round((nrow(filter(data, (Beliefs_voluntariness == 'Helemaal mee eens'| Beliefs_voluntariness == 'Mee eens'| Beliefs_voluntariness == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`% voelt zicht verplicht tot het gebruik.
 
 ```{r Motivationsbarriersvoluntariness, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Persoonlijke voor- en nadelen van gebruik en verplichting tot gebruik", tab.cap="Persoonlijke nadelen en verplichting tot gebruik", tab.cap="Persoonlijke voor- en nadelen van gebruik en verplichting tot gebruik", tab.cap="Persoonlijke nadelen en verplichting tot gebruik"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -2434,7 +2434,8 @@ ft_out
 
 
 ### Affectieve reacties
-In kaart is gebracht in welke mate de CoronaMelder in het algemeen en meer specifiek het ontvangen van een melding een emotionele reaktie opwekt. 
+In kaart is gebracht in welke mate de CoronaMelder in het algemeen en meer specifiek het ontvangen van een melding een emotionele reaktie opwekt. Bijna een kwart geeft aan de CoronaMelder eng te vinden (`r round((nrow(filter(data, (Beliefs_fear == 'Helemaal mee eens'| Beliefs_fear == 'Mee eens'| Beliefs_fear == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%), en 
+`r round((nrow(filter(data, (Beliefs_fear == 'Neutraal'))) /nrow(data))*100, digits = 1)`% staat hier neutraal tegenover. Een iets groter aandeel zou angstig worden bij het ontvangen van een melding (`r round((nrow(filter(data, (Beliefs_notificationfear == 'Helemaal mee eens'| Beliefs_notificationfear == 'Mee eens'| Beliefs_notificationfear == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%), hier staat `r round((nrow(filter(data, (Beliefs_notificationfear == 'Neutraal'))) /nrow(data))*100, digits = 1)`% neutraal in.
 
 ```{r Affective, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Affectieve reacties", tab.cap="Affectieve reacties"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -2544,9 +2545,9 @@ ft_out
 
 
 ### Sociale invloeden
-Om de sociale invloeden in kaart te brengen is gevraagd naar descriptieve en injunctieve normen en is gevraagd om een indicatie te geven van welk percentage van de Nederlandse bevolking de CoronaMelder gebruikt. Opvallend is dat een relatief laag percentage mensen het eens is met de stelling dat veel mensen in hun omgeving de CoronaMelder gebruiken. Dit kan liggen aan het feit dat gebruik van de CoronaMelder redelijk onzichtbaar is (in tegenstelling tot het gebruik van bijvoorbeeld een mondkapje).   
+Om de sociale invloeden in kaart te brengen is gevraagd naar descriptieve en injunctieve normen en is gevraagd om een indicatie te geven van welk percentage van de Nederlandse bevolking de CoronaMelder gebruikt. Opvallend is dat een relatief laag percentage mensen het eens is met de stelling dat veel mensen in hun omgeving de CoronaMelder gebruiken (`r round((nrow(filter(data, (SI1_UTAUT == 'Helemaal mee eens'| SI1_UTAUT == 'Mee eens'| SI1_UTAUT == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%). Dit kan liggen aan het feit dat gebruik van de CoronaMelder redelijk onzichtbaar is (in tegenstelling tot het gebruik van bijvoorbeeld een mondkapje). Daarnaast staat een groot percentage neutraal tegenover deze stelling (`r round((nrow(filter(data, (SI1_UTAUT == 'Neutraal'))) /nrow(data))*100, digits = 1)`%), wat zou kunnen betekenen dat men hier niet van op de hoogte is.
 
-Beliefs_AppAdoption
+Ook de injunctieve norm is nauwelijks aanwezig, bijna de helft is het oneeens met de stelling 'Mensen in mijn directe omgeving vinden dat ik de CoronaMelder moet gebruiken' (`r round((nrow(filter(data, (SI2_UTAUT == 'Helemaal mee oneens'| SI2_UTAUT == 'Oneens'| SI2_UTAUT == 'Een beetje oneens'))) /nrow(data))*100, digits = 1)`%), en ook een aanzienlijk percentage staat hier neutraal in (`r round((nrow(filter(data, (SI2_UTAUT == 'Neutraal'))) /nrow(data))*100, digits = 1)`%). Van de respondenten is `r round((nrow(filter(data, (Beliefs_civicduty == 'Helemaal mee eens'| Beliefs_civicduty == 'Mee eens'| Beliefs_civicduty == 'Een beetje mee eens'% het eens met de stelling dat de CoronaMelder je een goede burger maakt.
 
 ```{r Beliefsappadoption, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Percentage bevolking dat volgens de respondent de CoronaMelder gebruikt"}
 ggplot(data=data, aes(x = Beliefs_AppAdoption)) + theme_bw() + xlab(paste(names(table(data$Beliefs_AppAdoption)))) + ylab(" ") + xlab("Hoeveel procent van de\n Nederlandse bevolking denkt u\n dat de CoronaMelder gebruikt?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(,axis.title=element_text(size=10))
@@ -2682,7 +2683,7 @@ summary(tab1)
 ```
 
 ### Privacy en dataveiligheid 
-Nog een factor die een rol kan spelen in de adoptie is de verwachting met betrekking tot de privacy en dataveiligheid. 
+Nog een factor die een rol kan spelen in de adoptie is de verwachting met betrekking tot de privacy en dataveiligheid. Een opvallend groot aandeel beoordeelt de foutieve stellingen dat de CoronaMelder de locatie bijhoudt (`r round((nrow(filter(data, (Beliefs_locationmonitoring == 'Zeker waar'| Beliefs_locationmonitoring == 'Misschien waar'))) /nrow(data))*100, digits = 1)`%) en dat de CoronaMelder persoonsgegevens opslaat (`r round((nrow(filter(data, (Beliefs_identitymonitoring == 'Zeker waar'| Beliefs_identitymonitoring == 'Misschien waar'))) /nrow(data))*100, digits = 1)`%) als waar. Daartegenover staat wel dat men het idee heeft dat er vertrouwelijk wordt omgegaan met de informatie (`r round((nrow(filter(data, (Beliefs_datasafety == 'Zeker waar'| Beliefs_datasafety == 'Misschien waar'))) /nrow(data))*100, digits = 1)`%). 
 
 
 ```{r privacy, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Privacy overtuigingen"}
@@ -3374,7 +3375,8 @@ ft_out
 
 #### Verklarende factoren opvolging adviezen gegeven in melding
 ##### Eigen effectiviteit opvolging adviezen
-Om de eigen effectiviteit in kaart te brengen werd gevraagd in welke mate men dacht in staat te zijn om de adviezen uit de melding op te volgen. 
+Om de eigen effectiviteit in kaart te brengen werd gevraagd in welke mate men dacht in staat te zijn om de adviezen uit de melding op te volgen. Men acht zichzelf goed in staat om te bellen voor een test (`r round((nrow(filter(data, (HBM_selfefficacy_Test == 'Helemaal mee eens'| HBM_selfefficacy_Test == 'Mee eens'| HBM_selfefficacy_Test == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%), zo lang thuis te blijven als wordt geadviseerd (`r round((nrow(filter(data, (HBM_selfefficacy_Quarantaine == 'Helemaal mee eens'| HBM_selfefficacy_Quarantaine == 'Mee eens'| HBM_selfefficacy_Quarantaine == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%), geen bezoek te ontvangen (`r round((nrow(filter(data, (HBM_selfefficacy_Visits == 'Helemaal mee eens'| HBM_selfefficacy_Visits == 'Mee eens'| HBM_selfefficacy_Visits == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%) en de huisarts te bellen (`r round((nrow(filter(data, (HBM_selfefficacy_GP == 'Helemaal mee eens'| HBM_selfefficacy_GP == 'Mee eens'| HBM_selfefficacy_GP == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%).
+
 
 ```{r adherencenotificationsselfefficacy, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Eigen effectiviteit om adviezen op te volgen", tab.cap="Eigen effectiviteit om adviezen op te volgen"}
 
