@@ -2754,7 +2754,7 @@ data_selected$user_status = droplevels(data_selected$user_status)
 chisq.table = table(data_selected$SI1_UTAUT_agree, data_selected$user_status)
 chisqtest = chisq.test(chisq.table) 
 ```
-De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(round(chisqtest$p.value, digits = 2) < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 2)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status == 'Gebruiker'& SI1_UTAUT_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf het eens te zijn met de stelling dat veel mensen in de omgeving de CoronaMelder gebruiken vergeleken met degenen die de app nooit hebben gebruikt (`r round((nrow(filter(data_selected, (user_status == 'Niet gebruiker' & SI1_UTAUT_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Niet gebruiker'))))*100, digits = 1)`%).  
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status == 'Gebruiker'& SI1_UTAUT_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf het eens te zijn met de stelling dat veel mensen in de omgeving de CoronaMelder gebruiken vergeleken met degenen die de app nooit hebben gebruikt (`r round((nrow(filter(data_selected, (user_status == 'Niet gebruiker' & SI1_UTAUT_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Niet gebruiker'))))*100, digits = 1)`%).  
 
 ```{r chiSI1utautusernonuserneutral, echo=FALSE}
 # First calculate a proportion for the variable. 
@@ -2768,7 +2768,7 @@ data_selected$user_status_intention = droplevels(data_selected$user_status_inten
 chisq.table = table(data_selected$SI1_UTAUT_agree, data_selected$user_status_intention)
 chisqtest = chisq.test(chisq.table) 
 ```
-De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(round(chisqtest$p.value, digits = 2) < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 2)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status_intention == 'Gebruiker'& SI1_UTAUT_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf het eens te zijn met de stelling dat veel mensen in de omgeving de CoronaMelder gebruiken vergeleken met degenen die de app nooit hebben gebruikt en daarnaast aangaven neutraal te zijn in hun intentie om de CoronaMelder te gaan gebruiken (`r round((nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal' & SI1_UTAUT_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal'))))*100, digits = 1)`%). 
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status_intention == 'Gebruiker'& SI1_UTAUT_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf het eens te zijn met de stelling dat veel mensen in de omgeving de CoronaMelder gebruiken vergeleken met degenen die de app nooit hebben gebruikt en daarnaast aangaven neutraal te zijn in hun intentie om de CoronaMelder te gaan gebruiken (`r round((nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal' & SI1_UTAUT_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal'))))*100, digits = 1)`%). 
 
 ```{r chiSI2utautusernonuser, echo=FALSE}
 # First calculate a proportion for the variable. 
@@ -2782,7 +2782,7 @@ data_selected$user_status = droplevels(data_selected$user_status)
 chisq.table = table(data_selected$SI2_UTAUT_agree, data_selected$user_status)
 chisqtest = chisq.test(chisq.table) 
 ```
-De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(round(chisqtest$p.value, digits = 2) < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 2)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status == 'Gebruiker'& SI2_UTAUT_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf het eens te zijn met de stelling dat veel mensen in de omgeving vinden dat hij/zij de CoronaMelder moet gebruiken vergeleken met degenen die de app nooit hebben gebruikt (`r round((nrow(filter(data_selected, (user_status == 'Niet gebruiker' & SI2_UTAUT_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Niet gebruiker'))))*100, digits = 1)`%).  
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status == 'Gebruiker'& SI2_UTAUT_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf het eens te zijn met de stelling dat veel mensen in de omgeving vinden dat hij/zij de CoronaMelder moet gebruiken vergeleken met degenen die de app nooit hebben gebruikt (`r round((nrow(filter(data_selected, (user_status == 'Niet gebruiker' & SI2_UTAUT_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Niet gebruiker'))))*100, digits = 1)`%).  
 
 ```{r chiSI2utautusernonuserneutral, echo=FALSE}
 # First calculate a proportion for the variable. 
@@ -2796,10 +2796,9 @@ data_selected$user_status_intention = droplevels(data_selected$user_status_inten
 chisq.table = table(data_selected$SI2_UTAUT_agree, data_selected$user_status_intention)
 chisqtest = chisq.test(chisq.table) 
 ```
-De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(round(chisqtest$p.value, digits = 2) < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 2)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status_intention == 'Gebruiker'& SI2_UTAUT_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf het eens te zijn met de stelling dat veel mensen in de omgeving vinden dat hij/zij de CoronaMelder moet gebruiken vergeleken met degenen die de app nooit hebben gebruikt en daarnaast aangaven neutraal te zijn in hun intentie om de CoronaMelder te gaan gebruiken (`r round((nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal' & SI2_UTAUT_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal'))))*100, digits = 1)`%). 
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status_intention == 'Gebruiker'& SI2_UTAUT_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf het eens te zijn met de stelling dat veel mensen in de omgeving vinden dat hij/zij de CoronaMelder moet gebruiken vergeleken met degenen die de app nooit hebben gebruikt en daarnaast aangaven neutraal te zijn in hun intentie om de CoronaMelder te gaan gebruiken (`r round((nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal' & SI2_UTAUT_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal'))))*100, digits = 1)`%). 
 
 
-#### Per (potentiële) gebruikersgroep
 ```{r, echo=FALSE}
 
 # === EDIT THESE TO CUSTOMIZE TABLE ===
@@ -2807,8 +2806,8 @@ De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statist
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("SI1_UTAUT", 
                         "SI2_UTAUT")                     
-graph_questionlabels = c("Test1", 
-                         "Test2") 
+graph_questionlabels = c("Veel mensen in mijn omgeving gebruiken de CoronaMelder app", 
+                         "Mensen in mijn directe omgeving vinden dat ik de CoronaMelder app moet gebruiken") 
 
 # Which values do we want to include in the table cells?
 include_vars = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens")
