@@ -38,6 +38,7 @@ library(RColorBrewer)
 # For analysis and data preprocessing
 library(psy) # psy for the cronbach function
 library(reshape2) # For converting from wide to long format (function: melt)
+library(chisq.posthoc.test) # Kan toch weer weg. 
 
 # For aligning ggplots vertically
 library(cowplot)
@@ -51,11 +52,23 @@ data_in <- read.spss('L_CoronaMelder_wave1_3p.sav', to.data.frame=TRUE, use.miss
 # Filter out the ones that didn't complete the entire survey (N = 10)
 data <- data_in[!is.na(data_in$duur),]
 
-##### Add labels to variables
+##### Preprocessing cleaning up variables
+# Drop unused levels from some particular factors. The reason to do this is that there are levels in the dataset that were not included in the current sample (for instance participants of child age)
+data$lftdcat = droplevels(data$lftdcat)
+data$belbezig = droplevels(data$belbezig)
+
+# Combine some variable levels in order to have sufficient counts in cells for demographics
+data$belbezig_simplified = data$belbezig
+levels(data$belbezig_simplified) <- c(levels(data$belbezig_simplified),"Anders") # Add the new level that will contain the merged levels
+data$belbezig_simplified[data$belbezig == "Werkt of is meewerkend in gezins- of familiebedrijf" | data$belbezig == "Zoekt voor het eerst werk" | data$belbezig == "Zoekt werk na verlies werkkring" | data$belbezig == "Verricht onbetaald werk met behoud van uitkering" | data$belbezig == "Verricht vrijwilligerswerk" | data$belbezig == "Vrijgesteld van werkzoeken na verlies van werkkring" |data$belbezig == "Doet iets anders"] <- "Anders"
+data$belbezig_simplified = factor(data$belbezig_simplified)
+#View(data[,c("belbezig","belbezig_simplified")])
+
+# Add labels to variables
 attr(data$geslacht,'label')  <- 'Geslacht'
 attr(data$lftdcat,'label')  <- 'Leeftijdscategorie'
 attr(data$sted,'label')  <- 'Stedelijkheid woonplaats'
-attr(data$belbezig,'label')  <- 'Belangrijkste bezigheid'
+attr(data$belbezig_simplified,'label')  <- 'Belangrijkste bezigheid'
 attr(data$nettocat,'label')  <- 'Netto maandinkomen'
 attr(data$oplmet,'label')  <- 'Hoogste opleiding met diploma'
 attr(data$burgstat,'label')  <- 'Burgerlijke staat'
@@ -82,13 +95,13 @@ data$user_status[data$Behavior_UTAUT == "Ik heb de CoronaMelder app in het verle
 # Add factor
 data$user_status <- factor(data$user_status,levels = c("Gebruiker", "Niet gebruiker", "Voormalig gebruiker"))
 
-# Create a dataset with only the curent users and never users for all analyses in which these groups are compared. 
+# Create a dataset with only the current users and never users for all analyses in which these groups are compared. 
 data_currentvsneveruser = data[ which(data$user_status=='Gebruiker' | data$user_status=='Niet gebruiker'), ]
 ##### Add labels to variables
 attr(data_currentvsneveruser$geslacht,'label')  <- 'Geslacht'
 attr(data_currentvsneveruser$lftdcat,'label')  <- 'Leeftijdscategorie'
 attr(data_currentvsneveruser$sted,'label')  <- 'Stedelijkheid woonplaats'
-attr(data_currentvsneveruser$belbezig,'label')  <- 'Belangrijkste bezigheid'
+attr(data_currentvsneveruser$belbezig_simplified,'label')  <- 'Belangrijkste bezigheid'
 attr(data_currentvsneveruser$nettocat,'label')  <- 'Netto maandinkomen'
 attr(data_currentvsneveruser$oplmet,'label')  <- 'Hoogste opleiding met diploma'
 attr(data_currentvsneveruser$burgstat,'label')  <- 'Burgerlijke staat'
@@ -114,7 +127,7 @@ data_currentvsneveruserneutral = data[ which(data$user_status_intention=='Gebrui
 attr(data_currentvsneveruserneutral$geslacht,'label')  <- 'Geslacht'
 attr(data_currentvsneveruserneutral$lftdcat,'label')  <- 'Leeftijdscategorie'
 attr(data_currentvsneveruserneutral$sted,'label')  <- 'Stedelijkheid woonplaats'
-attr(data_currentvsneveruserneutral$belbezig,'label')  <- 'Belangrijkste bezigheid'
+attr(data_currentvsneveruserneutral$belbezig_simplified,'label')  <- 'Belangrijkste bezigheid'
 attr(data_currentvsneveruserneutral$nettocat,'label')  <- 'Netto maandinkomen'
 attr(data_currentvsneveruserneutral$oplmet,'label')  <- 'Hoogste opleiding met diploma'
 attr(data_currentvsneveruserneutral$burgstat,'label')  <- 'Burgerlijke staat'
@@ -229,7 +242,7 @@ In de resultaten sectie worden de uitkomsten getoond van de 1900 respondenten wa
 Aan dit onderzoek hebben `r nrow(data)` (gemiddelde leeftijd in jaren: `r round(mean(data$leeftijd), digits = 1)`, standaarddeviatie: `r round(sd(data$leeftijd), digits = 1)`, range: `r min(data$leeftijd)`-`r max(data$leeftijd)`); `r round((nrow(filter(data, geslacht == 'Vrouw'))/nrow(data))*100, digits = 2)`% vrouw) respondenten deelgenomen. 
 
 ```{r, echo=FALSE, results="asis"} 
-tab.noby <- tableby(~ geslacht + lftdcat + sted + belbezig + oplmet + burgstat + nettocat + woonvorm + Riskgroup_contact, data=data)
+tab.noby <- tableby(~ geslacht + lftdcat + sted + belbezig_simplified + oplmet + burgstat + nettocat + woonvorm + Riskgroup_contact, data=data)
 summary(tab.noby)
 ```
 
@@ -1013,10 +1026,28 @@ Van alle respondenten gaf `r round(nrow(filter(data, Behavior_UTAUT == 'Ik gebru
 
 #### Vergelijking gebruikers en niet gebruikers
 ##### Demografische gegevens naar gebruikersstatus
-Om inzicht te krijgen in welke factoren (demografisch, persoonlijk, sociaal, omgevingsfactoren) worden respondenten die momenteel de CoronaMelder gebruiken vergeleken met de respondenten die de CoronaMelder nooit hebben gebruikt. 
+Om inzicht te krijgen in welke factoren (demografisch, persoonlijk, sociaal, omgevingsfactoren) samenhangen met gebruik worden respondenten die momenteel de CoronaMelder gebruiken vergeleken met de respondenten die de CoronaMelder nooit hebben gebruikt. 
+
+Hiervoor wordt voor elke demografische variabele een chi kwadraat toets uitgevoerd. In het geval dat deze toets aangeeft dat de demografische variabele en de gebruikersstatus afhankelijk zijn, dat betekent dat een of meerdere van de categorien verschillen in percentage gebruikers, wordt er paarsgewijze posthoc tests met FDR correctie uitgevoerd om te bepalen welke categorien significant van elkaar verschillen in percentage gebruikers. 
 ```{r, echo=FALSE, results="asis", tab.cap = "Demografische kenmerken naar gebruikersstatus"} 
-tab.noby <- tableby(user_status ~ geslacht + lftdcat + sted + belbezig + oplmet + burgstat + nettocat + woonvorm + Riskgroup_contact, data=data_currentvsneveruser)
+tab.noby <- tableby(user_status ~ geslacht + lftdcat + sted + belbezig_simplified + oplmet + burgstat + nettocat + woonvorm + Riskgroup_contact, cat.stats = "countrowpct", data=data_currentvsneveruser) # cat.stats = "countrowpct") for row percentages in stead of column percentages
 summary(tab.noby, pfootnote=TRUE)
+```
+
+```{r}
+data_selected = data[data$nomem_encr %in% data_currentvsneveruser$nomem_encr, ]
+data_selected$user_status = droplevels(data_selected$user_status)
+data_selected$lftdcat = droplevels(data_selected$lftdcat)
+
+library(rcompanion)
+chisq.table = table(data_selected$lftdcat, data_selected$user_status)
+Matriz = chisq.table
+pairwiseNominalIndependence(Matriz,
+                            fisher = FALSE,
+                            gtest  = FALSE,
+                            chisq  = TRUE,
+                            method = "fdr")
+
 ```
 
 
