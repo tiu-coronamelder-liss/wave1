@@ -2102,7 +2102,7 @@ ft_out
 
 
 ### Vertrouwen in adequaatheid techniek
-In de vragenlijst werd gepeild in welke mate men vertrouwen heeft in de adequaatheid van de techniek. Het overgrote deel van de respondenten antwoordde 'zeker waar' of 'misschien waar' op de stelling 'De techniek (Bluetooth) die wordt gebruikt in de CoronaMelder geeft aan wie er in de buurt is geweest van een persoon die besmet is' (`r round((nrow(filter(data, (Beliefs_technologyperformance == 'Zeker waar'| Beliefs_Conspiracy1 == 'Misschien waar'))) /nrow(data))*100, digits = 1)`%). 
+In de vragenlijst werd gepeild in welke mate men vertrouwen heeft in de adequaatheid van de techniek. Het overgrote deel van de respondenten antwoordde 'zeker waar' of 'misschien waar' op de stelling 'De techniek (Bluetooth) die wordt gebruikt in de CoronaMelder geeft aan wie er in de buurt is geweest van een persoon die besmet is' (`r round((nrow(filter(data, (Beliefs_technologyperformance == 'Zeker waar'| Beliefs_technologyperformance == 'Misschien waar'))) /nrow(data))*100, digits = 1)`%). 
 
 
 ```{r technology, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Vertrouwen in techniek", tab.cap="Vertrouwen in techniek"}
@@ -4839,8 +4839,17 @@ ft_out
 Opvallend is dat hoger opgeleiden vaker de CoronaMelder gebruiken dan lager opgeleiden. Hiermee in lijn is de bevinding dat het percentage gebruikers het hoogst was bij de mensen met hogere inkomens (boven 3501 euro).  
 Daarnaast is het gebruik van de CoronaMelder het laagst in de jongste leeftijdscategorie (tot 24 jaar).   
 
+
+
 ## Verwachte effectiviteit  
 Verwachting effectiviteit goed. Wel wordt verwacht dat het pas effectief is als een zeer hoog percentage van de populatie de CoronaMelder gebruikt.   
+Daarnaast was het zo dat de verwachte effectiviteit veel hoger was bij de gebruikers vergeleken met degenen die de de CoronaMelder (nog) niet gebruiken. --> FActor om op in te spelen. 
+
+## Vertrouwen in de techniek
+Een overgroot deel gelooft dat de techniek (bluetooth) die gebruikt wordt in de CoronaMelder inderdaad kan aangeven wie er in de buurt is geweest van een persoon die besmet is. 
+
+## Gebruiksvriendelijkheid 
+Opvallend is dat 1 op de 5 mensen die de CoronaMelder nog niet gebruikt, denkt dat het veel tijd en energie kost om deze te gaan gebruiken en een groot deel hier neutraal in staat. Daat staat tegenover dat van de mensen die de CoronaMelder al gebruiken, slechts 3.5% aangaf dat dit inderdaad het geval was. Bijna 9 op de 10 gaf aan het niet eens te zijn met deze stelling. 
 
 ## Sociale invloeden
 Zeer lage descriptieve en injunctieve normen mbt. mensen in hun directe omgeving. Redelijk goede inschatting van adoptie in de hele populatie. Mensen denken zich te bevinden in een groep waarin niet veel anderen de CoronaMelder gebruiken. 
