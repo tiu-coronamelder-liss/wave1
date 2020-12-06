@@ -1053,15 +1053,19 @@ ggplot(data=data, aes(fill=Awareness, x=geslacht)) + geom_bar(position=position_
 Van alle respondenten gaf `r round(nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))/nrow(data)*100, digits = 1)`% aan dat hij/zij de CoronaMelder op dit moment gebruikt en `r round(nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt'))/nrow(data)*100, digits = 1)`% geeft aan de CoronaMelder niet te gebruiken. Slechts `r round(nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer'))/nrow(data)*100, digits = 1)`% gaf aan de CoronaMelder in het verleden gebruikt te hebben maar op dit moment niet meer. 
 
 #### Vergelijking gebruikers en niet gebruikers
-##### Demografische gegevens naar gebruikersstatus
+##### Demografische gegevens naar gebruikersstatus {#demo_userstatus}
 Om inzicht te krijgen in welke factoren (demografisch, persoonlijk, sociaal, omgevingsfactoren) samenhangen met het gebruiken van de CoronaMelder worden respondenten die momenteel de CoronaMelder gebruiken vergeleken met de respondenten die de CoronaMelder nooit hebben gebruikt. 
 
-Hiervoor wordt voor elke demografische variabele een chi kwadraat toets uitgevoerd. In het geval dat deze toets aangeeft dat de demografische variabele en de gebruikersstatus afhankelijk zijn, dat betekent dat een of meerdere van de categorien verschillen in percentage gebruikers, wordt er paarsgewijze posthoc tests met FDR correctie uitgevoerd om te bepalen welke groepen significant van elkaar verschillen in percentage gebruikers.  
+Om dit te onderzoeken wordt voor elke demografische variabele een chi kwadraat toets uitgevoerd. In het geval dat deze toets aangeeft dat de demografische variabele en de gebruikersstatus afhankelijk zijn - oftewel dat een of meerdere van de subgroepen afwijken van het gemiddelde percentage gebruikers - worden er posthoc paarsgewijze chi kwadraattests met FDR correctie uitgevoerd om te bepalen welke groepen significant van elkaar verschillen in percentage gebruikers. In tabel \ref(demobyuserstatus) kunnen de resultaten gevonden worden. In de appendix kunnen alle paarsgewijze vergelijkingen gevonden worden voor variabelen die samen hingen met de gebruikersstatus. 
+
+Het percentages gebruikers was niet gelijk verdeeld over alle leeftijdscategorieën. Het percentage gebruikers was significant lager bij de 15 - 24 jarigen vergeleken met de 55 - 64 jarigen. 
+
+Nog een demografische variabele die samenhing met gebruik was opleidingsniveau. Bij de hoger opgeleiden (ho en wo) was het percentage gebruikers het hoogst. Bij mensen die aleen basisonderwijs of vmbo hebben gevolgd was dit percentage het laagst. Ook netto maandkomen hing samen met gebruik mensen die maandelijks meer dan 3501 eur netto verdienen gebruiken de CoronaMelder het vaakst terwijl dit percentage bij mensen met een lager inkomen een stuk lager is. 
+
+Ook burgerlijke staat hing samen met gebruik van de CoronaMelder. Zo wordt de CoronMelder minder vaak gebruikt door weduwen en weduwnaars en het vaakst door gehuwden. 
 
 
-
-
-```{r, echo=FALSE, results="asis", tab.cap = "Demografische kenmerken naar gebruikersstatus"} 
+```{r demobyuserstatus, echo=FALSE, results="asis", tab.cap = "Demografische kenmerken naar gebruikersstatus"} 
 tab.noby <- tableby(user_status ~ geslacht + lftdcat + sted_simplified + belbezig_simplified  + oplmet_simplified + burgstat_simplified + nettocat_simplified + woonvorm + Riskgroup_contact, cat.stats = "countrowpct", data=data_currentvsneveruser) # cat.stats = "countrowpct") for row percentages in stead of column percentages
 summary(tab.noby, pfootnote=TRUE)
 ```
