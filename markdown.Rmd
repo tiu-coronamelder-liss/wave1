@@ -53,25 +53,49 @@ data_in <- read.spss('L_CoronaMelder_wave1_3p.sav', to.data.frame=TRUE, use.miss
 data <- data_in[!is.na(data_in$duur),]
 
 ##### Preprocessing cleaning up variables
-# Drop unused levels from some particular factors. The reason to do this is that there are levels in the dataset that were not included in the current sample (for instance participants of child age)
+### Drop unused levels from some particular factors. The reason to do this is that there are levels in the dataset that were not included in the current sample (for instance participants of child age)
 data$lftdcat = droplevels(data$lftdcat)
 data$belbezig = droplevels(data$belbezig)
 
-# Combine some variable levels in order to have sufficient counts in cells for demographics
+### Combine some variable levels in order to have sufficient counts in cells for demographics
+# For demographic variable stedelijkheid. 
+data$sted_simplified = data$sted
+levels(data$sted_simplified) <- c(levels(data$sted_simplified),"Onbekend") # Add the new level that will contain the merged levels
+data$sted_simplified[is.na(data$sted)] <- "Onbekend"
+data$sted_simplified = factor(data$sted_simplified)
+
+# For demographic variable oplmet. 
+data$oplmet_simplified = data$oplmet
+data$oplmet_simplified[data$oplmet == "anders" | data$oplmet == "(Nog) geen onderwijs afgerond" | data$oplmet == "Volgt nog geen onderwijs"] <- "anders"
+data$oplmet_simplified = factor(data$oplmet_simplified)
+
+# For demographic variable belbezig. 
 data$belbezig_simplified = data$belbezig
 levels(data$belbezig_simplified) <- c(levels(data$belbezig_simplified),"Anders") # Add the new level that will contain the merged levels
 data$belbezig_simplified[data$belbezig == "Werkt of is meewerkend in gezins- of familiebedrijf" | data$belbezig == "Zoekt voor het eerst werk" | data$belbezig == "Zoekt werk na verlies werkkring" | data$belbezig == "Verricht onbetaald werk met behoud van uitkering" | data$belbezig == "Verricht vrijwilligerswerk" | data$belbezig == "Vrijgesteld van werkzoeken na verlies van werkkring" |data$belbezig == "Doet iets anders"] <- "Anders"
 data$belbezig_simplified = factor(data$belbezig_simplified)
 #View(data[,c("belbezig","belbezig_simplified")])
 
-# Add labels to variables
+# For demographic variable burgstat. Add the people that are "Gescheiden van tafel en bed" to the "Gescheiden categorie"
+data$burgstat_simplified = data$burgstat
+data$burgstat_simplified[data$burgstat == "Gescheiden van tafel en bed"] <- "Gescheiden"
+data$burgstat_simplified = factor(data$burgstat_simplified)
+
+# For demographic variable nettocat. Make category with 3501 euro or higher and unknown ("weet ik niet" en "wil niet zeggen" en NMISS) 
+data$nettocat_simplified = data$nettocat
+levels(data$nettocat_simplified) <- c(levels(data$nettocat_simplified),"Meer dan EUR 3501", "Onbekend") # Add the new level that will contain the merged levels
+data$nettocat_simplified[data$nettocat == "Dat weet ik echt niet" | data$nettocat == "Dat wil ik niet zeggen" | is.na(data$nettocat)] <- "Onbekend"
+data$nettocat_simplified[data$nettocat == "EUR 3501 t/m EUR 4000" | data$nettocat == "EUR 4001 t/m EUR 4500" | data$nettocat == "EUR 4501 t/m EUR 5000" | data$nettocat == "EUR 5001 t/m EUR 7500" | data$nettocat == "Meer dan EUR 7500"] <- "Meer dan EUR 3501"
+data$nettocat_simplified = factor(data$nettocat_simplified)
+
+### Add labels to variables
 attr(data$geslacht,'label')  <- 'Geslacht'
 attr(data$lftdcat,'label')  <- 'Leeftijdscategorie'
-attr(data$sted,'label')  <- 'Stedelijkheid woonplaats'
+attr(data$sted_simplified,'label')  <- 'Stedelijkheid woonplaats'
 attr(data$belbezig_simplified,'label')  <- 'Belangrijkste bezigheid'
-attr(data$nettocat,'label')  <- 'Netto maandinkomen'
-attr(data$oplmet,'label')  <- 'Hoogste opleiding met diploma'
-attr(data$burgstat,'label')  <- 'Burgerlijke staat'
+attr(data$nettocat_simplified,'label')  <- 'Netto maandinkomen'
+attr(data$oplmet_simplified,'label')  <- 'Hoogste opleiding met diploma'
+attr(data$burgstat_simplified,'label')  <- 'Burgerlijke staat'
 attr(data$woonvorm,'label')  <- 'Woonvorm huishouden'
 attr(data$Riskgroup_contact,'label')  <- 'Frequentie op minder dan 1.5m van ouderen en mensen met een kwetsbare gezondheid zijn vanwege werk en/of (privé) zorgtaken'
 
@@ -100,11 +124,11 @@ data_currentvsneveruser = data[ which(data$user_status=='Gebruiker' | data$user_
 ##### Add labels to variables
 attr(data_currentvsneveruser$geslacht,'label')  <- 'Geslacht'
 attr(data_currentvsneveruser$lftdcat,'label')  <- 'Leeftijdscategorie'
-attr(data_currentvsneveruser$sted,'label')  <- 'Stedelijkheid woonplaats'
+attr(data_currentvsneveruser$sted_simplified,'label')  <- 'Stedelijkheid woonplaats'
 attr(data_currentvsneveruser$belbezig_simplified,'label')  <- 'Belangrijkste bezigheid'
-attr(data_currentvsneveruser$nettocat,'label')  <- 'Netto maandinkomen'
-attr(data_currentvsneveruser$oplmet,'label')  <- 'Hoogste opleiding met diploma'
-attr(data_currentvsneveruser$burgstat,'label')  <- 'Burgerlijke staat'
+attr(data_currentvsneveruser$nettocat_simplified,'label')  <- 'Netto maandinkomen'
+attr(data_currentvsneveruser$oplmet_simplified,'label')  <- 'Hoogste opleiding met diploma'
+attr(data_currentvsneveruser$burgstat_simplified,'label')  <- 'Burgerlijke staat'
 attr(data_currentvsneveruser$woonvorm,'label')  <- 'Woonvorm huishouden'
 attr(data_currentvsneveruser$Riskgroup_contact,'label')  <- 'Frequentie op minder dan 1.5m van ouderen en mensen met een kwetsbare gezondheid zijn vanwege werk en/of (privé) zorgtaken'
 
@@ -128,9 +152,9 @@ attr(data_currentvsneveruserneutral$geslacht,'label')  <- 'Geslacht'
 attr(data_currentvsneveruserneutral$lftdcat,'label')  <- 'Leeftijdscategorie'
 attr(data_currentvsneveruserneutral$sted,'label')  <- 'Stedelijkheid woonplaats'
 attr(data_currentvsneveruserneutral$belbezig_simplified,'label')  <- 'Belangrijkste bezigheid'
-attr(data_currentvsneveruserneutral$nettocat,'label')  <- 'Netto maandinkomen'
-attr(data_currentvsneveruserneutral$oplmet,'label')  <- 'Hoogste opleiding met diploma'
-attr(data_currentvsneveruserneutral$burgstat,'label')  <- 'Burgerlijke staat'
+attr(data_currentvsneveruserneutral$nettocat_simplified,'label')  <- 'Netto maandinkomen'
+attr(data_currentvsneveruserneutral$oplmet_simplified,'label')  <- 'Hoogste opleiding met diploma'
+attr(data_currentvsneveruserneutral$burgstat_simplified,'label')  <- 'Burgerlijke staat'
 attr(data_currentvsneveruserneutral$woonvorm,'label')  <- 'Woonvorm huishouden'
 attr(data_currentvsneveruserneutral$Riskgroup_contact,'label')  <- 'Frequentie op minder dan 1.5m van ouderen en mensen met een kwetsbare gezondheid zijn vanwege werk en/of (privé) zorgtaken'
 
@@ -242,7 +266,7 @@ In de resultaten sectie worden de uitkomsten getoond van de 1900 respondenten wa
 Aan dit onderzoek hebben `r nrow(data)` (gemiddelde leeftijd in jaren: `r round(mean(data$leeftijd), digits = 1)`, standaarddeviatie: `r round(sd(data$leeftijd), digits = 1)`, range: `r min(data$leeftijd)`-`r max(data$leeftijd)`); `r round((nrow(filter(data, geslacht == 'Vrouw'))/nrow(data))*100, digits = 2)`% vrouw) respondenten deelgenomen. 
 
 ```{r, echo=FALSE, results="asis"} 
-tab.noby <- tableby(~ geslacht + lftdcat + sted + belbezig_simplified + oplmet + burgstat + nettocat + woonvorm + Riskgroup_contact, data=data)
+tab.noby <- tableby(~ geslacht + lftdcat + sted_simplified + belbezig_simplified + oplmet_simplified + burgstat_simplified + nettocat_simplified + woonvorm + Riskgroup_contact, data=data)
 summary(tab.noby)
 ```
 
@@ -1030,11 +1054,11 @@ Om inzicht te krijgen in welke factoren (demografisch, persoonlijk, sociaal, omg
 
 Hiervoor wordt voor elke demografische variabele een chi kwadraat toets uitgevoerd. In het geval dat deze toets aangeeft dat de demografische variabele en de gebruikersstatus afhankelijk zijn, dat betekent dat een of meerdere van de categorien verschillen in percentage gebruikers, wordt er paarsgewijze posthoc tests met FDR correctie uitgevoerd om te bepalen welke categorien significant van elkaar verschillen in percentage gebruikers. 
 ```{r, echo=FALSE, results="asis", tab.cap = "Demografische kenmerken naar gebruikersstatus"} 
-tab.noby <- tableby(user_status ~ geslacht + lftdcat + sted + belbezig_simplified + oplmet + burgstat + nettocat + woonvorm + Riskgroup_contact, cat.stats = "countrowpct", data=data_currentvsneveruser) # cat.stats = "countrowpct") for row percentages in stead of column percentages
+tab.noby <- tableby(user_status ~ geslacht + lftdcat + sted_simplified + belbezig_simplified  + oplmet_simplified + burgstat_simplified + nettocat_simplified + woonvorm + Riskgroup_contact, cat.stats = "countrowpct", data=data_currentvsneveruser) # cat.stats = "countrowpct") for row percentages in stead of column percentages
 summary(tab.noby, pfootnote=TRUE)
 ```
 
-```{r}
+```{r , echo=FALSE}
 data_selected = data[data$nomem_encr %in% data_currentvsneveruser$nomem_encr, ]
 data_selected$user_status = droplevels(data_selected$user_status)
 data_selected$lftdcat = droplevels(data_selected$lftdcat)
