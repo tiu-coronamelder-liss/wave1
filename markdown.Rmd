@@ -1,7 +1,7 @@
 ---
 title: "CoronaMelder rapportage Wave 1 (preliminaire status: resultaten onder voorbehoud)"
 author: "Nynke van der Laan, Nadine van der Waal, Jan de Wit"
-date: "04/12/2020"
+date: "06/12/2020"
 output: 
   bookdown::word_document2:
     toc: true
@@ -1068,7 +1068,219 @@ tab.noby <- tableby(user_status ~ geslacht + lftdcat + sted_simplified + belbezi
 summary(tab.noby, pfootnote=TRUE, title="(\\#tab:mytableby2) Demografische kenmerken naar gebruikersstatus")
 ```
 
-##### Gezondheidsmotivatie en algemene opvattingen over het coronavirus naar gebruikersstatus
+##### Gezondheidsmotivatie en risicoperceptie naar gebruikersstatus
+Chi kwadraat toetsen zijn uitgevoerd om te bepalen of het totaal aandeel respondenten dat het eens  (een beetje, eens, helemaal mee eens) is met de stellingen verschilt tussen de huidige gebruikers en degenen die de CoronaMelder nooit gebruikt hebben. Daarnaast is gekeken of de subgroep die de CoronaMelder nooit gebruikt heeft en aangaf neutraal te zijn met betrekking tot toekomstig gebruik verschilt van de huidig gebruikers. 
+```{r chiHBMsuscself1usernonuser, echo=FALSE}
+# First calculate a proportion for the variable. 
+data$HBM_PSus_self1_agree[(data$HBM_PSus_self1 == 'Helemaal mee eens'| data$HBM_PSus_self1 == 'Mee eens'| data$HBM_PSus_self1 == 'Een beetje mee eens')] <- "Totaal eens"
+data$HBM_PSus_self1_agree[(data$HBM_PSus_self1 == 'Neutraal'| data$HBM_PSus_self1 == 'Een beetje oneens'| data$HBM_PSus_self1 == 'Oneens'| data$HBM_PSus_self1 == 'Helemaal mee oneens')] <- "Neutraal, niet mee eens" 
+# Select the data: Only compare the current users and never users
+data_selected = data[data$nomem_encr %in% data_currentvsneveruser$nomem_encr, ]
+data_selected$user_status = droplevels(data_selected$user_status)
+
+# Convert into a table that can be used for the chi square test
+chisq.table = table(data_selected$HBM_PSus_self1_agree, data_selected$user_status)
+chisqtest = chisq.test(chisq.table) 
+```
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status == 'Gebruiker'& HBM_PSus_self1_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf het eens te zijn met de stelling dat men in komende twee maanden een risico op een besmetting met het coronavirus liep vergeleken met degenen die de app nooit hebben gebruikt (`r round((nrow(filter(data_selected, (user_status == 'Niet gebruiker' & HBM_PSus_self1_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Niet gebruiker'))))*100, digits = 1)`%).  
+
+```{r chiHBMsuscself1usernonuserneutral, echo=FALSE}
+# First calculate a proportion for the variable. 
+data$HBM_PSus_self1_agree[(data$HBM_PSus_self1 == 'Helemaal mee eens'| data$HBM_PSus_self1 == 'Mee eens'| data$HBM_PSus_self1 == 'Een beetje mee eens')] <- "Totaal eens"
+data$HBM_PSus_self1_agree[(data$HBM_PSus_self1 == 'Neutraal'| data$HBM_PSus_self1 == 'Een beetje oneens'| data$HBM_PSus_self1 == 'Oneens'| data$HBM_PSus_self1 == 'Helemaal mee oneens')] <- "Neutraal, niet mee eens" 
+# Select the data: Only compare the current users and never users
+data_selected = data[data$nomem_encr %in% data_currentvsneveruserneutral$nomem_encr, ]
+data_selected$user_status_intention = droplevels(data_selected$user_status_intention)
+
+# Convert into a table that can be used for the chi square test
+chisq.table = table(data_selected$HBM_PSus_self1_agree, data_selected$user_status_intention)
+chisqtest = chisq.test(chisq.table) 
+```
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status_intention == 'Gebruiker'& HBM_PSus_self1_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf het eens te zijn met de stelling dat men in komende twee maanden een risico op een besmetting met het coronavirus liep vergeleken met degenen die de app nooit hebben gebruikt en daarnaast aangaven neutraal te zijn in hun intentie om de CoronaMelder te gaan gebruiken (`r round((nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal' & HBM_PSus_self1_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal'))))*100, digits = 1)`%). 
+
+```{r chiPHBMPsusother2utautusernonuser, echo=FALSE}
+# First calculate a proportion for the variable. 
+data$HBM_PSus_other2_agree[(data$HBM_PSus_other2 == 'Helemaal mee eens'| data$HBM_PSus_other2 == 'Mee eens'| data$HBM_PSus_other2 == 'Een beetje mee eens')] <- "Totaal eens"
+data$HBM_PSus_other2_agree[(data$HBM_PSus_other2 == 'Neutraal'| data$HBM_PSus_other2 == 'Een beetje oneens'| data$HBM_PSus_other2 == 'Oneens'| data$HBM_PSus_other2 == 'Helemaal mee oneens')] <- "Neutraal, niet mee eens" 
+# Select the data: Only compare the current users and never users
+data_selected = data[data$nomem_encr %in% data_currentvsneveruser$nomem_encr, ]
+data_selected$user_status = droplevels(data_selected$user_status)
+
+# Convert into a table that can be used for the chi square test
+chisq.table = table(data_selected$HBM_PSus_other2_agree, data_selected$user_status)
+chisqtest = chisq.test(chisq.table) 
+```
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status == 'Gebruiker'& HBM_PSus_other2_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf het eens te zijn met de stelling dat de kans groot zou zijn dat diegene anderen zal besmetten indien hij/zij zelf besmet zou zijn, vergeleken met degenen die de app nooit hebben gebruikt (`r round((nrow(filter(data_selected, (user_status == 'Niet gebruiker' & HBM_PSus_other2_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Niet gebruiker'))))*100, digits = 1)`%).  
+
+```{r chiPHBMPsusother2usernonuserneutral, echo=FALSE}
+# First calculate a proportion for the variable. 
+data$HBM_PSus_other2_agree[(data$HBM_PSus_other2 == 'Helemaal mee eens'| data$HBM_PSus_other2 == 'Mee eens'| data$HBM_PSus_other2 == 'Een beetje mee eens')] <- "Totaal eens"
+data$HBM_PSus_other2_agree[(data$HBM_PSus_other2 == 'Neutraal'| data$HBM_PSus_other2 == 'Een beetje oneens'| data$HBM_PSus_other2 == 'Oneens'| data$HBM_PSus_other2 == 'Helemaal mee oneens')] <- "Neutraal, niet mee eens" 
+# Select the data: Only compare the current users and never users
+data_selected = data[data$nomem_encr %in% data_currentvsneveruserneutral$nomem_encr, ]
+data_selected$user_status_intention = droplevels(data_selected$user_status_intention)
+
+# Convert into a table that can be used for the chi square test
+chisq.table = table(data_selected$HBM_PSus_other2_agree, data_selected$user_status_intention)
+chisqtest = chisq.test(chisq.table) 
+```
+
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status_intention == 'Gebruiker'& HBM_PSus_other2_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf het eens te zijn met de stelling dat de kans groot zou zijn dat diegene anderen zal besmetten indien hij/zij zelf besmet zou zijn, vergeleken met degenen die de app nooit hebben gebruikt en daarnaast aangaven neutraal te zijn in hun intentie om de CoronaMelder te gaan gebruiken (`r round((nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal' & HBM_PSus_other2_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal'))))*100, digits = 1)`%). 
+
+```{r chiHBMsevcself1usernonuser, echo=FALSE}
+# First calculate a proportion for the variable.
+data$HBM_PSev_self1_agree[(data$HBM_PSev_self1 == 'Helemaal mee eens'| data$HBM_PSev_self1 == 'Mee eens'| data$HBM_PSev_self1 == 'Een beetje mee eens')] <- "Totaal eens"
+data$HBM_PSus_PSev_agree[(data$HBM_PSev_self1 == 'Neutraal'| data$HBM_PSev_self1 == 'Een beetje oneens'| data$HBM_PSev_self1 == 'Oneens'| data$HBM_PSev_self1 == 'Helemaal mee oneens')] <- "Neutraal, niet mee eens" 
+# Select the data: Only compare the current users and never users
+data_selected = data[data$nomem_encr %in% data_currentvsneveruser$nomem_encr, ]
+data_selected$user_status = droplevels(data_selected$user_status)
+
+# Convert into a table that can be used for the chi square test
+chisq.table = table(data_selected$HBM_PSev_self1_agree, data_selected$user_status)
+chisqtest = chisq.test(chisq.table) 
+```
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status == 'Gebruiker'& HBM_PSev_self1_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf het eens te zijn met de stelling dat hij/zij het erg zou vinden om besmet te raken met he coronavirus vergeleken met degenen die de app nooit hebben gebruikt (`r round((nrow(filter(data_selected, (user_status == 'Niet gebruiker' & HBM_PSev_self1_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Niet gebruiker'))))*100, digits = 1)`%).  
+
+```{r chiHBMsevsself1usernonuserneutral, echo=FALSE}
+# First calculate a proportion for the variable. 
+data$HBM_PSev_self1_agree[(data$HBM_PSev_self1 == 'Helemaal mee eens'| data$HBM_PSev_self1 == 'Mee eens'| data$HBM_PSev_self1 == 'Een beetje mee eens')] <- "Totaal eens"
+data$HBM_PSev_self1_agree[(data$HBM_PSev_self1 == 'Neutraal'| data$HBM_PSev_self1 == 'Een beetje oneens'| data$HBM_PSev_self1 == 'Oneens'| data$HBM_PSev_self1 == 'Helemaal mee oneens')] <- "Neutraal, niet mee eens" 
+# Select the data: Only compare the current users and never users
+data_selected = data[data$nomem_encr %in% data_currentvsneveruserneutral$nomem_encr, ]
+data_selected$user_status_intention = droplevels(data_selected$user_status_intention)
+
+# Convert into a table that can be used for the chi square test
+chisq.table = table(data_selected$HBM_PSev_self1_agree, data_selected$user_status_intention)
+chisqtest = chisq.test(chisq.table) 
+```
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status_intention == 'Gebruiker'& HBM_PSev_self1_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf het eens te zijn met de stelling dat hij/zij het erg zou vinden om besmet te raken met het coronavirus vergeleken met degenen die de app nooit hebben gebruikt en daarnaast aangaven neutraal te zijn in hun intentie om de CoronaMelder te gaan gebruiken (`r round((nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal' & HBM_PSev_self1_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal'))))*100, digits = 1)`%). 
+
+```{r chiPHBMPsevother2utautusernonuser, echo=FALSE}
+# First calculate a proportion for the variable. 
+data$HBM_PSev_other2_agree[(data$HBM_PSev_other2 == 'Helemaal mee eens'| data$HBM_PSev_other2 == 'Mee eens'| data$HBM_PSev_other2 == 'Een beetje mee eens')] <- "Totaal eens"
+data$HBM_PSev_other2_agree[(data$HBM_PSev_other2 == 'Neutraal'| data$HBM_PSev_other2 == 'Een beetje oneens'| data$HBM_PSev_other2 == 'Oneens'| data$HBM_PSev_other2 == 'Helemaal mee oneens')] <- "Neutraal, niet mee eens" 
+# Select the data: Only compare the current users and never users
+data_selected = data[data$nomem_encr %in% data_currentvsneveruser$nomem_encr, ]
+data_selected$user_status = droplevels(data_selected$user_status)
+
+# Convert into a table that can be used for the chi square test
+chisq.table = table(data_selected$HBM_PSev_other2_agree, data_selected$user_status)
+chisqtest = chisq.test(chisq.table) 
+```
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status == 'Gebruiker'& HBM_PSev_other2_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf het eens te zijn met de stelling dat hij/zij het erg zou vinden om andere mensen te besmetten met het coronavirus vergeleken met degenen die de app nooit hebben gebruikt (`r round((nrow(filter(data_selected, (user_status == 'Niet gebruiker' & HBM_PSev_other2_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Niet gebruiker'))))*100, digits = 1)`%).  
+
+```{r chiPHBMPsevother2usernonuserneutral, echo=FALSE}
+# First calculate a proportion for the variable. 
+data$HBM_PSev_other2_agree[(data$HBM_PSev_other2 == 'Helemaal mee eens'| data$HBM_PSev_other2 == 'Mee eens'| data$HBM_PSev_other2 == 'Een beetje mee eens')] <- "Totaal eens"
+data$HBM_PSev_other2_agree[(data$HBM_PSev_other2 == 'Neutraal'| data$HBM_PSev_other2 == 'Een beetje oneens'| data$HBM_PSev_other2 == 'Oneens'| data$HBM_PSev_other2 == 'Helemaal mee oneens')] <- "Neutraal, niet mee eens" 
+# Select the data: Only compare the current users and never users
+data_selected = data[data$nomem_encr %in% data_currentvsneveruserneutral$nomem_encr, ]
+data_selected$user_status_intention = droplevels(data_selected$user_status_intention)
+
+# Convert into a table that can be used for the chi square test
+chisq.table = table(data_selected$HBM_PSev_other2_agree, data_selected$user_status_intention)
+chisqtest = chisq.test(chisq.table) 
+```
+
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status_intention == 'Gebruiker'& HBM_PSev_other2_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf het eens te zijn met de stelling hij/zij het erg zou vinden om andere mensen te besmetten met het coronavirus vergeleken met degenen die de app nooit hebben gebruikt en daarnaast aangaven neutraal te zijn in hun intentie om de CoronaMelder te gaan gebruiken (`r round((nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal' & HBM_PSev_other2_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal'))))*100, digits = 1)`%). 
+
+```{r, echo=FALSE, tab.cap ="Ernst en vatbaarheid coronavirus naar gebruikersstatus. Aantal en totaal percentage eens (beetje mee eens, eens, helemaal mee eens)."}
+
+# === EDIT THESE TO CUSTOMIZE TABLE ===
+
+# Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
+graph_variablenames = c("HBM_PSus_self1", 
+                        "HBM_PSus_other2", 
+                        "HBM_PSev_self1", 
+                        "HBM_PSev_other2")                     
+graph_questionlabels = c("Ik loop in de komende twee maanden risico op een besmetting met het coronavirus", 
+                         "Als ik besmet raak met het coronavirus is de kans groot dat ik anderen zal besmetten", 
+                         "Ik vind het erg om besmet te raken met het coronavirus", 
+                         "Ik vind het erg als ik andere mensen besmet met het coronavirus") 
+
+# Which values do we want to include in the table cells?
+include_vars = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens")
+
+# === NO MORE EDITS SHOULD BE NEEDED BELOW THIS POINT ===
+
+# Split by user groups
+data_grouptable = data.frame(matrix(ncol = length(colnames(user_totals))+1, nrow = length(graph_variablenames)))
+
+colnames(data_grouptable) <- c("variable", usergroup_names)
+
+# Set the values for each variable. Note: this still contains too much logic right now, the values that are counted 
+# as correct (in this case "Helemaal mee eens", "Mee eens", and "Een beetje mee eens") are manually added
+# and will not apply to all variables (sometimes it is "Waar", or a different likert-scale)
+for(idx in 1:length(graph_variablenames)) {
+  data_grouptable[idx,"variable"] = graph_questionlabels[idx]
+  
+  data_grouptable[idx,2] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status == "Gebruiker"))
+  
+  data_grouptable[idx,3] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status == "Niet gebruiker"))
+
+  data_grouptable[idx,4] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status_intention == "Nooit gebruikt en niet van plan"))
+
+  data_grouptable[idx,5] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status_intention == "Nooit gebruikt en neutraal"))
+
+  data_grouptable[idx,6] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status_intention == "Nooit gebruikt en wel van plan"))
+}
+
+# Build the basic table
+ft <- flextable(
+  head(data_grouptable, n = nrow(data_grouptable))
+)
+
+# Header labels
+tmp_labels = as.data.frame(t(c("", usergroup_labels)))
+colnames(tmp_labels) <- c("variable", usergroup_names)
+ft <- set_header_labels(ft, values = tmp_labels)
+
+# Set up the footer of totals
+totals = c("Totaal", user_totals)
+totals[-1] <- paste(totals[-1], " (100.0%)")
+
+# Percentages and totals
+for(colname in colnames(data_grouptable)) {
+  if(colname != "variable") {
+    # Add percentage to cell
+    if (user_totals[1,colname]==0) {
+      ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (0.0%)"))
+    }
+    else {
+      ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/user_totals[1,colname]*100), "%)"))
+    }
+    
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_grouptable))-1))
+
+ft_out
+
+```
+In onderstaande tabellen is te zijn hoe deze percentages opgebouwd zijn voor deze vier vragen, voor huidig gebruikers en niet gebruikers. 
 
 ```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - Gebruikers", tab.cap="Waargenomen ernst en vatbaarheid - Gebruikers"}
 
@@ -1113,78 +1325,7 @@ theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + the
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
-# Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
 
-# We need one extra (empty) column label for the row with the possible values
-table_questionlabels = list()
-table_questionlabels["table_answercategories"] <- ""
-
-# We also need the 'unreversed' question labels ;)
-graph_questionlabels_unrev <- rev(graph_questionlabels)
-
-# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
-# and add the correct labels for column headings
-for(idx in 1:length(graph_variablenames)) {
-  # Add to new dataframe
-  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
-  
-  # Add correct mapping to column headings
-  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
-}
-
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
-
-# Build the basic table
-ft <- flextable(
-  head(data_table, n = nrow(data_table))
-)
-
-# Header labels
-ft <- set_header_labels(ft, values = table_questionlabels)
-
-# Set up the footer of totals
-totals = c("Totaal")
-
-# Percentages and totals
-for(colname in colnames(data_table)) {
-  if(colname != "table_answercategories") {
-    # Add percentage to cell
-    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
-    
-    # Add total to footer
-    tablecolumn = paste("data_table$", colname)
-    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
-  }
-}
-
-# Actually add the footer with totals
-ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
-
-# Change layout of table, and footer specifically
-ft <- fontsize(ft, size = 10, part = "all")
-ft <- font(ft, fontname = "Cambria", part = "all")
-ft <- align(ft, j = -1, align = "right", part = "footer")
-ft <- padding(ft, padding = 5, part = "footer")
-
-# Basic autofit does not work well with Word, found this code below
-# but it seems to make all columns of equal size (7 inch / number of columns?)
-# Might give unwanted results, so we might want to control this per column.
-
-# Note: 7 inch is the page width in Word
-# We now divide this into 1.5 inch for the first column (the values),
-# and divide the other columns equally among the remaining 5.5 inch.
-# If you only have one or few columns, you might want to reduce the total width below:
-table_width <- 7
-
-# Set width
-ft_out <- ft %>% autofit()
-ft_out <- width(ft_out, j = 1, width = 1.5)
-ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
-
-ft_out
 ```
 
 ```{r perceivedsuscsev, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - Niet gebruikers", tab.cap="Waargenomen ernst en vatbaarheid - Niet gebruikers"}
@@ -1230,79 +1371,10 @@ theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + the
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
-# Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
 
-# We need one extra (empty) column label for the row with the possible values
-table_questionlabels = list()
-table_questionlabels["table_answercategories"] <- ""
-
-# We also need the 'unreversed' question labels ;)
-graph_questionlabels_unrev <- rev(graph_questionlabels)
-
-# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
-# and add the correct labels for column headings
-for(idx in 1:length(graph_variablenames)) {
-  # Add to new dataframe
-  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
-  
-  # Add correct mapping to column headings
-  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
-}
-
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
-
-# Build the basic table
-ft <- flextable(
-  head(data_table, n = nrow(data_table))
-)
-
-# Header labels
-ft <- set_header_labels(ft, values = table_questionlabels)
-
-# Set up the footer of totals
-totals = c("Totaal")
-
-# Percentages and totals
-for(colname in colnames(data_table)) {
-  if(colname != "table_answercategories") {
-    # Add percentage to cell
-    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
-    
-    # Add total to footer
-    tablecolumn = paste("data_table$", colname)
-    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
-  }
-}
-
-# Actually add the footer with totals
-ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
-
-# Change layout of table, and footer specifically
-ft <- fontsize(ft, size = 10, part = "all")
-ft <- font(ft, fontname = "Cambria", part = "all")
-ft <- align(ft, j = -1, align = "right", part = "footer")
-ft <- padding(ft, padding = 5, part = "footer")
-
-# Basic autofit does not work well with Word, found this code below
-# but it seems to make all columns of equal size (7 inch / number of columns?)
-# Might give unwanted results, so we might want to control this per column.
-
-# Note: 7 inch is the page width in Word
-# We now divide this into 1.5 inch for the first column (the values),
-# and divide the other columns equally among the remaining 5.5 inch.
-# If you only have one or few columns, you might want to reduce the total width below:
-table_width <- 7
-
-# Set width
-ft_out <- ft %>% autofit()
-ft_out <- width(ft_out, j = 1, width = 1.5)
-ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
-
-ft_out
 ```
+
+  
 #### Naleving en intentie tot naleving algemene gedragsregels naar gebruikersstatus
 Relevant om te weten is of de mensen die de CoronaMelder momenteel gebruiken, mensen zijn die zich in het algemeen al beter aan de gedragsregels houden. 
 
@@ -1466,6 +1538,279 @@ graph_questionlabels = c("... hebt u uw handen gewassen met water en zeep?",
 
 # Which values do we want to include in the table cells?
 include_vars = c("Vaak", "Meestal", "Altijd")
+
+# === NO MORE EDITS SHOULD BE NEEDED BELOW THIS POINT ===
+
+# Split by user groups
+data_grouptable = data.frame(matrix(ncol = length(colnames(user_totals))+1, nrow = length(graph_variablenames)))
+
+colnames(data_grouptable) <- c("variable", usergroup_names)
+
+# Set the values for each variable. Note: this still contains too much logic right now, the values that are counted 
+# as correct (in this case "Helemaal mee eens", "Mee eens", and "Een beetje mee eens") are manually added
+# and will not apply to all variables (sometimes it is "Waar", or a different likert-scale)
+for(idx in 1:length(graph_variablenames)) {
+  data_grouptable[idx,"variable"] = graph_questionlabels[idx]
+  
+  data_grouptable[idx,2] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status == "Gebruiker"))
+  
+  data_grouptable[idx,3] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status == "Niet gebruiker"))
+
+  data_grouptable[idx,4] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status_intention == "Nooit gebruikt en niet van plan"))
+
+  data_grouptable[idx,5] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status_intention == "Nooit gebruikt en neutraal"))
+
+  data_grouptable[idx,6] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status_intention == "Nooit gebruikt en wel van plan"))
+}
+
+# Build the basic table
+ft <- flextable(
+  head(data_grouptable, n = nrow(data_grouptable))
+)
+
+# Header labels
+tmp_labels = as.data.frame(t(c("", usergroup_labels)))
+colnames(tmp_labels) <- c("variable", usergroup_names)
+ft <- set_header_labels(ft, values = tmp_labels)
+
+# Set up the footer of totals
+totals = c("Totaal", user_totals)
+totals[-1] <- paste(totals[-1], " (100.0%)")
+
+# Percentages and totals
+for(colname in colnames(data_grouptable)) {
+  if(colname != "variable") {
+    # Add percentage to cell
+    if (user_totals[1,colname]==0) {
+      ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (0.0%)"))
+    }
+    else {
+      ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/user_totals[1,colname]*100), "%)"))
+    }
+    
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_grouptable))-1))
+
+ft_out
+
+```
+
+##### Algemene opvattingen over het coronavirus naar gebruikersstatus
+Chi kwadraat toetsen zijn uitgevoerd om te bepalen of het totaal aandeel respondenten die denkt dat de stelling waar is (*zeker waar* en *misschien waar*) verschilt tussen de huidige gebruikers en degenen die de CoronaMelder nooit gebruikt hebben. Daarnaast is gekeken of de subgroep die de CoronaMelder nooit gebruikt heeft en aangaf neutraal te zijn met betrekking tot toekomstig gebruik verschilt van de huidig gebruikers. 
+```{r chiconspiracy1usernonuser, echo=FALSE}
+# First calculate a proportion for the variable. 
+data$Beliefs_Conspiracy1_agree[data$Beliefs_Conspiracy1 == 'Zeker waar'| data$Beliefs_Conspiracy1 == 'Misschien waar'] <- "Totaal waar"
+data$Beliefs_Conspiracy1_agree[data$Beliefs_Conspiracy1 == 'Weet ik niet'| data$Beliefs_Conspiracy1 == 'Misschien niet waar'| data$Beliefs_Conspiracy1 == 'Zeker niet waar'] <- "Weet niet, niet waar" 
+# Select the data: Only compare the current users and never users
+data_selected = data[data$nomem_encr %in% data_currentvsneveruser$nomem_encr, ]
+data_selected$user_status = droplevels(data_selected$user_status)
+
+# Convert into a table that can be used for the chi square test
+chisq.table = table(data_selected$Beliefs_Conspiracy1_agree, data_selected$user_status)
+chisqtest = chisq.test(chisq.table) 
+```
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status == 'Gebruiker'& Beliefs_Conspiracy1_agree == 'Totaal waar'))) /nrow(filter(data_selected, (user_status == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf dat het waar is dat het coronavirus een biologisch wapen dat in een laboratorium is gemaakt, vergeleken met degenen die de app nooit hebben gebruikt (`r round((nrow(filter(data_selected, (user_status == 'Niet gebruiker' & Beliefs_Conspiracy1_agree == 'Totaal waar'))) /nrow(filter(data_selected, (user_status == 'Niet gebruiker'))))*100, digits = 1)`%).  
+
+```{r chiconspiracy1usernonuserneutral, echo=FALSE}
+# First calculate a proportion for the variable. 
+data$Beliefs_Conspiracy1_agree[data$Beliefs_Conspiracy1 == 'Zeker waar'| data$HBM_PSus_self1 == 'Misschien waar'] <- "Totaal waar"
+data$Beliefs_Conspiracy1_agree[data$Beliefs_Conspiracy1 == 'Weet ik niet'| data$Beliefs_Conspiracy1 == 'Misschien niet waar'| data$Beliefs_Conspiracy1 == 'Zeker niet waar'] <- "Weet niet, niet waar" 
+# Select the data: Only compare the current users and never users
+data_selected = data[data$nomem_encr %in% data_currentvsneveruserneutral$nomem_encr, ]
+data_selected$user_status_intention = droplevels(data_selected$user_status_intention)
+
+# Convert into a table that can be used for the chi square test
+chisq.table = table(data_selected$Beliefs_Conspiracy1_agree, data_selected$user_status_intention)
+chisqtest = chisq.test(chisq.table) 
+```
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status_intention == 'Gebruiker'& Beliefs_Conspiracy1_agree == 'Totaal waar'))) /nrow(filter(data_selected, (user_status_intention == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf dat het waar is dat het coronavirus een biologisch wapen dat in een laboratorium is gemaakt, vergeleken met degenen die de app nooit hebben gebruikt en daarnaast aangaven neutraal te zijn in hun intentie om de CoronaMelder te gaan gebruiken (`r round((nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal' & Beliefs_Conspiracy1_agree == 'Totaal waar'))) /nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal'))))*100, digits = 1)`%). 
+
+```{r chiconspiracy2usernonuser, echo=FALSE}
+# First calculate a proportion for the variable. 
+data$Beliefs_Conspiracy2_agree[data$Beliefs_Conspiracy2 == 'Zeker waar'| data$Beliefs_Conspiracy2 == 'Misschien waar'] <- "Totaal waar"
+data$Beliefs_Conspiracy2_agree[data$Beliefs_Conspiracy2 == 'Weet ik niet'| data$Beliefs_Conspiracy2 == 'Misschien niet waar'| data$Beliefs_Conspiracy2 == 'Zeker niet waar'] <- "Weet niet, niet waar" 
+# Select the data: Only compare the current users and never users
+data_selected = data[data$nomem_encr %in% data_currentvsneveruser$nomem_encr, ]
+data_selected$user_status = droplevels(data_selected$user_status)
+
+# Convert into a table that can be used for the chi square test
+chisq.table = table(data_selected$Beliefs_Conspiracy2_agree, data_selected$user_status)
+chisqtest = chisq.test(chisq.table) 
+```
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status == 'Gebruiker'& Beliefs_Conspiracy2_agree == 'Totaal waar'))) /nrow(filter(data_selected, (user_status == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf dat het waar is dat de uitbraak van het coronavirus heeft te maken met het 5G netwerk, vergeleken met degenen die de app nooit hebben gebruikt (`r round((nrow(filter(data_selected, (user_status == 'Niet gebruiker' & Beliefs_Conspiracy2_agree == 'Totaal waar'))) /nrow(filter(data_selected, (user_status == 'Niet gebruiker'))))*100, digits = 1)`%).  
+
+```{r chiconspiracy2usernonuserneutral, echo=FALSE}
+# First calculate a proportion for the variable. 
+data$Beliefs_Conspiracy1_agree[data$Beliefs_Conspiracy2 == 'Zeker waar'| data$Beliefs_Conspiracy2 == 'Misschien waar'] <- "Totaal waar"
+data$Beliefs_Conspiracy2_agree[data$Beliefs_Conspiracy2 == 'Weet ik niet'| data$Beliefs_Conspiracy2 == 'Misschien niet waar'| data$Beliefs_Conspiracy2 == 'Zeker niet waar'] <- "Weet niet, niet waar" 
+# Select the data: Only compare the current users and never users
+data_selected = data[data$nomem_encr %in% data_currentvsneveruserneutral$nomem_encr, ]
+data_selected$user_status_intention = droplevels(data_selected$user_status_intention)
+
+# Convert into a table that can be used for the chi square test
+chisq.table = table(data_selected$Beliefs_Conspiracy2_agree, data_selected$user_status_intention)
+chisqtest = chisq.test(chisq.table) 
+```
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status_intention == 'Gebruiker'& Beliefs_Conspiracy2_agree == 'Totaal waar'))) /nrow(filter(data_selected, (user_status_intention == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf dat het waar is dat de uitbraak van het coronavirus heeft te maken met het 5G netwerk, vergeleken met degenen die de app nooit hebben gebruikt en daarnaast aangaven neutraal te zijn in hun intentie om de CoronaMelder te gaan gebruiken (`r round((nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal' & Beliefs_Conspiracy2_agree == 'Totaal waar'))) /nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal'))))*100, digits = 1)`%). 
+
+
+```{r, echo=FALSE, tab.cap ="Geloof in complottheorieën. Aantal en totaal percentage dat overtuigd is dat de stelling waar is (zeker waar, misschien waar)."}
+
+# === EDIT THESE TO CUSTOMIZE TABLE ===
+
+# Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
+graph_variablenames = c("Beliefs_Conspiracy1", 
+                        "Beliefs_Conspiracy2")                     
+graph_questionlabels = c("Het coronavirus is een biologisch wapen dat in een laboratorium is gemaakt", 
+                         "De uitbraak van het coronavirus heeft te maken met (de aanleg van) het 5G netwerk") 
+
+# Which values do we want to include in the table cells?
+include_vars = c("Zeker waar", "Misschien waar")
+
+# === NO MORE EDITS SHOULD BE NEEDED BELOW THIS POINT ===
+
+# Split by user groups
+data_grouptable = data.frame(matrix(ncol = length(colnames(user_totals))+1, nrow = length(graph_variablenames)))
+
+colnames(data_grouptable) <- c("variable", usergroup_names)
+
+# Set the values for each variable. Note: this still contains too much logic right now, the values that are counted 
+# as correct (in this case "Helemaal mee eens", "Mee eens", and "Een beetje mee eens") are manually added
+# and will not apply to all variables (sometimes it is "Waar", or a different likert-scale)
+for(idx in 1:length(graph_variablenames)) {
+  data_grouptable[idx,"variable"] = graph_questionlabels[idx]
+  
+  data_grouptable[idx,2] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status == "Gebruiker"))
+  
+  data_grouptable[idx,3] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status == "Niet gebruiker"))
+
+  data_grouptable[idx,4] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status_intention == "Nooit gebruikt en niet van plan"))
+
+  data_grouptable[idx,5] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status_intention == "Nooit gebruikt en neutraal"))
+
+  data_grouptable[idx,6] = nrow(filter(data, (eval(parse(text=graph_variablenames[idx]))) %in% include_vars & user_status_intention == "Nooit gebruikt en wel van plan"))
+}
+
+# Build the basic table
+ft <- flextable(
+  head(data_grouptable, n = nrow(data_grouptable))
+)
+
+# Header labels
+tmp_labels = as.data.frame(t(c("", usergroup_labels)))
+colnames(tmp_labels) <- c("variable", usergroup_names)
+ft <- set_header_labels(ft, values = tmp_labels)
+
+# Set up the footer of totals
+totals = c("Totaal", user_totals)
+totals[-1] <- paste(totals[-1], " (100.0%)")
+
+# Percentages and totals
+for(colname in colnames(data_grouptable)) {
+  if(colname != "variable") {
+    # Add percentage to cell
+    if (user_totals[1,colname]==0) {
+      ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (0.0%)"))
+    }
+    else {
+      ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/user_totals[1,colname]*100), "%)"))
+    }
+    
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_grouptable))-1))
+
+ft_out
+
+```
+
+```{r chiPBeliefsTrustGovernmentusernonuser, echo=FALSE}
+# First calculate a proportion for the variable. 
+data$Beliefs_TrustGovernment_agree[(data$Beliefs_TrustGovernment == 'Helemaal mee eens'| data$Beliefs_TrustGovernment == 'Mee eens'| data$Beliefs_TrustGovernment == 'Een beetje mee eens')] <- "Totaal eens"
+data$Beliefs_TrustGovernment_agree[(data$Beliefs_TrustGovernment == 'Neutraal'| data$Beliefs_TrustGovernment == 'Een beetje oneens'| data$Beliefs_TrustGovernment == 'Oneens'| data$Beliefs_TrustGovernment == 'Helemaal mee oneens')] <- "Neutraal, niet mee eens" 
+# Select the data: Only compare the current users and never users
+data_selected = data[data$nomem_encr %in% data_currentvsneveruser$nomem_encr, ]
+data_selected$user_status = droplevels(data_selected$user_status)
+
+# Convert into a table that can be used for the chi square test
+chisq.table = table(data_selected$Beliefs_TrustGovernment_agree, data_selected$user_status)
+chisqtest = chisq.test(chisq.table) 
+```
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status == 'Gebruiker'& Beliefs_TrustGovernment_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf het eens te zijn met de stelling dat ze vertrouwen hebben in de aanpak van de Nederlandse overheid om het coronavirus onder controle te krijgen, vergeleken met degenen die de app nooit hebben gebruikt (`r round((nrow(filter(data_selected, (user_status == 'Niet gebruiker' & Beliefs_TrustGovernment_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Niet gebruiker'))))*100, digits = 1)`%).  
+
+```{r chiBeliefsTrustGovernmentusernonuserneutral, echo=FALSE}
+# First calculate a proportion for the variable. 
+data$Beliefs_TrustGovernment_agree[(data$Beliefs_TrustGovernment == 'Helemaal mee eens'| data$Beliefs_TrustGovernment == 'Mee eens'| data$Beliefs_TrustGovernment == 'Een beetje mee eens')] <- "Totaal eens"
+data$Beliefs_TrustGovernment_agree[(data$Beliefs_TrustGovernment == 'Neutraal'| data$Beliefs_TrustGovernment == 'Een beetje oneens'| data$Beliefs_TrustGovernment == 'Oneens'| data$Beliefs_TrustGovernment == 'Helemaal mee oneens')] <- "Neutraal, niet mee eens" 
+# Select the data: Only compare the current users and never users
+data_selected = data[data$nomem_encr %in% data_currentvsneveruserneutral$nomem_encr, ]
+data_selected$user_status_intention = droplevels(data_selected$user_status_intention)
+
+# Convert into a table that can be used for the chi square test
+chisq.table = table(data_selected$Beliefs_TrustGovernment_agree, data_selected$user_status_intention)
+chisqtest = chisq.test(chisq.table) 
+```
+
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status_intention == 'Gebruiker'& Beliefs_TrustGovernment_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf het eens te zijn met de stelling dat ze vertrouwen hebben in de aanpak van de Nederlandse overheid om het coronavirus onder controle te krijgen,vergeleken met degenen die de app nooit hebben gebruikt en daarnaast aangaven neutraal te zijn in hun intentie om de CoronaMelder te gaan gebruiken (`r round((nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal' & Beliefs_TrustGovernment_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal'))))*100, digits = 1)`%). 
+
+
+```{r, echo=FALSE, tab.cap ="Vertrouwen in aanpak overheid naar gebruikersstatus. Aantal en totaal percentage dat het eens is met de stelling (helemaal mee eens, mee eens, een beetje mee eens)."}
+
+# === EDIT THESE TO CUSTOMIZE TABLE ===
+
+# Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
+graph_variablenames = c("Beliefs_TrustGovernment")                     
+graph_questionlabels = c("Ik heb vertrouwen in de manier waarop de Nederlandse overheid probeert het coronavirus onder controle te houden") 
+
+# Which values do we want to include in the table cells?
+include_vars = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens")
 
 # === NO MORE EDITS SHOULD BE NEEDED BELOW THIS POINT ===
 
