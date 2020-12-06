@@ -1071,51 +1071,6 @@ tab.noby <- tableby(user_status ~ geslacht + lftdcat + sted_simplified + belbezi
 summary(tab.noby, pfootnote=TRUE)
 ```
 
-```{r , echo=FALSE}
-### Determine all pairwise comparisons for the demgraphic variables the chi square indicated that the variable was not indepnedent from use status. 
-# Age category (lftdcat)
-data_selected = data_currentvsneveruser
-data_selected$lftdcat = droplevels(data_selected$lftdcat)
-chisq.table = table(data_selected$lftdcat, data_selected$user_status)
-Matriz = chisq.table
-pairwiseNominalIndependence(Matriz,
-                            fisher = FALSE,
-                            gtest  = FALSE,
-                            chisq  = TRUE,
-                            method = "fdr")
-# Educational level (oplmet_simplified)
-data_selected = data_currentvsneveruser
-data_selected$oplmet_simplified = droplevels(data_selected$oplmet_simplified)
-chisq.table = table(data_selected$oplmet_simplified, data_selected$user_status)
-Matriz = chisq.table
-pairwiseNominalIndependence(Matriz,
-                            fisher = FALSE,
-                            gtest  = FALSE,
-                            chisq  = TRUE,
-                            method = "fdr")
-# Marital status (burgstat_simplified)
-data_selected = data_currentvsneveruser
-data_selected$burgstat_simplified = droplevels(data_selected$burgstat_simplified)
-chisq.table = table(data_selected$burgstat_simplified, data_selected$user_status)
-Matriz = chisq.table
-pairwiseNominalIndependence(Matriz,
-                            fisher = FALSE,
-                            gtest  = FALSE,
-                            chisq  = TRUE,
-                            method = "fdr")
-# Net income (nettocat_simplified)
-data_selected = data_currentvsneveruser
-data_selected$nettocat_simplified = droplevels(data_selected$nettocat_simplified)
-chisq.table = table(data_selected$nettocat_simplified, data_selected$user_status)
-Matriz = chisq.table
-pairwiseNominalIndependence(Matriz,
-                            fisher = FALSE,
-                            gtest  = FALSE,
-                            chisq  = TRUE,
-                            method = "fdr")
-```
-
-
 ##### Gezondheidsmotivatie en algemene opvattingen over het coronavirus naar gebruikersstatus
 
 ```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Waargenomen ernst en vatbaarheid - Gebruikers", tab.cap="Waargenomen ernst en vatbaarheid - Gebruikers"}
@@ -4742,8 +4697,57 @@ Qua intentie wel, qua gedrag niet.
 \newpage
 # Referenties
 \newpage
+# Appendix
+## Additionele resulaten: Demografie naar gebruikersstatus - Paarsgewijze vergelijkingen
+Vergelijking subgroepen met ruwe p-waarden en FDR-gecorrigeerde p-waarden. 
+```{r , echo=FALSE}
+### Determine all pairwise comparisons for the demgraphic variables the chi square indicated that the variable was not indepnedent from use status. 
+# Age category (lftdcat)
+data_selected = data_currentvsneveruser
+data_selected$lftdcat = droplevels(data_selected$lftdcat)
+chisq.table = table(data_selected$lftdcat, data_selected$user_status)
+Matriz = chisq.table
+pairwiseNominalIndependence(Matriz,
+                            fisher = FALSE,
+                            gtest  = FALSE,
+                            chisq  = TRUE,
+                            method = "fdr")
+# Educational level (oplmet_simplified)
+data_selected = data_currentvsneveruser
+data_selected$oplmet_simplified = droplevels(data_selected$oplmet_simplified)
+chisq.table = table(data_selected$oplmet_simplified, data_selected$user_status)
+Matriz = chisq.table
+pairwiseNominalIndependence(Matriz,
+                            fisher = FALSE,
+                            gtest  = FALSE,
+                            chisq  = TRUE,
+                            method = "fdr")
+# Marital status (burgstat_simplified)
+data_selected = data_currentvsneveruser
+data_selected$burgstat_simplified = droplevels(data_selected$burgstat_simplified)
+chisq.table = table(data_selected$burgstat_simplified, data_selected$user_status)
+Matriz = chisq.table
+pairwiseNominalIndependence(Matriz,
+                            fisher = FALSE,
+                            gtest  = FALSE,
+                            chisq  = TRUE,
+                            method = "fdr")
+# Net income (nettocat_simplified)
+data_selected = data_currentvsneveruser
+data_selected$nettocat_simplified = droplevels(data_selected$nettocat_simplified)
+chisq.table = table(data_selected$nettocat_simplified, data_selected$user_status)
+Matriz = chisq.table
+pairwiseNominalIndependence(Matriz,
+                            fisher = FALSE,
+                            gtest  = FALSE,
+                            chisq  = TRUE,
+                            method = "fdr")
+```
 # Bijlagen
-## Vragenlijst wave 1
+Als bijlage kunt u bij dit rapport vinden:
+- Vragenlijst wave 1
+- Vergelijking demografie sample huidig onderzoek, LISS core panel en CBS
+
 
 
 
