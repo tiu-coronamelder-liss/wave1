@@ -38,7 +38,7 @@ library(RColorBrewer)
 # For analysis and data preprocessing
 library(psy) # psy for the cronbach function
 library(reshape2) # For converting from wide to long format (function: melt)
-library(chisq.posthoc.test) # Kan toch weer weg. 
+library(rcompanion) # For the posthoc chi square tests
 
 # For aligning ggplots vertically
 library(cowplot)
@@ -119,20 +119,6 @@ data$user_status[data$Behavior_UTAUT == "Ik heb de CoronaMelder app in het verle
 # Add factor
 data$user_status <- factor(data$user_status,levels = c("Gebruiker", "Niet gebruiker", "Voormalig gebruiker"))
 
-# Create a dataset with only the current users and never users for all analyses in which these groups are compared. 
-data_currentvsneveruser = data[ which(data$user_status=='Gebruiker' | data$user_status=='Niet gebruiker'), ]
-##### Add labels to variables
-attr(data_currentvsneveruser$geslacht,'label')  <- 'Geslacht'
-attr(data_currentvsneveruser$lftdcat,'label')  <- 'Leeftijdscategorie'
-attr(data_currentvsneveruser$sted_simplified,'label')  <- 'Stedelijkheid woonplaats'
-attr(data_currentvsneveruser$belbezig_simplified,'label')  <- 'Belangrijkste bezigheid'
-attr(data_currentvsneveruser$nettocat_simplified,'label')  <- 'Netto maandinkomen'
-attr(data_currentvsneveruser$oplmet_simplified,'label')  <- 'Hoogste opleiding met diploma'
-attr(data_currentvsneveruser$burgstat_simplified,'label')  <- 'Burgerlijke staat'
-attr(data_currentvsneveruser$woonvorm,'label')  <- 'Woonvorm huishouden'
-attr(data_currentvsneveruser$Riskgroup_contact,'label')  <- 'Frequentie op minder dan 1.5m van ouderen en mensen met een kwetsbare gezondheid zijn vanwege werk en/of (privé) zorgtaken'
-
-
 ## User status and intention. 
 # Of interest is the comparison of current users and the non users that are neutral when it comes to intention.  
 data$user_status_intention[data$Behavior_UTAUT == "Ik gebruik de CoronaMelder app op dit moment"] <- "Gebruiker"
@@ -145,9 +131,27 @@ data$user_status_intention[data$Behavior_UTAUT == "Ik heb de CoronaMelder app in
 # Add factor
 data$user_status_intention <- factor(data$user_status_intention,levels = c("Gebruiker", "Nooit gebruikt en niet van plan", "Nooit gebruikt en neutraal", "Nooit gebruikt en wel van plan", "Voormalig gebruiker"))
 
-# Create a dataset with only the curent users and never users that are neutral on intention for all analyses in which these groups are compared. 
+##### Create new datasets
+### Create a dataset with only the current users and never users for all analyses in which these groups are compared. 
+data_currentvsneveruser = data[ which(data$user_status=='Gebruiker' | data$user_status=='Niet gebruiker'), ]
+# Drop unused levels
+data_currentvsneveruser$user_status = droplevels(data_currentvsneveruser$user_status)
+# Add labels to variables
+attr(data_currentvsneveruser$geslacht,'label')  <- 'Geslacht'
+attr(data_currentvsneveruser$lftdcat,'label')  <- 'Leeftijdscategorie'
+attr(data_currentvsneveruser$sted_simplified,'label')  <- 'Stedelijkheid woonplaats'
+attr(data_currentvsneveruser$belbezig_simplified,'label')  <- 'Belangrijkste bezigheid'
+attr(data_currentvsneveruser$nettocat_simplified,'label')  <- 'Netto maandinkomen'
+attr(data_currentvsneveruser$oplmet_simplified,'label')  <- 'Hoogste opleiding met diploma'
+attr(data_currentvsneveruser$burgstat_simplified,'label')  <- 'Burgerlijke staat'
+attr(data_currentvsneveruser$woonvorm,'label')  <- 'Woonvorm huishouden'
+attr(data_currentvsneveruser$Riskgroup_contact,'label')  <- 'Frequentie op minder dan 1.5m van ouderen en mensen met een kwetsbare gezondheid zijn vanwege werk en/of (privé) zorgtaken'
+
+### Create a dataset with only the curent users and never users that are neutral on intention for all analyses in which these groups are compared. 
 data_currentvsneveruserneutral = data[ which(data$user_status_intention=='Gebruiker' | data$user_status_intention=='Nooit gebruikt en neutraal'), ]
-##### Add labels to variables
+# Drop unused levels
+data_currentvsneveruserneutral$user_status_intention = droplevels(data_currentvsneveruserneutral$user_status_intention)
+# Add labels to variables
 attr(data_currentvsneveruserneutral$geslacht,'label')  <- 'Geslacht'
 attr(data_currentvsneveruserneutral$lftdcat,'label')  <- 'Leeftijdscategorie'
 attr(data_currentvsneveruserneutral$sted,'label')  <- 'Stedelijkheid woonplaats'
@@ -1050,20 +1054,23 @@ Van alle respondenten gaf `r round(nrow(filter(data, Behavior_UTAUT == 'Ik gebru
 
 #### Vergelijking gebruikers en niet gebruikers
 ##### Demografische gegevens naar gebruikersstatus
-Om inzicht te krijgen in welke factoren (demografisch, persoonlijk, sociaal, omgevingsfactoren) samenhangen met gebruik worden respondenten die momenteel de CoronaMelder gebruiken vergeleken met de respondenten die de CoronaMelder nooit hebben gebruikt. 
+Om inzicht te krijgen in welke factoren (demografisch, persoonlijk, sociaal, omgevingsfactoren) samenhangen met het gebruiken van de CoronaMelder worden respondenten die momenteel de CoronaMelder gebruiken vergeleken met de respondenten die de CoronaMelder nooit hebben gebruikt. 
 
-Hiervoor wordt voor elke demografische variabele een chi kwadraat toets uitgevoerd. In het geval dat deze toets aangeeft dat de demografische variabele en de gebruikersstatus afhankelijk zijn, dat betekent dat een of meerdere van de categorien verschillen in percentage gebruikers, wordt er paarsgewijze posthoc tests met FDR correctie uitgevoerd om te bepalen welke categorien significant van elkaar verschillen in percentage gebruikers. 
+Hiervoor wordt voor elke demografische variabele een chi kwadraat toets uitgevoerd. In het geval dat deze toets aangeeft dat de demografische variabele en de gebruikersstatus afhankelijk zijn, dat betekent dat een of meerdere van de categorien verschillen in percentage gebruikers, wordt er paarsgewijze posthoc tests met FDR correctie uitgevoerd om te bepalen welke groepen significant van elkaar verschillen in percentage gebruikers.  
+
+
+
+
 ```{r, echo=FALSE, results="asis", tab.cap = "Demografische kenmerken naar gebruikersstatus"} 
 tab.noby <- tableby(user_status ~ geslacht + lftdcat + sted_simplified + belbezig_simplified  + oplmet_simplified + burgstat_simplified + nettocat_simplified + woonvorm + Riskgroup_contact, cat.stats = "countrowpct", data=data_currentvsneveruser) # cat.stats = "countrowpct") for row percentages in stead of column percentages
 summary(tab.noby, pfootnote=TRUE)
 ```
 
 ```{r , echo=FALSE}
-data_selected = data[data$nomem_encr %in% data_currentvsneveruser$nomem_encr, ]
-data_selected$user_status = droplevels(data_selected$user_status)
+### Determine all pairwise comparisons for the demgraphic variables the chi square indicated that the variable was not indepnedent from use status. 
+# Age category (lftdcat)
+data_selected = data_currentvsneveruser
 data_selected$lftdcat = droplevels(data_selected$lftdcat)
-
-library(rcompanion)
 chisq.table = table(data_selected$lftdcat, data_selected$user_status)
 Matriz = chisq.table
 pairwiseNominalIndependence(Matriz,
@@ -1071,7 +1078,36 @@ pairwiseNominalIndependence(Matriz,
                             gtest  = FALSE,
                             chisq  = TRUE,
                             method = "fdr")
-
+# Educational level (oplmet_simplified)
+data_selected = data_currentvsneveruser
+data_selected$oplmet_simplified = droplevels(data_selected$oplmet_simplified)
+chisq.table = table(data_selected$oplmet_simplified, data_selected$user_status)
+Matriz = chisq.table
+pairwiseNominalIndependence(Matriz,
+                            fisher = FALSE,
+                            gtest  = FALSE,
+                            chisq  = TRUE,
+                            method = "fdr")
+# Marital status (burgstat_simplified)
+data_selected = data_currentvsneveruser
+data_selected$burgstat_simplified = droplevels(data_selected$burgstat_simplified)
+chisq.table = table(data_selected$burgstat_simplified, data_selected$user_status)
+Matriz = chisq.table
+pairwiseNominalIndependence(Matriz,
+                            fisher = FALSE,
+                            gtest  = FALSE,
+                            chisq  = TRUE,
+                            method = "fdr")
+# Net income (nettocat_simplified)
+data_selected = data_currentvsneveruser
+data_selected$nettocat_simplified = droplevels(data_selected$nettocat_simplified)
+chisq.table = table(data_selected$nettocat_simplified, data_selected$user_status)
+Matriz = chisq.table
+pairwiseNominalIndependence(Matriz,
+                            fisher = FALSE,
+                            gtest  = FALSE,
+                            chisq  = TRUE,
+                            method = "fdr")
 ```
 
 
