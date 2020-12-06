@@ -267,11 +267,11 @@ In de resultaten sectie worden de uitkomsten getoond van de 1900 respondenten wa
 # Resultaten
 ## Karakteristieken van de steekproef
 ### Demografische factoren
-Aan dit onderzoek hebben `r nrow(data)` (gemiddelde leeftijd in jaren: `r round(mean(data$leeftijd), digits = 1)`, standaarddeviatie: `r round(sd(data$leeftijd), digits = 1)`, range: `r min(data$leeftijd)`-`r max(data$leeftijd)`); `r round((nrow(filter(data, geslacht == 'Vrouw'))/nrow(data))*100, digits = 2)`% vrouw) respondenten deelgenomen. 
+Aan dit onderzoek hebben `r nrow(data)` (gemiddelde leeftijd in jaren: `r round(mean(data$leeftijd), digits = 1)`, standaarddeviatie: `r round(sd(data$leeftijd), digits = 1)`, range: `r min(data$leeftijd)`-`r max(data$leeftijd)`); `r round((nrow(filter(data, geslacht == 'Vrouw'))/nrow(data))*100, digits = 2)`% vrouw) respondenten deelgenomen. De demografische statistieken zijn te vinden in de onderstaande tabel. 
 
 ```{r, echo=FALSE, results="asis"} 
 tab.noby <- tableby(~ geslacht + lftdcat + sted_simplified + belbezig_simplified + oplmet_simplified + burgstat_simplified + nettocat_simplified + woonvorm + Riskgroup_contact, data=data)
-summary(tab.noby)
+summary(tab.noby, title="(\\#tab:mytableby) Demografische statieken van de steekproef")
 ```
 
 ### Gezondheidsmotivatie en risicoperceptie corona besmetting
@@ -1032,8 +1032,6 @@ ft_out
 ### Bekendheid met CoronaMelder
 In de vragenlijst werd gevraagd hoe bekend men (voor het openen van de vragenlijst) was met de CoronaMelder app. In totaal gaf `r round(((nrow(filter(data, Awareness == 'Heel erg bekend')) + nrow(filter(data, Awareness == 'Bekend')) + nrow(filter(data, Awareness == 'Redelijk bekend'))+ nrow(filter(data, Awareness == 'Een beetje bekend')))/nrow(data)*100), digits = 1)`% aan in meer of mindere mate bekend te zijn met de CoronaMelder (zie figuur \@ref(fig:awareness)). Ruim 1 op de 10 (`r round(nrow(filter(data, Awareness == 'Niet bekend'))/nrow(data)*100, digits = 1)`%) gaf aan niet bekend te zijn met de CoronaMelder.   
 
---> To do: Verdere uitplitsingen. 
-
 ```{r awareness, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Bekendheid met CoronaMelder", tab.cap="Waargenomen ernst en vatbaarheid - Gebruikers"}
 # Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 ggplot(data=data, aes(x = Awareness)) + theme_bw() + xlab(paste(names(table(data$Awareness)))) + ylab(" ") + xlab("Hoe bekend bent u met de CoronaMelder?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(,axis.title=element_text(size=10))
@@ -1041,22 +1039,22 @@ ggplot(data=data, aes(x = Awareness)) + theme_bw() + xlab(paste(names(table(data
 
 ```{r awarenesslftd, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Bekendheid met de CoronaMelder per leeftijdscategorie"}
 # Awareness op leeftijdscategorie, met ook 'reversed' labels en waarden in de bar chart:
-ggplot(data=data, aes(fill=Awareness, x=lftdcat)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("15-24", "25-34", "35-44", "45-54", "55-64", "65+")) + coord_flip() + labs(x = "Leeftijdscategorie", y = "", fill = "") + ggtitle("Bekendheid Coronamelder per leeftijdscategorie") + scale_fill_manual(values=my_palette5) + guides(fill = guide_legend(reverse = TRUE))
+#ggplot(data=data, aes(fill=Awareness, x=lftdcat)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("15-24", "25-34", "35-44", "45-54", "55-64", "65+")) + coord_flip() + labs(x = "Leeftijdscategorie", y = "", fill = "") + ggtitle("Bekendheid Coronamelder per leeftijdscategorie") + scale_fill_manual(values=my_palette5) + guides(fill = guide_legend(reverse = TRUE))
 ```
 
 ```{r awarenessgender, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Bekendheid met de CoronaMelder per geslacht"}
 # Awareness op gender
-ggplot(data=data, aes(fill=Awareness, x=geslacht)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("man", "vrouw")) + coord_flip() + labs(x = " ", y = "", fill = "") + ggtitle("Bekendheid Coronamelder per geslacht") + scale_fill_manual(values=my_palette5) + guides(fill = guide_legend(reverse = TRUE))
+#ggplot(data=data, aes(fill=Awareness, x=geslacht)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("man", "vrouw")) + coord_flip() + labs(x = " ", y = "", fill = "") + ggtitle("Bekendheid Coronamelder per geslacht") + scale_fill_manual(values=my_palette5) + guides(fill = guide_legend(reverse = TRUE))
 ```
 
 ### Gebruik CoronaMelder
 Van alle respondenten gaf `r round(nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))/nrow(data)*100, digits = 1)`% aan dat hij/zij de CoronaMelder op dit moment gebruikt en `r round(nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt'))/nrow(data)*100, digits = 1)`% geeft aan de CoronaMelder niet te gebruiken. Slechts `r round(nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer'))/nrow(data)*100, digits = 1)`% gaf aan de CoronaMelder in het verleden gebruikt te hebben maar op dit moment niet meer. 
 
 #### Vergelijking gebruikers en niet gebruikers
-##### Demografische gegevens naar gebruikersstatus {#demo_userstatus}
+##### Demografische gegevens naar gebruikersstatus {#demouserstatus}
 Om inzicht te krijgen in welke factoren (demografisch, persoonlijk, sociaal, omgevingsfactoren) samenhangen met het gebruiken van de CoronaMelder worden respondenten die momenteel de CoronaMelder gebruiken vergeleken met de respondenten die de CoronaMelder nooit hebben gebruikt. 
 
-Om dit te onderzoeken wordt voor elke demografische variabele een chi kwadraat toets uitgevoerd. In het geval dat deze toets aangeeft dat de demografische variabele en de gebruikersstatus afhankelijk zijn - oftewel dat een of meerdere van de subgroepen afwijken van het gemiddelde percentage gebruikers - worden er posthoc paarsgewijze chi kwadraattests met FDR correctie uitgevoerd om te bepalen welke groepen significant van elkaar verschillen in percentage gebruikers. In tabel \ref(demobyuserstatus) kunnen de resultaten gevonden worden. In de appendix kunnen alle paarsgewijze vergelijkingen gevonden worden voor variabelen die samen hingen met de gebruikersstatus. 
+Om dit te onderzoeken wordt voor elke demografische variabele een chi kwadraat toets uitgevoerd. In het geval dat deze toets aangeeft dat de demografische variabele en de gebruikersstatus afhankelijk zijn - oftewel dat een of meerdere van de subgroepen afwijken van het gemiddelde percentage gebruikers - worden er posthoc paarsgewijze chi kwadraattests met FDR correctie uitgevoerd om te bepalen welke groepen significant van elkaar verschillen in percentage gebruikers. In de onderstaande tabel kunnen de resultaten gevonden worden. In de appendix kunnen alle paarsgewijze vergelijkingen gevonden worden voor variabelen die samen hingen met de gebruikersstatus. 
 
 Het percentages gebruikers was niet gelijk verdeeld over alle leeftijdscategorieën. Het percentage gebruikers was significant lager bij de 15 - 24 jarigen vergeleken met de 55 - 64 jarigen. 
 
@@ -1067,7 +1065,7 @@ Ook burgerlijke staat hing samen met gebruik van de CoronaMelder. Zo wordt de Co
 
 ```{r demobyuserstatus, echo=FALSE, results="asis", tab.cap = "Demografische kenmerken naar gebruikersstatus"} 
 tab.noby <- tableby(user_status ~ geslacht + lftdcat + sted_simplified + belbezig_simplified  + oplmet_simplified + burgstat_simplified + nettocat_simplified + woonvorm + Riskgroup_contact, cat.stats = "countrowpct", data=data_currentvsneveruser) # cat.stats = "countrowpct") for row percentages in stead of column percentages
-summary(tab.noby, pfootnote=TRUE)
+summary(tab.noby, pfootnote=TRUE, title="(\\#tab:mytableby2) Demografische kenmerken naar gebruikersstatus")
 ```
 
 ##### Gezondheidsmotivatie en algemene opvattingen over het coronavirus naar gebruikersstatus
@@ -4679,11 +4677,16 @@ ft_out
 
 \newpage
 # Conclusie en aanbevelingen
+## Demografie
+Opvallend is dat hoger opgeleiden vaker de CoronaMelder gebruiken dan lager opgeleiden. Hiermee in lijn is de bevinding dat het percentage gebruikers het hoogst was bij de mensen met hogere inkomens (boven 3501 euro).  
+Daarnaast is het gebruik van de CoronaMelder het laagst in de jongste leeftijdscategorie (tot 24 jaar).   
+
 ## Verwachte effectiviteit  
 Verwachting effectiviteit goed. Wel wordt verwacht dat het pas effectief is als een zeer hoog percentage van de populatie de CoronaMelder gebruikt.   
 
 ## Sociale invloeden
-Zeer lage descriptieve en injunctieve normen mbt. mensen in hun directe omgeving. Redelijk goede inschatting van adoptie in de hele populatie.   
+Zeer lage descriptieve en injunctieve normen mbt. mensen in hun directe omgeving. Redelijk goede inschatting van adoptie in de hele populatie. Mensen denken zich te bevinden in een groep waarin niet veel anderen de CoronaMelder gebruiken. 
+Onzichtbaarheid van gebruik (itt tot mondkapjes). 
 
 ## Schijnveiligheid  
 
@@ -4697,7 +4700,7 @@ Qua intentie wel, qua gedrag niet.
 # Referenties
 \newpage
 # Appendix
-## Additionele resulaten: Demografie naar gebruikersstatus - Paarsgewijze vergelijkingen
+## Additionele resultaten: Demografie naar gebruikersstatus - Paarsgewijze vergelijkingen
 Vergelijking subgroepen met ruwe p-waarden en FDR-gecorrigeerde p-waarden. 
 ```{r , echo=FALSE}
 ### Determine all pairwise comparisons for the demgraphic variables the chi square indicated that the variable was not indepnedent from use status. 
