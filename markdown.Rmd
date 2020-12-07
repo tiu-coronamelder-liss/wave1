@@ -1616,6 +1616,36 @@ ggdraw(aligned[[2]])
 Relevant om te weten is of de mensen die de CoronaMelder momenteel gebruiken, mensen zijn die zich in het algemeen al beter aan de gedragsregels houden. 
 
 Chi kwadraat toetsen zijn uitgevoerd om te bepalen of het totaal aandeel respondenten dat het eens  (een beetje, eens, helemaal mee eens) is met de stellingen verschilt tussen de huidige gebruikers en degenen die de CoronaMelder nooit gebruikt hebben.  
+
+```{r chiintentionhandwashingusernonuser, echo=FALSE}
+# First calculate a proportion for the variable. 
+data$Intention_AdherenceGeneralMeasures_handwashing_agree[(data$Intention_AdherenceGeneralMeasures_handwashing == 'Helemaal mee eens'| data$Intention_AdherenceGeneralMeasures_handwashing == 'Mee eens'| data$Intention_AdherenceGeneralMeasures_handwashing == 'Een beetje mee eens')] <- "Totaal eens"
+data$Intention_AdherenceGeneralMeasures_handwashing_agree[(data$Intention_AdherenceGeneralMeasures_handwashing == 'Neutraal'| data$Intention_AdherenceGeneralMeasures_handwashing == 'Een beetje oneens'| data$Intention_AdherenceGeneralMeasures_handwashing == 'Oneens'| data$Intention_AdherenceGeneralMeasures_handwashing == 'Helemaal mee oneens')] <- "Neutraal, niet mee eens" 
+# Select the data: Only compare the current users and never users
+data_selected = data[data$nomem_encr %in% data_currentvsneveruser$nomem_encr, ]
+data_selected$user_status = droplevels(data_selected$user_status)
+
+# Convert into a table that can be used for the chi square test
+chisq.table = table(data_selected$Intention_AdherenceGeneralMeasures_handwashing_agree, data_selected$user_status)
+chisqtest = chisq.test(chisq.table) 
+```
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status == 'Gebruiker'& Intention_AdherenceGeneralMeasures_handwashing_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf de handen regelmatig te wassen vergeleken met degenen die de app nooit hebben gebruikt (`r round((nrow(filter(data_selected, (user_status == 'Niet gebruiker' & Intention_AdherenceGeneralMeasures_handwashing_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Niet gebruiker'))))*100, digits = 1)`%).  
+
+```{r chibehaviorhandwashingusernonuser, echo=FALSE}
+# First calculate a proportion for the variable. 
+data$Behavior_AdherenceGeneralMeasures_handwashing_agree[(data$Behavior_AdherenceGeneralMeasures_handwashing == 'Vaak'| data$Behavior_AdherenceGeneralMeasures_handwashing == 'Meestal'| data$Behavior_AdherenceGeneralMeasures_handwashing == 'Altijd')] <- "Totaal eens"
+data$Behavior_AdherenceGeneralMeasures_handwashing_agree[(data$Behavior_AdherenceGeneralMeasures_handwashing == 'Nooit'| data$Behavior_AdherenceGeneralMeasures_handwashing == 'Zelden'| data$Behavior_AdherenceGeneralMeasures_handwashing == 'Soms'| data$Behavior_AdherenceGeneralMeasures_handwashing == 'Regelmatig')] <- "Neutraal, niet mee eens" 
+# Select the data: Only compare the current users and never users
+data_selected = data[data$nomem_encr %in% data_currentvsneveruser$nomem_encr, ]
+data_selected$user_status = droplevels(data_selected$user_status)
+
+# Convert into a table that can be used for the chi square test
+chisq.table = table(data_selected$Behavior_AdherenceGeneralMeasures_handwashing_agree, data_selected$user_status)
+chisqtest = chisq.test(chisq.table) 
+```
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status == 'Gebruiker'& Behavior_AdherenceGeneralMeasures_handwashing_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf vaak, meestal of altijd de handen te wassen met water en zeep vergeleken met degenen die de app nooit hebben gebruikt (`r round((nrow(filter(data_selected, (user_status == 'Niet gebruiker' & Behavior_AdherenceGeneralMeasures_handwashing_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Niet gebruiker'))))*100, digits = 1)`%).  
+
+
 ```{r chiintentiondistancingusernonuser, echo=FALSE}
 # First calculate a proportion for the variable. 
 data$Intention_AdherenceGeneralMeasures_distance_agree[(data$Intention_AdherenceGeneralMeasures_distance == 'Helemaal mee eens'| data$Intention_AdherenceGeneralMeasures_distance == 'Mee eens'| data$Intention_AdherenceGeneralMeasures_distance == 'Een beetje mee eens')] <- "Totaal eens"
@@ -1643,6 +1673,35 @@ chisq.table = table(data_selected$Behavior_AdherenceGeneralMeasures_distance_agr
 chisqtest = chisq.test(chisq.table) 
 ```
 De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status == 'Gebruiker'& Behavior_AdherenceGeneralMeasures_distance_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf vaak, meestal of altijd 1.5 meter afstand te houden van mensen buiten hun huishouden vergeleken met degenen die de app nooit hebben gebruikt (`r round((nrow(filter(data_selected, (user_status == 'Niet gebruiker' & Behavior_AdherenceGeneralMeasures_distance_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Niet gebruiker'))))*100, digits = 1)`%).  
+
+```{r chiintentionbusyusernonuser, echo=FALSE}
+# First calculate a proportion for the variable. 
+data$Intention_AdherenceGeneralMeasures_avoidbusyplaces_agree[(data$Intention_AdherenceGeneralMeasures_avoidbusyplaces == 'Helemaal mee eens'| data$Intention_AdherenceGeneralMeasures_avoidbusyplaces == 'Mee eens'| data$Intention_AdherenceGeneralMeasures_avoidbusyplaces == 'Een beetje mee eens')] <- "Totaal eens"
+data$Intention_Intention_AdherenceGeneralMeasures_avoidbusyplaces_agree[(data$Intention_AdherenceGeneralMeasures_avoidbusyplaces == 'Neutraal'| data$Intention_AdherenceGeneralMeasures_avoidbusyplaces == 'Een beetje oneens'| data$Intention_AdherenceGeneralMeasures_avoidbusyplaces == 'Oneens'| data$Intention_AdherenceGeneralMeasures_avoidbusyplaces == 'Helemaal mee oneens')] <- "Neutraal, niet mee eens" 
+# Select the data: Only compare the current users and never users
+data_selected = data[data$nomem_encr %in% data_currentvsneveruser$nomem_encr, ]
+data_selected$user_status = droplevels(data_selected$user_status)
+
+# Convert into a table that can be used for the chi square test
+chisq.table = table(data_selected$Intention_AdherenceGeneralMeasures_avoidbusyplaces_agree, data_selected$user_status)
+chisqtest = chisq.test(chisq.table) 
+```
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status == 'Gebruiker'& Intention_AdherenceGeneralMeasures_avoidbusyplaces_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf de intentie te hebben om drukke plekken te vermijden vergeleken met degenen die de app nooit hebben gebruikt (`r round((nrow(filter(data_selected, (user_status == 'Niet gebruiker' & Intention_AdherenceGeneralMeasures_avoidbusyplaces_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Niet gebruiker'))))*100, digits = 1)`%).  
+
+```{r chibehaviorbusyusernonuser, echo=FALSE}
+# First calculate a proportion for the variable. 
+data$Behavior_AdherenceGeneralMeasures_avoidbusyplaces_agree[(data$Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Vaak'| data$Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Meestal'| data$Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Altijd')] <- "Totaal eens"
+data$Behavior_AdherenceGeneralMeasures_avoidbusyplaces_agree[(data$Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Nooit'| data$Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Zelden'| data$Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Soms'| data$Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Regelmatig')] <- "Neutraal, niet mee eens" 
+# Select the data: Only compare the current users and never users
+data_selected = data[data$nomem_encr %in% data_currentvsneveruser$nomem_encr, ]
+data_selected$user_status = droplevels(data_selected$user_status)
+
+# Convert into a table that can be used for the chi square test
+chisq.table = table(data_selected$Behavior_AdherenceGeneralMeasures_avoidbusyplaces_agree, data_selected$user_status)
+chisqtest = chisq.test(chisq.table) 
+```
+De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status == 'Gebruiker'& Behavior_AdherenceGeneralMeasures_avoidbusyplaces_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf vaak, meestal of altijd op plekken te zijn geweest die eigenlijk te druk waren om de 1.5 meter afstand te houden, vergeleken met degenen die de app nooit hebben gebruikt (`r round((nrow(filter(data_selected, (user_status == 'Niet gebruiker' & Behavior_AdherenceGeneralMeasures_avoidbusyplaces_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status == 'Niet gebruiker'))))*100, digits = 1)`%).  
+
 
 ```{r chiIntentionadherencequarantaine, echo=FALSE}
 # First calculate a proportion for the variable. 
