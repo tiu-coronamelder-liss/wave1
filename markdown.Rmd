@@ -1,7 +1,7 @@
 ---
-title: "CoronaMelder rapportage Wave 1 (preliminaire status: resultaten onder voorbehoud)"
-author: "Nynke van der Laan, Nadine van der Waal, Jan de Wit"
-date: "06/12/2020"
+title: ""
+author: ""
+date: ""
 output: 
   bookdown::word_document2:
     toc: true
@@ -9,10 +9,6 @@ output:
     reference_docx: markdown_template.docx
 toc-title: "Inhoudsopgave"    
 ---
-```{r uvtlogo, echo=FALSE, fig.cap="my caption", out.width = '90%'}
-knitr::include_graphics("images/uvtlogo.jpg")
-```
-
 ```{r setup, include=FALSE}
 rm(list = ls()) #Clear workspace
 knitr::opts_chunk$set(echo = TRUE)
@@ -46,7 +42,6 @@ library(rcompanion) # For the posthoc chi square tests
 library(labelled)
 
 ################ Settings and variables for plotting, images, etc. #######################
-### Full page breaks are added with ###### Page break (as described in: https://datascienceplus.com/r-markdown-how-to-insert-page-breaks-in-a-ms-word-document/) 
 ### Set up color palettes for graphs
 my_palette5 <- brewer.pal(11,"RdYlGn")[c(4, 5, 6, 7, 8, 9, 10)]
 my_palette7 <- brewer.pal(11,"RdYlGn")[c(9,8,7,6,5,4,3)]
@@ -206,7 +201,9 @@ user_totals[4] <- sum(data$user_status_intention == "Nooit gebruikt en neutraal"
 user_totals[5] <- sum(data$user_status_intention == "Nooit gebruikt en wel van plan")
 
 ```
-
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
 # Samenvatting {.unlisted .unnumbered}
 ## Inleiding {-}
 ## Methode {.unlisted .unnumbered}
@@ -214,12 +211,17 @@ user_totals[5] <- sum(data$user_status_intention == "Nooit gebruikt en wel van p
 ## Conclusie {.unlisted .unnumbered}
 ## Aanbevelingen {.unlisted .unnumbered}
 
-###### Newpage 
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
 
 # Achtergrond
 De CoronaMelder app is ontwikkeld door het ministerie van Volksgezondheid, Welzijn en Sport en wordt nu landelijk gebruikt in de strijd tegen het coronavirus. Het doel van dit onderzoek is om, over de tijd, de adoptie van de app en de (intentie tot) opvolging van de in de app gegeven adviezen te onderzoeken en te verklaren.
 
-###### Newpage 
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
 
 # Methoden  
 
@@ -264,7 +266,9 @@ Datum van dataverzameling: 19 oktober 2020 – 1 november 2020.
 
 In de resultaten sectie worden de uitkomsten getoond van de 1900 respondenten waarbij de data compleet was. Ook word er een overzicht van de karakteristieken van de steekproef getoond. In de bijlage kan een vergelijking van de demografische samenstelling van de steekproef in vergelijking met die van de Nederlandse bevolking (op basis van gegevens van het CBS) gevonden worden. 
 
-###### Newpage 
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
 
 # Resultaten
 ## Karakteristieken van de steekproef
@@ -2325,7 +2329,7 @@ Er is ook gevraagd hoeveel procent van de Nederlandse bevolking volgens de respo
 
 ```{r, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Percentage bevolking dat de CoronaMelder moet gebruiken om verspreiding van het virus tegen te gaan"}
 # Beliefs_ResponseefficasyOther
-ggplot(data=data, aes(x = Beliefs_ResponseefficasyOther)) + theme_bw() + xlab(paste(names(table(data$Beliefs_ResponseefficasyOther)))) + ylab(" ") + xlab("Hoeveel procent van de Nederlandse bevolking zou volgens u de CoronaMelder moeten gebruiken om de verspreiding van het coronavirus tegen te gaan?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(,axis.title=element_text(size=10))
+ggplot(data=data, aes(x = Beliefs_ResponseefficasyOther)) + theme_bw() + xlab(paste(names(table(data$Beliefs_ResponseefficasyOther)))) + ylab(" ") + xlab(" ") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(,axis.title=element_text(size=10))
 
 ```
 
@@ -5113,7 +5117,7 @@ ft_out
 #### Intentie tot opvolgen adviezen gegeven in de melding - alleen huidig gebruikers
 Dezelfde bepalingen zijn ook gedaan in alleen de subsample (n = `r nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))`) die momenteel de CoronaMelder gebruikt. 
 
-``` {r adherencenotificationsnosympcurrentusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot opvolgen adviezen zonder symptomen - alleen huidig gebruikers", tab.cap="Intentie tot opvolgen adviezen zonder symptomen - alleen huidig gebruikers"}
+``` {r adherencenotificationsnosympcurrentusers, message=FALSE, echo=FALSE, fig.width=7, fig.height=2.2, fig.cap="Intentie tot opvolgen adviezen zonder symptomen - alleen huidig gebruikers", tab.cap="Intentie tot opvolgen adviezen zonder symptomen - alleen huidig gebruikers"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("AdherenceNotificationMeasuresNosymptoms_Test", 
                         "AdherenceNotificationMeasuresNosymptoms_Quarantaine", 
@@ -5128,7 +5132,7 @@ graph_questionlabels = c("Bellen om coronatest aan te vragen",
 # However, for without symptoms, nobody answered "Ik zou de CoronaMelder app niet gebruiken". Therefore, the following color palette should be used:
 color_palette = my_palette7
 # Order of the question categories: first = most green, last = most red
-graph_answercategories = c("Ik zou de CoronaMelder app niet gebruiken", "Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
+graph_answercategories = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
 
 # Create a dataframe for the plot
 # Select only the current users
@@ -5781,6 +5785,123 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 ```
 
+#### Intentie tot doorgeven GGD-sleutel na positieve test - alleen huidig gebruikers
+Dezelfde bepalingen zijn ook gedaan in alleen de subsample (n = `r nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))`) die momenteel de CoronaMelder gebruikt. 
+
+``` {r sharekeyscurrentusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot doorgeven GGD-sleutel na positieve test - alleen huidig gebruikers", tab.cap="Intentie tot doorgeven GGD-sleutel na positieve test - alleen huidig gebruikers"}
+# Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
+graph_variablenames = c("Intention_reportinfection")
+graph_questionlabels = c("Als ik besmet ben, ben ik van plan om dit door te geven via de CoronaMelder app"); 
+
+# These questions have 8 answer categories: Helemaal mee eens - Helemaal mee oneens and no use. 
+# However, for without symptoms, nobody answered "Ik zou de CoronaMelder app niet gebruiken". Therefore, the following color palette should be used:
+color_palette = my_palette7
+# Order of the question categories: first = most green, last = most red
+graph_answercategories = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
+
+# Create a dataframe for the plot
+# Select only the current users
+data_selected = data[ which(data$Behavior_UTAUT=='Ik gebruik de CoronaMelder app op dit moment'
+), ]
+#First only keep the variables you wish to keep. Note: nomem_enc is the participant id
+data_graph_wideformat = select(data_selected, nomem_encr, all_of(graph_variablenames))
+
+#Convert it to long format
+data_graph_longformat = melt(data_graph_wideformat, id.vars = c('nomem_encr'), measure.vars = graph_variablenames)
+
+# Set the correct ordering of the questions (by default the first variable is placed on the bottom)
+data_graph_longformat$variable <- factor(data_graph_longformat$variable,levels = rev(graph_variablenames))
+
+# Also invert the order of the question labels (as default is that the first element of the vector is placed on the bottom)
+graph_questionlabels = rev(graph_questionlabels)
+
+# Set the correct ordering of the answer categories (by default on alphabetic order)
+data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
+
+# Create the plot
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+
+aligned <- align_plots(baseplot, theplot, align="v")
+ggdraw(aligned[[2]])
+
+# Create the table. Step 1: new data frame containing counts
+table_answercategories = rev(graph_answercategories)
+data_table = data.frame(table_answercategories)
+
+# We need one extra (empty) column label for the row with the possible values
+table_questionlabels = list()
+table_questionlabels["table_answercategories"] <- ""
+
+# We also need the 'unreversed' question labels ;)
+graph_questionlabels_unrev <- rev(graph_questionlabels)
+
+# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
+# and add the correct labels for column headings
+for(idx in 1:length(graph_variablenames)) {
+  # Add to new dataframe
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
+  
+  # Add correct mapping to column headings
+  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
+}
+
+# Sort properly -- NOTE: does not work yet?
+data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+# Build the basic table
+ft <- flextable(
+  head(data_table, n = nrow(data_table))
+)
+
+# Header labels
+ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal")
+
+# Percentages and totals
+for(colname in colnames(data_table)) {
+  if(colname != "table_answercategories") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
+    
+    # Add total to footer
+    tablecolumn = paste("data_table$", colname)
+    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- width(ft, j = 1, width = 2)
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
+
+ft_out
+```
+
+
+
+
 ### Onbeoogde effecten: schijnveiligheid
 Een gevoel van schijnveiligheid zou kunnen optreden bij de adoptie van de CoronaMelder, wat ervoor zou kunnen zorgen dat andere maatregelen minder nodig worden geacht. Uit de antwoorden op de stelling of men zich minder aan andere maatregelen kan houden bij het gebruik van de CoronaMelder, blijkt dat slechts een klein aandeel denkt dat dit het geval is. Het aandeel dat op deze vraag 'zeker waar' of 'misschien waar' antwoordt, is `r round((nrow(filter(data, (Beliefs_falsesecurity1 == 'Zeker waar'| Beliefs_falsesecurity1 == 'Misschien waar'))) /nrow(data))*100, digits = 1)`%. Een iets groter percentage denkt dat de CoronaMelder ervoor zorgt dat je niet besmet kunt raken (`r round((nrow(filter(data, (Beliefs_falsesecurity2 == 'Zeker waar'| Beliefs_falsesecurity2 == 'Misschien waar'))) /nrow(data))*100, digits = 1)`%).
 
@@ -5899,8 +6020,10 @@ ft_out
 
 
 
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
 
-\newpage
 # Conclusie en aanbevelingen
 ## Demografie
 Opvallend is dat hoger opgeleiden vaker de CoronaMelder gebruiken dan lager opgeleiden. Hiermee in lijn is de bevinding dat het percentage gebruikers het hoogst was bij de mensen met hogere inkomens (boven 3501 euro).  
@@ -5930,11 +6053,17 @@ Lijkt niet waarschijnlijk.
 
 Qua intentie wel, qua gedrag niet.   
 
-###### Newpage 
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+ 
 
 # Referenties
 
-###### Newpage 
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
 
 # Appendix
 ## Additionele resultaten: Demografie naar gebruikersstatus - Paarsgewijze vergelijkingen
@@ -5982,7 +6111,10 @@ pairwiseNominalIndependence(Matriz,
                             chisq  = TRUE,
                             method = "fdr")
 ```
-###### Newpage 
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+ 
 
 # Bijlagen
 Als bijlage kunt u bij dit rapport vinden:
