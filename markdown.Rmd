@@ -14,14 +14,10 @@ knitr::include_graphics("images/uvtlogo.jpg")
 ```
 
 ```{r setup, include=FALSE}
-# All decimals are commas instead of periods (Dutch formatting style)
-# Does not work for tables -- leaving it as period for consistency
-#options(OutDec=",")
-
+rm(list = ls()) #Clear workspace
 knitr::opts_chunk$set(echo = TRUE)
 
-rm(list = ls()) #Clear workspace
-
+##### Load packages
 # For importing SPSS files
 library(foreign)
 
@@ -33,32 +29,40 @@ library(dplyr)
 library(flextable)
 library(arsenal)
 
-# Various plotting stuff
+# Various plotting 
 library(ggplot2)
 library(tidyr)
 library(forcats)
 library(scales)
 library(RColorBrewer)
+library(cowplot) # for aligning ggplots vertically
 
 # For analysis and data preprocessing
 library(psy) # psy for the cronbach function
 library(reshape2) # For converting from wide to long format (function: melt)
 library(rcompanion) # For the posthoc chi square tests
 
-# For aligning ggplots vertically
-library(cowplot)
-
 # Other
 library(labelled)
 
+################ Set up variables for plotting, images, etc. #######################
+### Set up color palettes for graphs
+my_palette5 <- brewer.pal(11,"RdYlGn")[c(4, 5, 6, 7, 8, 9, 10)]
+my_palette7 <- brewer.pal(11,"RdYlGn")[c(9,8,7,6,5,4,3)]
+my_palette_nonuse = c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "RdYlGn")[c(9,8,7,6,5,4,3)])
+my_palette5true <- c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "RdYlGn")[c(6,7,8,9)])
+my_palette5blue <- c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "Blues")[c(6,5,4,3)])
+my_palette7blue <- brewer.pal(11, "Blues")[c(7,6,5,4,3,2,1)]
+
+################ Set up data preprocessing and analysis #############################
 ##### Load dataset (not included on Github)
 data_in <- read.spss('L_CoronaMelder_wave1_3p.sav', to.data.frame=TRUE, use.missings=FALSE)
 
-# Filter out the ones that didn't complete the entire survey (N = 10)
+# Filter out the respondents that did not complete the entire survey (N = 10)
 data <- data_in[!is.na(data_in$duur),]
 
-##### Preprocessing cleaning up variables
-### Drop unused levels from some particular factors. The reason to do this is that there are levels in the dataset that were not included in the current sample (for instance participants of child age)
+##### Preprocessing and cleaning up variables
+### Drop unused levels from some particular factors. The reason to do this is that there are levels in the dataset that were not included in the current sample (for instance participants of child age are present in the LISS panel but not in the representative sample of Dutch inhabitants that was included for this study)
 data$lftdcat = droplevels(data$lftdcat)
 data$belbezig = droplevels(data$belbezig)
 
@@ -93,7 +97,7 @@ data$nettocat_simplified[data$nettocat == "Dat weet ik echt niet" | data$nettoca
 data$nettocat_simplified[data$nettocat == "EUR 3501 t/m EUR 4000" | data$nettocat == "EUR 4001 t/m EUR 4500" | data$nettocat == "EUR 4501 t/m EUR 5000" | data$nettocat == "EUR 5001 t/m EUR 7500" | data$nettocat == "Meer dan EUR 7500"] <- "Meer dan EUR 3501"
 data$nettocat_simplified = factor(data$nettocat_simplified)
 
-### Add labels to variables
+### Add labels to variables of main dataset
 attr(data$geslacht,'label')  <- 'Geslacht'
 attr(data$lftdcat,'label')  <- 'Leeftijdscategorie'
 attr(data$sted_simplified,'label')  <- 'Stedelijkheid woonplaats'
@@ -104,18 +108,8 @@ attr(data$burgstat_simplified,'label')  <- 'Burgerlijke staat'
 attr(data$woonvorm,'label')  <- 'Woonvorm huishouden'
 attr(data$Riskgroup_contact,'label')  <- 'Frequentie op minder dan 1.5m van ouderen en mensen met een kwetsbare gezondheid zijn vanwege werk en/of (privé) zorgtaken'
 
-##### Set up color palettes for graphs
-my_palette5 <- brewer.pal(11,"RdYlGn")[c(4, 5, 6, 7, 8, 9, 10)]
-my_palette7 <- brewer.pal(11,"RdYlGn")[c(9,8,7,6,5,4,3)]
-
-# Custom coloring:
-my_palette_nonuse = c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "RdYlGn")[c(9,8,7,6,5,4,3)])
-my_palette5true <- c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "RdYlGn")[c(6,7,8,9)])
-my_palette5blue <- c(brewer.pal(11, "RdGy")[c(11)], brewer.pal(11, "Blues")[c(6,5,4,3)])
-my_palette7blue <- brewer.pal(11, "Blues")[c(7,6,5,4,3,2,1)]
-
 ##### Creating new variables
-## User status. 
+### User status. 
 # Of interest is the comparison of current users and current non users.  
 data$user_status[data$Behavior_UTAUT == "Ik gebruik de CoronaMelder app op dit moment"] <- "Gebruiker"
 data$user_status[data$Behavior_UTAUT == "Ik heb de CoronaMelder app nooit gebruikt"] <- "Niet gebruiker"
@@ -124,7 +118,7 @@ data$user_status[data$Behavior_UTAUT == "Ik heb de CoronaMelder app in het verle
 # Add factor
 data$user_status <- factor(data$user_status,levels = c("Gebruiker", "Niet gebruiker", "Voormalig gebruiker"))
 
-## User status and intention. 
+### User status and intention. 
 # Of interest is the comparison of current users and the non users that are neutral when it comes to intention.  
 data$user_status_intention[data$Behavior_UTAUT == "Ik gebruik de CoronaMelder app op dit moment"] <- "Gebruiker"
 data$user_status_intention[(data$Behavior_UTAUT == "Ik heb de CoronaMelder app nooit gebruikt") & (data$BI1a_UTAUT == 'Helemaal mee oneens'| data$BI1a_UTAUT == 'Oneens'| data$BI1a_UTAUT == 'Een beetje oneens')] <- "Nooit gebruikt en niet van plan"
@@ -135,6 +129,24 @@ data$user_status_intention[data$Behavior_UTAUT == "Ik heb de CoronaMelder app in
 
 # Add factor
 data$user_status_intention <- factor(data$user_status_intention,levels = c("Gebruiker", "Nooit gebruikt en niet van plan", "Nooit gebruikt en neutraal", "Nooit gebruikt en wel van plan", "Voormalig gebruiker"))
+
+### Health literacy
+# To enable a median split, labels are first recoded to numbers 
+data$HealthLiteracy1n = recode(data$HealthLiteracy1, Nooit=1, 'Af en toe'=2, Soms=3, Vaak=4,  Altijd=5)
+data$HealthLiteracy2n = recode(data$HealthLiteracy2, 'Helemaal niet'=1, 'Een klein beetje'=2, 'Een beetje'=3, 'Nogal'=4,  'Heel erg'=5)
+data$HealthLiteracy3n = recode(data$HealthLiteracy3, Nooit=1, 'Af en toe'=2, Soms=3, Vaak=4,  Altijd=5)
+
+# Since items HealtLiteracy1 and 3 are negatively phrased they will be reverse coded such that higher numbers refer to higher health literacy
+data$HealthLiteracy1nr = recode(data$HealthLiteracy1n, "1"=5, "2"=4, "3"=3, "4"=2, "5"=1) 
+data$HealthLiteracy3nr = recode(data$HealthLiteracy3n, "1"=5, "2"=4, "3"=3, "4"=2, "5"=1) 
+
+# Calculate construct and cronbach alpha (0.58 - poor). The reliability of the scale is low and based on the histogram the distribution is highly skewed; no further analysis of this variable will be done. 
+data$HealthLiteracy <- rowMeans(data[, c("HealthLiteracy1nr", "HealthLiteracy2n", "HealthLiteracy3nr")], na.rm = TRUE)
+cronbach(data[, c("HealthLiteracy1nr", "HealthLiteracy2n", "HealthLiteracy3nr")])
+#hl_avg <- mean(data$HealthLiteracy)
+#hist(data$HealthLiteracy)
+# Data splitsen hoge vs. midden. vs lage health literacy
+#data$CatHL <- cut(data$HealthLiteracy, breaks = c(0,1.333333,3.66666,5), labels = c("Laag", "Midden", "Hoog"))
 
 ##### Create new datasets
 ### Create a dataset with only the current users and never users for all analyses in which these groups are compared. 
@@ -167,26 +179,7 @@ attr(data_currentvsneveruserneutral$burgstat_simplified,'label')  <- 'Burgerlijk
 attr(data_currentvsneveruserneutral$woonvorm,'label')  <- 'Woonvorm huishouden'
 attr(data_currentvsneveruserneutral$Riskgroup_contact,'label')  <- 'Frequentie op minder dan 1.5m van ouderen en mensen met een kwetsbare gezondheid zijn vanwege werk en/of (privé) zorgtaken'
 
-
-## Health literacy
-# To enable a median split, labels are first recoded to numbers 
-data$HealthLiteracy1n = recode(data$HealthLiteracy1, Nooit=1, 'Af en toe'=2, Soms=3, Vaak=4,  Altijd=5)
-data$HealthLiteracy2n = recode(data$HealthLiteracy2, 'Helemaal niet'=1, 'Een klein beetje'=2, 'Een beetje'=3, 'Nogal'=4,  'Heel erg'=5)
-data$HealthLiteracy3n = recode(data$HealthLiteracy3, Nooit=1, 'Af en toe'=2, Soms=3, Vaak=4,  Altijd=5)
-
-# Since items HealtLiteracy1 and 3 are negatively phrased they will be reverse coded such that higher numbers refer to higher health literacy
-data$HealthLiteracy1nr = recode(data$HealthLiteracy1n, "1"=5, "2"=4, "3"=3, "4"=2, "5"=1) 
-data$HealthLiteracy3nr = recode(data$HealthLiteracy3n, "1"=5, "2"=4, "3"=3, "4"=2, "5"=1) 
-
-# Calculate construct and cronbach alpha (0.58 - poor). The reliability of the scale is low and based on the histogram the distribution is highly skewed; no further analysis of this variable will be done. 
-data$HealthLiteracy <- rowMeans(data[, c("HealthLiteracy1nr", "HealthLiteracy2n", "HealthLiteracy3nr")], na.rm = TRUE)
-cronbach(data[, c("HealthLiteracy1nr", "HealthLiteracy2n", "HealthLiteracy3nr")])
-#hl_avg <- mean(data$HealthLiteracy)
-#hist(data$HealthLiteracy)
-# Data splitsen hoge vs. midden. vs lage health literacy
-#data$CatHL <- cut(data$HealthLiteracy, breaks = c(0,1.333333,3.66666,5), labels = c("Laag", "Midden", "Hoog"))
-
-# Calculate size of user subgroups
+##### Calculate size of user subgroups
 # Lookup table for totals of different user groups
 usergroup_names = c("users", "nonusers", "nonusers_no_intention", "nonusers_neutral", "nonusers_intention")
 
@@ -214,11 +207,13 @@ user_totals[5] <- sum(data$user_status_intention == "Nooit gebruikt en wel van p
 ```
 \newpage
 # Samenvatting {.unlisted .unnumbered}
-## Inleiding {.unlisted .unnumbered}
+## Inleiding {-}
 ## Methode {.unlisted .unnumbered}
 ## Resultaten {.unlisted .unnumbered}
 ## Conclusie {.unlisted .unnumbered}
 ## Aanbevelingen {.unlisted .unnumbered}
+\newpage
+\tableofcontents
 \newpage
 # Achtergrond
 De CoronaMelder app is ontwikkeld door het ministerie van Volksgezondheid, Welzijn en Sport en wordt nu landelijk gebruikt in de strijd tegen het coronavirus. Het doel van dit onderzoek is om, over de tijd, de adoptie van de app en de (intentie tot) opvolging van de in de app gegeven adviezen te onderzoeken en te verklaren.
@@ -3497,8 +3492,8 @@ Daarnaast liet de chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(ch
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("FC1_UTAUT", 
                         "FC2_UTAUT") 
-graph_questionlabels = c("Door de CoronaMelder app te gebruiken help ik mee bij de bestrijding van het coronavirus", 
-                         "De CoronaMelder app is nuttig om ervoor te zorgen dat het coronavirus zich minder verspreidt")
+graph_questionlabels = c("Ik heb een smartphone tot mijn beschikking met toegang tot het internet waarmee ik de CoronaMelder app kan gebruiken", 
+                         "Ik heb genoeg (technische) kennis om de CoronaMelder app te gebruiken")
 
 # Which values do we want to include in the table cells?
 include_vars = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens")
@@ -4070,7 +4065,7 @@ chisqtest = chisq.test(chisq.table)
 
 De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) liet zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status_intention == 'Gebruiker'& Beliefs_notificationfear_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf het eens te zijn met de stelling dat hij/zij angstig zou worden na het ontvangen van een melding van de CoronaMelder app vergeleken met degenen die de app nooit hebben gebruikt en daarnaast aangaven neutraal te zijn in hun intentie om de CoronaMelder te gaan gebruiken (`r round((nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal' & Beliefs_notificationfear_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal'))))*100, digits = 1)`%). 
 
-```{r, echo=FALSE, tab.cap ="Sociale normen naar gebruikersstatus. Aantal en totaal percentage eens (beetje mee eens, eens, helemaal mee eens)."}
+```{r, echo=FALSE, tab.cap ="Affectieve reakties naar gebruikersstatus. Aantal en totaal percentage eens (beetje mee eens, eens, helemaal mee eens)."}
 
 # === EDIT THESE TO CUSTOMIZE TABLE ===
 
