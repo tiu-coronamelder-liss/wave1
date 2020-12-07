@@ -1,6 +1,6 @@
 ---
 title: "Evaluatie CoronaMelder Rapportage LISS panel wave 1"
-author: "Dr. ir. Nynke van der Laan, N. van der Waal, MSc, J. de Wit, PdEng"
+author: "Dr. ir. Nynke van der Laan, Nadine van der Waal, MSc, Jan de Wit, PDEng"
 date: ""
 output: 
   bookdown::word_document2:
@@ -12,6 +12,10 @@ toc-title: "Inhoudsopgave"
 ```{r setup, include=FALSE}
 rm(list = ls()) #Clear workspace
 knitr::opts_chunk$set(echo = TRUE)
+
+# Disable output of warnings to the generated doc file
+# Set to FALSE for final doc, TRUE for debugging
+knitr::opts_chunk$set(warning = TRUE)
 
 ##### Load packages
 # For importing SPSS files
@@ -333,7 +337,7 @@ ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + g
 
 
 # To check: also create the plot with variable labels
-#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 ```
 
@@ -376,12 +380,12 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-baseplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+baseplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 ggdraw(baseplot)
 
 # To check: also create the plot with variable labels
-#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 
 # Create the table. Step 1: new data frame containing counts
@@ -494,7 +498,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle(plot_title) + theme(plot.title = element_text(size=11))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle(plot_title) + theme(plot.title = element_text(size=11))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -608,7 +612,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -724,7 +728,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle(plot_title) + theme(plot.title = element_text(size=11))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle(plot_title) + theme(plot.title = element_text(size=11))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -839,13 +843,13 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # To check: also create the plot with variable labels
-#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 #table(data$Beliefs_Conspiracy1)
 
@@ -954,7 +958,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) 
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) 
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -1092,7 +1096,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -1208,7 +1212,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -1558,7 +1562,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -1604,7 +1608,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -2246,7 +2250,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -2545,13 +2549,13 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # To check: also create the plot with variable labels
-#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -2782,7 +2786,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) 
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) 
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -3020,7 +3024,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -3132,7 +3136,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -3239,7 +3243,7 @@ graph_questionlabels = rev(graph_questionlabels)
 # Set the correct ordering of the answer categories (by default on alphabetic order)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + theme(plot.title = element_text(size=11))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + theme(plot.title = element_text(size=11))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -3352,7 +3356,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -3620,7 +3624,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -3933,7 +3937,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -4206,7 +4210,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -4494,7 +4498,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -4796,10 +4800,10 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 # To check: also create the plot with variable labels
-#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -4885,7 +4889,7 @@ Aan de respondenten is gevraagd in hoeverre zij de intentie hebben om, na ontvan
 
 In figuur \@ref(fig:adherencenotificationsnosymp) is te zien dat respondenten over het algemeen de juiste intenties hebben wat betreft het opvolgen van geadviseerd gedrag wanneer men geen symptomen heeft. Zo zou ruim twee derde thuisblijven zolang geadviseerd (`r round((nrow(filter(data, (AdherenceNotificationMeasuresNosymptoms_Quarantaine == 'Helemaal mee eens'| AdherenceNotificationMeasuresNosymptoms_Quarantaine == 'Mee eens'| AdherenceNotificationMeasuresNosymptoms_Quarantaine == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%), en geen bezoek ontvangen (`r round((nrow(filter(data, (AdherenceNotificationMeasuresNoSymptoms_Visits == 'Helemaal mee eens'| AdherenceNotificationMeasuresNoSymptoms_Visits == 'Mee eens'| AdherenceNotificationMeasuresNoSymptoms_Visits == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%). Iets meer dan één vierde geeft aan een coronatest aan te zullen vragen (`r round((nrow(filter(data, (AdherenceNotificationMeasuresNosymptoms_Test == 'Helemaal mee eens'| AdherenceNotificationMeasuresNosymptoms_Test == 'Mee eens'| AdherenceNotificationMeasuresNosymptoms_Test == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%) of de huisarts te bellen (`r round((nrow(filter(data, (AdherenceNotificationMeasuresNosymptoms_CallGP == 'Helemaal mee eens'| AdherenceNotificationMeasuresNosymptoms_CallGP == 'Mee eens'| AdherenceNotificationMeasuresNosymptoms_CallGP == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%).
 
-``` {r adherencenotificationsnosymp, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot opvolgen adviezen zonder symptomen", tab.cap="Intentie tot opvolgen adviezen zonder symptomen"}
+``` {r adherencenotificationsnosymp, echo=FALSE, fig.width=7, fig.height=2.5, fig.cap="Intentie tot opvolgen adviezen zonder symptomen", tab.cap="Intentie tot opvolgen adviezen zonder symptomen"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("AdherenceNotificationMeasuresNosymptoms_Test", 
                         "AdherenceNotificationMeasuresNosymptoms_Quarantaine", 
@@ -4919,7 +4923,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -5001,7 +5005,7 @@ ft_out
 
 Figuur \@ref(fig:adherencenotificationssympt) laat zien dat respondenten over het algemeen ook de juiste intenties hebben wanneer men wel symptomen heeft. Van de respondenten geeft `r round((nrow(filter(data, (AdherenceNotificationMeasuresSymptoms_Test == 'Helemaal mee eens'| AdherenceNotificationMeasuresSymptoms_Test == 'Mee eens'| AdherenceNotificationMeasuresSymptoms_Test == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`% aan te bellen voor een coronatest, `r round((nrow(filter(data, (AdherenceNotificationMeasuresSymptoms_Quarantaine == 'Helemaal mee eens'| AdherenceNotificationMeasuresSymptoms_Quarantaine == 'Mee eens'| AdherenceNotificationMeasuresSymptoms_Quarantaine == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`% aan thuis te blijven zolang geadviseerd, en `r round((nrow(filter(data, (AdherenceNotificationMeasuresSymptoms_Visits == 'Helemaal mee eens'| AdherenceNotificationMeasuresSymptoms_Visits == 'Mee eens'| AdherenceNotificationMeasuresSymptoms_Visits == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%. Toch geeft ook nog bijna de helft aan de huisarts te zullen bellen (`r round((nrow(filter(data, (AdherenceNotificationMeasuresSymptoms_CallGP == 'Helemaal mee eens'| AdherenceNotificationMeasuresSymptoms_CallGP == 'Mee eens'| AdherenceNotificationMeasuresSymptoms_CallGP == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%).
 
-```{r adherencenotificationssympt, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot opvolgen adviezen met symptomen", tab.cap="Intentie tot opvolgen adviezen met symptomen"}
+```{r adherencenotificationssympt, echo=FALSE, fig.width=7, fig.height=2.5, fig.cap="Intentie tot opvolgen adviezen met symptomen", tab.cap="Intentie tot opvolgen adviezen met symptomen"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("AdherenceNotificationMeasuresSymptoms_Test", 
                         "AdherenceNotificationMeasuresSymptoms_Quarantaine", 
@@ -5034,7 +5038,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -5154,7 +5158,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -5235,7 +5239,7 @@ ft_out
 ```
 
 
-```{r adherencenotificationssymptcurrentusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot opvolgen adviezen met symptomen - alleen huidig gebruikers", tab.cap="Intentie tot opvolgen adviezen met symptomen - alleen huidig gebruikers"}
+```{r adherencenotificationssymptcurrentusers, echo=FALSE, fig.width=7, fig.height=2.5, fig.cap="Intentie tot opvolgen adviezen met symptomen - alleen huidig gebruikers", tab.cap="Intentie tot opvolgen adviezen met symptomen - alleen huidig gebruikers"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("AdherenceNotificationMeasuresSymptoms_Test", 
                         "AdherenceNotificationMeasuresSymptoms_Quarantaine", 
@@ -5271,7 +5275,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -5391,13 +5395,13 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle("Ik ben in staat om...") + theme(plot.title = element_text(size=11))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle("Ik ben in staat om...") + theme(plot.title = element_text(size=11))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # To check: also create the plot with variable labels
-#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 # Create the table. Step 1: new data frame containing counts
 table_answercategories = rev(graph_answercategories)
@@ -5504,7 +5508,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle("Het heeft voor mij persoonlijke voordelen om...") + theme(plot.title = element_text(size=11))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle("Het heeft voor mij persoonlijke voordelen om...") + theme(plot.title = element_text(size=11))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -5612,7 +5616,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle("Het heeft voor mij persoonlijke nadelen om...") + theme(plot.title = element_text(size=11))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8)) + ggtitle("Het heeft voor mij persoonlijke nadelen om...") + theme(plot.title = element_text(size=11))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -5686,7 +5690,7 @@ ft_out
 ### Intentie tot doorgeven GGD-sleutel na positieve test
 Als iemand positief is getest op het coronavirus kan men dit daarna via de app laten weten door de GGD-sleutel door te geven aan de GGD medewerker. Dan waarschuwt de app weer mensen bij wie de positief gesteste persoon in de buurt is geweest. Van de respondenten heeft `r round((nrow(filter(data, (Intention_reportinfection == 'Helemaal mee eens'| Intention_reportinfection == 'Mee eens'| Intention_reportinfection == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%  de intentie om de GGD-sleutel door te geven. 
 
-```{r, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot doorgeven GGD-sleutel", tab.cap="Intentie tot doorgeven GGD-sleutel"}
+```{r, echo=FALSE, fig.width=7, fig.height=2.5, fig.cap="Intentie tot doorgeven GGD-sleutel", tab.cap="Intentie tot doorgeven GGD-sleutel"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Intention_reportinfection")
@@ -5714,7 +5718,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette_nonuse) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=my_palette_nonuse, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -5819,7 +5823,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
@@ -5936,7 +5940,7 @@ graph_questionlabels = rev(graph_questionlabels)
 data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
 
 # Create the plot
-theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+theplot <- ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
