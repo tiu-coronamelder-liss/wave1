@@ -45,7 +45,8 @@ library(rcompanion) # For the posthoc chi square tests
 # Other
 library(labelled)
 
-################ Set up variables for plotting, images, etc. #######################
+################ Settings and variables for plotting, images, etc. #######################
+### Full page breaks are added with ###### Page break (as described in: https://datascienceplus.com/r-markdown-how-to-insert-page-breaks-in-a-ms-word-document/) 
 ### Set up color palettes for graphs
 my_palette5 <- brewer.pal(11,"RdYlGn")[c(4, 5, 6, 7, 8, 9, 10)]
 my_palette7 <- brewer.pal(11,"RdYlGn")[c(9,8,7,6,5,4,3)]
@@ -205,20 +206,21 @@ user_totals[4] <- sum(data$user_status_intention == "Nooit gebruikt en neutraal"
 user_totals[5] <- sum(data$user_status_intention == "Nooit gebruikt en wel van plan")
 
 ```
-\newpage
+
 # Samenvatting {.unlisted .unnumbered}
 ## Inleiding {-}
 ## Methode {.unlisted .unnumbered}
 ## Resultaten {.unlisted .unnumbered}
 ## Conclusie {.unlisted .unnumbered}
 ## Aanbevelingen {.unlisted .unnumbered}
-\newpage
-\tableofcontents
-\newpage
+
+###### Newpage 
+
 # Achtergrond
 De CoronaMelder app is ontwikkeld door het ministerie van Volksgezondheid, Welzijn en Sport en wordt nu landelijk gebruikt in de strijd tegen het coronavirus. Het doel van dit onderzoek is om, over de tijd, de adoptie van de app en de (intentie tot) opvolging van de in de app gegeven adviezen te onderzoeken en te verklaren.
-\newpage  
-  
+
+###### Newpage 
+
 # Methoden  
 
 ## Onderzoeksopzet  
@@ -262,7 +264,7 @@ Datum van dataverzameling: 19 oktober 2020 – 1 november 2020.
 
 In de resultaten sectie worden de uitkomsten getoond van de 1900 respondenten waarbij de data compleet was. Ook word er een overzicht van de karakteristieken van de steekproef getoond. In de bijlage kan een vergelijking van de demografische samenstelling van de steekproef in vergelijking met die van de Nederlandse bevolking (op basis van gegevens van het CBS) gevonden worden. 
 
-\newpage
+###### Newpage 
 
 # Resultaten
 ## Karakteristieken van de steekproef
@@ -577,7 +579,7 @@ graph_variablenames = c("Behavior_AdherenceGeneralMeasures_quarantaine")
 graph_questionlabels = c("Bent u, toen u deze klachten had, naar buiten geweest?"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
-color_palette = my_palette7
+color_palette = my_palette7blue
 # Order of the question categories: first = most green, last = most red # Check if the answer categories match with the codebook (e.g, sometimes also 'weet ik niet is one of the answeroptions')
 graph_answercategories = c("Nooit", "Zelden", "Soms", "Regelmatig", "Vaak", "Meestal", "Altijd"); 
 
@@ -2885,8 +2887,6 @@ chisqtest = chisq.test(chisq.table)
 Daarnaast liet de chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statistic, digits = 2)`, p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`) zien dat er `r if(chisqtest$p.value > 0.05){"g"}`een significant verschil was in het percentage gebruikers (`r round((nrow(filter(data_selected, (user_status_intention == 'Gebruiker'& Beliefs_benefiteconomic_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Gebruiker'))))*100, digits = 1)`%) dat aangaf het eens te zijn met de stelling dat gebruik van de CoronaMelder de Nederlandse economie helpt, vergeleken met degenen die de app nooit hebben gebruikt en daarnaast aangaven neutraal te zijn in hun intentie om de CoronaMelder te gaan gebruiken (`r round((nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal' & Beliefs_benefiteconomic_agree == 'Totaal eens'))) /nrow(filter(data_selected, (user_status_intention == 'Nooit gebruikt en neutraal'))))*100, digits = 1)`%). 
 
 
-p `r ifelse(chisqtest$p.value < 0.001, "<0.001", paste("=", round(chisqtest$p.value, digits = 3)))`)
-
 ```{r, echo=FALSE, tab.cap ="Maatschappelijke gevolgen gebruik CoronaMelder naar gebruikersstatus. Aantal en totaal percentage eens (beetje mee eens, eens, helemaal mee eens)."}
 
 # === EDIT THESE TO CUSTOMIZE TABLE ===
@@ -3595,7 +3595,7 @@ graph_questionlabels = c("Het heeft voor mij persoonlijke voordelen om de Corona
                          "Ik voel me verplicht om de CoronaMelder te gebruiken"); 
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
-color_palette = my_palette7
+color_palette = my_palette7blue
 # Order of the question categories: first = most green, last = most red # Check if the answer categories match with the codebook (e.g, sometimes also 'weet ik niet is one of the answeroptions')
 graph_answercategories = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens", "Neutraal", "Een beetje oneens", "Oneens", "Helemaal mee oneens"); 
 
@@ -5930,9 +5930,12 @@ Lijkt niet waarschijnlijk.
 
 Qua intentie wel, qua gedrag niet.   
 
-\newpage
+###### Newpage 
+
 # Referenties
-\newpage
+
+###### Newpage 
+
 # Appendix
 ## Additionele resultaten: Demografie naar gebruikersstatus - Paarsgewijze vergelijkingen
 Vergelijking subgroepen met ruwe p-waarden en FDR-gecorrigeerde p-waarden. 
@@ -5979,6 +5982,8 @@ pairwiseNominalIndependence(Matriz,
                             chisq  = TRUE,
                             method = "fdr")
 ```
+###### Newpage 
+
 # Bijlagen
 Als bijlage kunt u bij dit rapport vinden:
 - Vragenlijst wave 1
