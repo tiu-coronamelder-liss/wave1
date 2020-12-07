@@ -1,6 +1,6 @@
 ---
-title: ""
-author: ""
+title: "Evaluatie CoronaMelder Rapportage LISS panel wave 1"
+author: "Dr. ir. Nynke van der Laan, N. van der Waal, MSc, J. de Wit, PdEng"
 date: ""
 output: 
   bookdown::word_document2:
