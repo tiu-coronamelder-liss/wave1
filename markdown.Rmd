@@ -1292,7 +1292,7 @@ Het percentages gebruikers was niet gelijk verdeeld over alle leeftijdscategorie
 
 Nog een demografische variabele die samenhing met gebruik was opleidingsniveau. Bij de hoger opgeleiden (ho en wo) was het percentage gebruikers het hoogst. Bij mensen die aleen basisonderwijs of vmbo hebben gevolgd was dit percentage het laagst. Ook netto maandkomen hing samen met gebruik mensen die maandelijks meer dan 3501 eur netto verdienen gebruiken de CoronaMelder het vaakst terwijl dit percentage bij mensen met een lager inkomen een stuk lager is. 
 
-Ook burgerlijke staat hing samen met gebruik van de CoronaMelder. Zo wordt de CoronMelder minder vaak gebruikt door weduwen en weduwnaars en het vaakst door gehuwden. 
+Ook burgerlijke staat hing samen met gebruik van de CoronaMelder. Zo wordt de CoronaMelder minder vaak gebruikt door weduwen en weduwnaars en het vaakst door gehuwden. 
 
 
 ```{r demobyuserstatus, echo=FALSE, results="asis", tab.cap = "Demografische kenmerken naar gebruikersstatus"} 
