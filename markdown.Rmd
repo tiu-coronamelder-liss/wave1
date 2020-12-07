@@ -7,7 +7,12 @@ output:
     toc: true
     toc_depth: 3
     reference_docx: markdown_template.docx
+toc-title: "Inhoudsopgave"    
 ---
+```{r uvtlogo, echo=FALSE, fig.cap="my caption", out.width = '90%'}
+knitr::include_graphics("images/uvtlogo.jpg")
+```
+
 ```{r setup, include=FALSE}
 # All decimals are commas instead of periods (Dutch formatting style)
 # Does not work for tables -- leaving it as period for consistency
