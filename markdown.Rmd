@@ -5086,125 +5086,11 @@ ft_out
 ## Effecten
 ### Meldingen en reacties op adviezen gegeven in de melding
 
-```{r adherenceappnotification, echo=FALSE, eval = FALSE, fig.width=7, fig.height=2, fig.cap="Thuisblijven na melding"}
-
-#KLOPT NOG NIET!!! NAs staan er nog in
-# Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
-graph_variablenames = c("Notification_behavior_quarantaine")
-graph_questionlabels = c("Bent u nadat u deze melding(en) kreeg zo lang thuisgebleven als de melding adviseert?"); 
-
-# These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
-color_palette = my_palette7
-# Order of the question categories: first = most green, last = most red # Check if the answer categories match with the codebook (e.g, sometimes also 'weet ik niet is one of the answeroptions')
-graph_answercategories = c("Altijd", "Meestal", "Vaak", "Regelmatig", "Soms", "Zelden", "Nooit"); 
-
-# Create a dataframe for the plot
-#First only keep the variables you wish to keep. Note: nomem_enc is the participant id
-data_graph_wideformat = select(data, nomem_encr, all_of(graph_variablenames))
-
-#Convert it to long format
-data_graph_longformat = melt(data_graph_wideformat, id.vars = c('nomem_encr'), measure.vars = graph_variablenames)
-
-# Set the correct ordering of the questions (by default the first variable is placed on the bottom)
-data_graph_longformat$variable <- factor(data_graph_longformat$variable,levels = rev(graph_variablenames))
-
-# Also invert the order of the question labels (as default is that the first element of the vector is placed on the bottom)
-graph_questionlabels = rev(graph_questionlabels)
-
-# Set the correct ordering of the answer categories (by default on alphabetic order)
-data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph_answercategories)
-
-# Create the plot
-#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
-
-# To check: also create the plot with variable labels
-#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
-
-# Create the table. Step 1: new data frame containing counts
-data_table = data.frame(matrix(0, ncol = 0, nrow = length(levels(data[[graph_variablenames[1]]]))))
-
-# We need one extra (empty) column label for the row with the possible values
-table_questionlabels = list()
-table_questionlabels["table_answercategories"] <- ""
-
-# We also need the 'unreversed' question labels ;)
-graph_questionlabels_unrev <- rev(graph_questionlabels)
-
-# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
-# and add the correct labels for column headings
-for(idx in 1:length(graph_variablenames)) {
-  
-  if (idx == 1) {
-    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
-  }
-  
-  # Add to new dataframe
-  data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
-  
-  # Add correct mapping to column headings
-  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
-}
-
-
-
-
-# Build the basic table
-ft <- flextable(
-  head(data_table, n = nrow(data_table))
-)
-
-# Header labels
-ft <- set_header_labels(ft, values = table_questionlabels)
-
-# Set up the footer of totals
-totals = c("Totaal")
-
-# Percentages and totals
-for(colname in colnames(data_table)) {
-  if(colname != "table_answercategories") {
-    # Add percentage to cell
-    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
-    
-    # Add total to footer
-    tablecolumn = paste("data_table$", colname)
-    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
-  }
-}
-
-# Actually add the footer with totals
-ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
-
-# Change layout of table, and footer specifically
-ft <- fontsize(ft, size = 10, part = "all")
-ft <- font(ft, fontname = "Cambria", part = "all")
-ft <- align(ft, j = -1, align = "right", part = "footer")
-ft <- padding(ft, padding = 5, part = "footer")
-
-# Basic autofit does not work well with Word, found this code below
-# but it seems to make all columns of equal size (7 inch / number of columns?)
-# Might give unwanted results, so we might want to control this per column.
-
-# Note: 7 inch is the page width in Word
-# We now divide this into 1.5 inch for the first column (the values),
-# and divide the other columns equally among the remaining 5.5 inch.
-# If you only have one or few columns, you might want to reduce the total width below:
-table_width <- 7
-
-# Set width
-ft_out <- ft %>% autofit()
-ft_out <- width(ft_out, j = 1, width = 1.5)
-ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
-
-ft_out
-
-```
-
-
 #### Ontvangen meldingen en opvolging van de adviezen
-In totaal hebben `r nrow(filter(data, (Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment' | Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer') & (notifications_1 == 'Ja, 1 keer' | notifications_1 == 'Ja, al meerdere keren')))` deelnemers die de app nu gebruikten, of gebruikt hadden, minstens één melding gehad vanuit de app; dat is `r round(nrow(filter(data, (Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment' | Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer') & (notifications_1 == 'Ja, 1 keer' | notifications_1 == 'Ja, al meerdere keren')))/nrow(filter(data, (Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment' | Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer')))*100, digits = 1)`%.Vanwege dit lage aantal zijn de vervolgvragen voor deelnemers die een melding hebben ontvangen (opvolging van de adviezen, etc.) niet verder bekeken. 
+In totaal hebben `r nrow(filter(data, (Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment' | Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer') & (notifications_1 == 'Ja, 1 keer' | notifications_1 == 'Ja, al meerdere keren')))` deelnemers die de app nu gebruikten, of gebruikt hadden, minstens één melding gehad vanuit de app; dat is `r round(nrow(filter(data, (Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment' | Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer') & (notifications_1 == 'Ja, 1 keer' | notifications_1 == 'Ja, al meerdere keren')))/nrow(filter(data, (Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment' | Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer')))*100, digits = 1)`%. Vanwege dit lage aantal zijn de vervolgvragen voor deelnemers die een melding hebben ontvangen (daadwerkelijke opvolging van de adviezen, etc.) niet verder bekeken. 
 
 #### Intentie tot opvolgen adviezen gegeven in de melding
-Aan de respondenten is gevraagd in hoeverre zij de intentie hebben om, na ontvangen van een melding, zich te houden aan de adviezen die in een melding van de CoronaMelder worden gegeven. Om dit te onderzoeken werd proefpersonen twee sitaties voorgelegd (situatie waarin men wel of geen symptomen had) en een screenshot van de melding getoond. Een belangrijke noot bij deze resultaten is dat ten tijde van deze enquete het testbeleid zo was dat men na het ontvangen van een melding alleen kon laten testen indien symptomen aawezig waren (in de appendix kan de vragenlijst inclusief screenshot van melding gevonden worden). 
+Aan de respondenten is gevraagd in hoeverre zij de intentie hebben om, na ontvangen van een melding, zich te houden aan de adviezen die in een melding van de CoronaMelder worden gegeven. Om dit te onderzoeken werd proefpersonen twee sitaties voorgelegd (situatie waarin men wel of geen symptomen had) en werd een screenshot van de melding getoond. Een belangrijke noot bij deze resultaten is dat ten tijde van deze enquete het testbeleid zo was dat men na het ontvangen van een melding alleen kon laten testen indien symptomen aawezig waren (in de appendix kan de vragenlijst inclusief screenshot van melding gevonden worden). 
 
 In figuur \@ref(fig:adherencenotificationsnosymp) is te zien dat respondenten over het algemeen de juiste intenties hebben wat betreft het opvolgen van geadviseerd gedrag wanneer men geen symptomen heeft. Zo zou ruim twee derde thuisblijven zolang geadviseerd (`r round((nrow(filter(data, (AdherenceNotificationMeasuresNosymptoms_Quarantaine == 'Helemaal mee eens'| AdherenceNotificationMeasuresNosymptoms_Quarantaine == 'Mee eens'| AdherenceNotificationMeasuresNosymptoms_Quarantaine == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%), en geen bezoek ontvangen (`r round((nrow(filter(data, (AdherenceNotificationMeasuresNoSymptoms_Visits == 'Helemaal mee eens'| AdherenceNotificationMeasuresNoSymptoms_Visits == 'Mee eens'| AdherenceNotificationMeasuresNoSymptoms_Visits == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%). Iets meer dan één vierde geeft aan een coronatest aan te zullen vragen (`r round((nrow(filter(data, (AdherenceNotificationMeasuresNosymptoms_Test == 'Helemaal mee eens'| AdherenceNotificationMeasuresNosymptoms_Test == 'Mee eens'| AdherenceNotificationMeasuresNosymptoms_Test == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%) of de huisarts te bellen (`r round((nrow(filter(data, (AdherenceNotificationMeasuresNosymptoms_CallGP == 'Helemaal mee eens'| AdherenceNotificationMeasuresNosymptoms_CallGP == 'Mee eens'| AdherenceNotificationMeasuresNosymptoms_CallGP == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%).
 
@@ -5326,7 +5212,7 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 ```
 
-Figuur \@ref(fig:adherencenotificationssympt) laat zien dat respondenten over het algemeen ook de juiste intenties hebben wanneer men wel symptomen heeft. Van de respondenten geeft `r round((nrow(filter(data, (AdherenceNotificationMeasuresSymptoms_Test == 'Helemaal mee eens'| AdherenceNotificationMeasuresSymptoms_Test == 'Mee eens'| AdherenceNotificationMeasuresSymptoms_Test == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`% aan te bellen voor een coronatest, `r round((nrow(filter(data, (AdherenceNotificationMeasuresSymptoms_Quarantaine == 'Helemaal mee eens'| AdherenceNotificationMeasuresSymptoms_Quarantaine == 'Mee eens'| AdherenceNotificationMeasuresSymptoms_Quarantaine == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`% aan thuis te blijven zolang geadviseerd, en `r round((nrow(filter(data, (AdherenceNotificationMeasuresSymptoms_Visits == 'Helemaal mee eens'| AdherenceNotificationMeasuresSymptoms_Visits == 'Mee eens'| AdherenceNotificationMeasuresSymptoms_Visits == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%. Toch geeft ook nog bijna de helft aan de huisarts te zullen bellen (`r round((nrow(filter(data, (AdherenceNotificationMeasuresSymptoms_CallGP == 'Helemaal mee eens'| AdherenceNotificationMeasuresSymptoms_CallGP == 'Mee eens'| AdherenceNotificationMeasuresSymptoms_CallGP == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%).
+Figuur \@ref(fig:adherencenotificationssympt) laat zien dat respondenten over het algemeen ook de juiste intenties hebben wanneer men wel symptomen heeft. Van de respondenten met symptomen geeft `r round((nrow(filter(data, (AdherenceNotificationMeasuresSymptoms_Test == 'Helemaal mee eens'| AdherenceNotificationMeasuresSymptoms_Test == 'Mee eens'| AdherenceNotificationMeasuresSymptoms_Test == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`% aan te bellen voor een coronatest, geeft `r round((nrow(filter(data, (AdherenceNotificationMeasuresSymptoms_Quarantaine == 'Helemaal mee eens'| AdherenceNotificationMeasuresSymptoms_Quarantaine == 'Mee eens'| AdherenceNotificationMeasuresSymptoms_Quarantaine == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`% aan thuis te blijven zolang geadviseerd, en geeft `r round((nrow(filter(data, (AdherenceNotificationMeasuresSymptoms_Visits == 'Helemaal mee eens'| AdherenceNotificationMeasuresSymptoms_Visits == 'Mee eens'| AdherenceNotificationMeasuresSymptoms_Visits == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`% aan geen bezoek te ontvangen na ontvangen van een melding. Toch geeft ook nog bijna de helft aan de huisarts te zullen bellen (`r round((nrow(filter(data, (AdherenceNotificationMeasuresSymptoms_CallGP == 'Helemaal mee eens'| AdherenceNotificationMeasuresSymptoms_CallGP == 'Mee eens'| AdherenceNotificationMeasuresSymptoms_CallGP == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%).
 
 ```{r adherencenotificationssympt, echo=FALSE, fig.width=7, fig.height=2.5, fig.cap="Intentie tot opvolgen adviezen met symptomen", tab.cap="Intentie tot opvolgen adviezen met symptomen"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -5692,8 +5578,8 @@ ft_out
 
 
 #### Verklarende factoren opvolging adviezen gegeven in melding
-##### Eigen effectiviteit opvolging adviezen
-Om de eigen effectiviteit in kaart te brengen werd gevraagd in welke mate men dacht in staat te zijn om de adviezen uit de melding op te volgen. Men acht zichzelf goed in staat om te bellen voor een test (`r round((nrow(filter(data, (HBM_selfefficacy_Test == 'Helemaal mee eens'| HBM_selfefficacy_Test == 'Mee eens'| HBM_selfefficacy_Test == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%), zo lang thuis te blijven als wordt geadviseerd (`r round((nrow(filter(data, (HBM_selfefficacy_Quarantaine == 'Helemaal mee eens'| HBM_selfefficacy_Quarantaine == 'Mee eens'| HBM_selfefficacy_Quarantaine == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%), geen bezoek te ontvangen (`r round((nrow(filter(data, (HBM_selfefficacy_Visits == 'Helemaal mee eens'| HBM_selfefficacy_Visits == 'Mee eens'| HBM_selfefficacy_Visits == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%) en de huisarts te bellen (`r round((nrow(filter(data, (HBM_selfefficacy_GP == 'Helemaal mee eens'| HBM_selfefficacy_GP == 'Mee eens'| HBM_selfefficacy_GP == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%).
+##### Zelfeffectiviteit opvolging adviezen
+Om de zelfeffectiviteit in kaart te brengen werd gevraagd in welke mate men dacht in staat te zijn om de adviezen uit de melding op te volgen. Men acht zichzelf goed in staat om te bellen voor een test (`r round((nrow(filter(data, (HBM_selfefficacy_Test == 'Helemaal mee eens'| HBM_selfefficacy_Test == 'Mee eens'| HBM_selfefficacy_Test == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%), zo lang thuis te blijven als wordt geadviseerd (`r round((nrow(filter(data, (HBM_selfefficacy_Quarantaine == 'Helemaal mee eens'| HBM_selfefficacy_Quarantaine == 'Mee eens'| HBM_selfefficacy_Quarantaine == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%), geen bezoek te ontvangen (`r round((nrow(filter(data, (HBM_selfefficacy_Visits == 'Helemaal mee eens'| HBM_selfefficacy_Visits == 'Mee eens'| HBM_selfefficacy_Visits == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%) en de huisarts te bellen (`r round((nrow(filter(data, (HBM_selfefficacy_GP == 'Helemaal mee eens'| HBM_selfefficacy_GP == 'Mee eens'| HBM_selfefficacy_GP == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%).
 
 
 ```{r adherencenotificationsselfefficacy, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Eigen effectiviteit om adviezen op te volgen", tab.cap="Eigen effectiviteit om adviezen op te volgen"}
