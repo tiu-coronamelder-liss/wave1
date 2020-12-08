@@ -280,4 +280,52 @@ CROSSTABS
   /CELLS=COUNT ROW COLUMN 
   /COUNT ROUND CELL.
 
-*
+* Privacy and data safety. 
+FREQUENCIES VARIABLES=  Beliefs_datasafety Beliefs_locationmonitoring Beliefs_identitymonitoring 
+ /ORDER=ANALYSIS.
+
+CROSSTABS
+  /TABLES= Beliefs_datasafety Beliefs_locationmonitoring Beliefs_identitymonitoring BY Behavior_UTAUT
+  /FORMAT=AVALUE TABLES
+  /STATISTICS=CHISQ 
+  /CELLS=COUNT ROW COLUMN 
+  /COUNT ROUND CELL.
+
+CROSSTABS
+  /TABLES= Beliefs_datasafety Beliefs_locationmonitoring Beliefs_identitymonitoring BY user_status_intention 
+  /FORMAT=AVALUE TABLES
+  /STATISTICS=CHISQ 
+  /CELLS=COUNT ROW COLUMN 
+  /COUNT ROUND CELL.
+
+* Effects
+* Notifications.
+FREQUENCIES VARIABLES=  notifications_1
+ /ORDER=ANALYSIS.
+
+* Intention to adhere with and without symptoms.
+FREQUENCIES VARIABLES=  AdherenceNotificationMeasuresNosymptoms_Quarantaine AdherenceNotificationMeasuresNoSymptoms_Visits AdherenceNotificationMeasuresSymptoms_Quarantaine AdherenceNotificationMeasuresSymptoms_Visits 
+ /ORDER=ANALYSIS.
+
+* Same but only for the current users. 
+USE ALL.
+COMPUTE filter_$=( ~ SYSMIS(duur)  & (Behavior_UTAUT = 1)).
+VARIABLE LABELS filter_$ ' ~ SYSMIS(duur)  & (Behavior_UTAUT ~= 2) (FILTER)'.
+VALUE LABELS filter_$ 0 'Not Selected' 1 'Selected'.
+FORMATS filter_$ (f1.0).
+FILTER BY filter_$.
+EXECUTE.
+FREQUENCIES VARIABLES=  AdherenceNotificationMeasuresNosymptoms_Quarantaine AdherenceNotificationMeasuresNoSymptoms_Visits AdherenceNotificationMeasuresSymptoms_Quarantaine AdherenceNotificationMeasuresSymptoms_Visits 
+ /ORDER=ANALYSIS.
+
+* Explaining variables for intention to adherence to advices in notification. 
+* Use all 1900 again. 
+USE ALL.
+COMPUTE filter_$=( ~ SYSMIS(duur)).
+VARIABLE LABELS filter_$ ' ~ SYSMIS(duur) (FILTER)'.
+VALUE LABELS filter_$ 0 'Not Selected' 1 'Selected'.
+FORMATS filter_$ (f1.0).
+FILTER BY filter_$.
+EXECUTE.
+FREQUENCIES VARIABLES=  HBM_selfefficacy_Test HBM_selfefficacy_Quarantaine HBM_perceivedbenefits_Test HBM_barriers_GP
+ /ORDER=ANALYSIS.
