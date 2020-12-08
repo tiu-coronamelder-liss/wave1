@@ -5878,7 +5878,7 @@ ft_out
 ```
 
 #### Intentie tot doorgeven GGD-sleutel na positieve test - alleen huidig gebruikers
-Dezelfde bepalingen zijn ook gedaan in alleen de subsample (n = `r nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))`) die momenteel de CoronaMelder gebruikt. 
+Dezelfde bepalingen zijn ook gedaan in alleen de subsample (n = `r nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))`) die momenteel de CoronaMelder gebruikt. Van deze subsample van respondenten die momenteel de CoronaMelder gebruiken had de `r round((nrow(filter(data, (Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')&(Intention_reportinfection == 'Helemaal mee eens'| Intention_reportinfection == 'Mee eens'| Intention_reportinfection == 'Een beetje mee eens'))) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)`%intentie om de GGD sleutels door te geven na een positieve test.  
 
 ``` {r sharekeyscurrentusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot doorgeven GGD-sleutel na positieve test - alleen huidig gebruikers", tab.cap="Intentie tot doorgeven GGD-sleutel na positieve test - alleen huidig gebruikers"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart

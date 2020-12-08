@@ -329,3 +329,30 @@ FILTER BY filter_$.
 EXECUTE.
 FREQUENCIES VARIABLES=  HBM_selfefficacy_Test HBM_selfefficacy_Quarantaine HBM_perceivedbenefits_Test HBM_barriers_GP
  /ORDER=ANALYSIS.
+
+* Intention to share GGD keys.
+FREQUENCIES VARIABLES=  Intention_reportinfection
+ /ORDER=ANALYSIS.
+
+* Same but only for the current users. 
+USE ALL.
+COMPUTE filter_$=( ~ SYSMIS(duur)  & (Behavior_UTAUT = 1)).
+VARIABLE LABELS filter_$ ' ~ SYSMIS(duur)  & (Behavior_UTAUT ~= 2) (FILTER)'.
+VALUE LABELS filter_$ 0 'Not Selected' 1 'Selected'.
+FORMATS filter_$ (f1.0).
+FILTER BY filter_$.
+EXECUTE.
+FREQUENCIES VARIABLES=   Intention_reportinfection 
+ /ORDER=ANALYSIS.
+
+* False security
+* Use all 1900 again. 
+USE ALL.
+COMPUTE filter_$=( ~ SYSMIS(duur)).
+VARIABLE LABELS filter_$ ' ~ SYSMIS(duur) (FILTER)'.
+VALUE LABELS filter_$ 0 'Not Selected' 1 'Selected'.
+FORMATS filter_$ (f1.0).
+FILTER BY filter_$.
+EXECUTE.
+FREQUENCIES VARIABLES=  Beliefs_falsesecurity1 Beliefs_falsesecurity2
+ /ORDER=ANALYSIS.
