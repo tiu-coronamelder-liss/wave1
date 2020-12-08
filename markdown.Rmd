@@ -3485,7 +3485,7 @@ ft_out
 
 
 ### Technologie gerelateerde belemmeringen
-Vanuit het UTAUT is bekend dat technologie gerelateerde belemmeringen een rol kunnen spelen in de adoptie van nieuwe technologie. 
+Vanuit het UTAUT is bekend dat technologie gerelateerde belemmeringen een rol kunnen spelen in de adoptie van nieuwe technologieën zoals de CoronaMelder. In totaal gaf slechts `r round((nrow(filter(data, (FC1_UTAUT == 'Helemaal mee oneens'| FC1_UTAUT == 'Oneens'| FC1_UTAUT == 'Een beetje oneens'))) /nrow(data))*100, digits = 1)`% aan het oneens te zijn met de stelling dat hij/zij beschikking heeft over een smartphone waarmee de CoronaMelder gebruikt kan worden. Daarnaast gaf een laag percentage (`r round((nrow(filter(data, (FC2_UTAUT == 'Helemaal mee oneens'| FC2_UTAUT == 'Oneens'| FC2_UTAUT == 'Een beetje oneens'))) /nrow(data))*100, digits = 1)`%) aan het oneens te zijn met de stelling dat hij/zij genoeg (technische kennis) heeft om de CoronaMelder te gebruiken.
 
 ```{r , echo=FALSE, fig.width=7, fig.height=2, fig.cap="Technologie gerelateerde belemmeringen", tab.cap="Technologie gerelateerde belemmeringen"}
 
