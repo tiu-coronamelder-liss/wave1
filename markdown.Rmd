@@ -2456,7 +2456,7 @@ ft_out
 
 Er is ook gevraagd hoeveel procent van de Nederlandse bevolking volgens de respondent de CoronaMelder app zou moeten gebruiken om de verspreiding van het coronavirus tegen te gaan. De meeste respondenten (`r round(nrow(filter(data, Beliefs_ResponseefficasyOther == '76-90%'))/nrow(data)*100, digits = 1)`%) dachten dat 76-90% van de Nederlandse bevolking de CoronaMelder moet gebruiken om de verspreiding van het coronavirus tegen te gaan. In totaal dacht `r round(((nrow(filter(data, Beliefs_ResponseefficasyOther == '51-75%')) + nrow(filter(data, Beliefs_ResponseefficasyOther == '76-90%')) + nrow(filter(data, Beliefs_ResponseefficasyOther == '91-100%')))/nrow(data)*100), digits = 1)`% van de respondenten dat meer dan 50% van de Nederlandse bevolking de CoronaMelder app moet gebruiken om effectief te zijn. Het aandeel respondenten dat aan gaf niet te weten hoeveel mensen de CoronaMelder app zouden moeten gebruiken is `r round(nrow(filter(data, Beliefs_ResponseefficasyOther == 'Weet ik niet'))/nrow(data)*100, digits = 1)`%. 
 
-```{r, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Percentage bevolking dat de CoronaMelder moet gebruiken om verspreiding van het virus tegen te gaan"}
+```{r, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Percentage bevolking dat de CoronaMelder moet gebruiken om verspreiding van het virus tegen te gaan", tab.cap="Percentage bevolking dat de CoronaMelder moet gebruiken om verspreiding van het virus tegen te gaan"}
 # Beliefs_ResponseefficasyOther
 ggplot(data=data, aes(x = Beliefs_ResponseefficasyOther)) +
   theme_bw() +
@@ -2467,7 +2467,81 @@ ggplot(data=data, aes(x = Beliefs_ResponseefficasyOther)) +
   theme(plot.margin = margin(0, 0.1, 0, 0)) + 
   theme(axis.title=element_text(size=10))
 
+graph_variablenames = "Beliefs_ResponseefficasyOther"
+graph_questionlabels = "Hoeveel procent van de Nederlandse bevolking zou volgens u de CoronaMelder app moeten gebruiken om de verspreiding van het coronavirus tegen te gaan?"
 
+# Create the table. Step 1: new data frame containing counts
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(levels(data[[graph_variablenames[1]]]))))
+
+# We need one extra (empty) column label for the row with the possible values
+table_questionlabels = list()
+table_questionlabels["table_answercategories"] <- ""
+
+# We also need the 'unreversed' question labels ;)
+graph_questionlabels_unrev <- rev(graph_questionlabels)
+
+# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
+# and add the correct labels for column headings
+for(idx in 1:length(graph_variablenames)) {
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data[graph_variablenames[idx]]))[1]
+  }
+  
+  # Add to new dataframe
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data[graph_variablenames[idx]]))[2]
+  
+  # Add correct mapping to column headings
+  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
+}
+
+# Build the basic table
+ft <- flextable(
+  head(data_table, n = nrow(data_table))
+)
+
+# Header labels
+ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal")
+
+# Percentages and totals
+for(colname in colnames(data_table)) {
+  if(colname != "table_answercategories") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
+    
+    # Add total to footer
+    tablecolumn = paste("data_table$", colname)
+    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
+
+ft_out
 ```
 
 #### Verwachte effectiviteit CoronaMelder naar gebruikersstatus
@@ -4445,9 +4519,84 @@ ft_out
 Er werd ook gevraagd aan de respondenten hoeveel procent van de NEderlandse bevolking zij dachten dat de CoronaMelder gebruikt. De meeste respondenten (`r round((nrow(filter(data, (Beliefs_AppAdoption == '26-50%'))) /nrow(data))*100, digits = 1)`%) dachten dat tussen de 26 en 50% van de bevolking de CoronaMelder gebruikt, gevolgd door de categorie van 11 tot 25% (`r round((nrow(filter(data, (Beliefs_AppAdoption == '11-25%'))) /nrow(data))*100, digits = 1)`%).
 
 
-```{r Beliefsappadoption, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Percentage Nederlandse bevolking dat volgens de respondent de CoronaMelder gebruikt"}
+```{r Beliefsappadoption, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Percentage Nederlandse bevolking dat volgens de respondent de CoronaMelder gebruikt", tab.cap="Percentage Nederlandse bevolking dat volgens de respondent de CoronaMelder gebruikt"}
 ggplot(data=data, aes(x = Beliefs_AppAdoption)) + theme_bw() + xlab(paste(names(table(data$Beliefs_AppAdoption)))) + ylab(" ") + xlab("") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(axis.title=element_text(size=10))
 
+graph_variablenames = "Beliefs_AppAdoption"
+graph_questionlabels = "Hoeveel procent van de Nederlandse bevolking denkt u dat de CoronaMelder app gebruikt?"
+
+# Create the table. Step 1: new data frame containing counts
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(levels(data[[graph_variablenames[1]]]))))
+
+# We need one extra (empty) column label for the row with the possible values
+table_questionlabels = list()
+table_questionlabels["table_answercategories"] <- ""
+
+# We also need the 'unreversed' question labels ;)
+graph_questionlabels_unrev <- rev(graph_questionlabels)
+
+# Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
+# and add the correct labels for column headings
+for(idx in 1:length(graph_variablenames)) {
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data[graph_variablenames[idx]]))[1]
+  }
+  
+  # Add to new dataframe
+  data_table[graph_variablenames[idx]] <- as.data.frame(table(data[graph_variablenames[idx]]))[2]
+  
+  # Add correct mapping to column headings
+  table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
+}
+
+# Build the basic table
+ft <- flextable(
+  head(data_table, n = nrow(data_table))
+)
+
+# Header labels
+ft <- set_header_labels(ft, values = table_questionlabels)
+
+# Set up the footer of totals
+totals = c("Totaal")
+
+# Percentages and totals
+for(colname in colnames(data_table)) {
+  if(colname != "table_answercategories") {
+    # Add percentage to cell
+    ft <- compose(ft, j = colname, value = as_paragraph(eval(parse(text=colname)), " (", sprintf("%.1f", eval(parse(text=colname))/sum(eval(parse(text=colname)))*100), "%)"))
+    
+    # Add total to footer
+    tablecolumn = paste("data_table$", colname)
+    totals <- c(totals, paste(sum(eval(parse(text=tablecolumn))), " (100%)"))
+  }
+}
+
+# Actually add the footer with totals
+ft <- add_footer_row(ft, values = totals, colwidths = rep(1, length(totals)))
+
+# Change layout of table, and footer specifically
+ft <- fontsize(ft, size = 10, part = "all")
+ft <- font(ft, fontname = "Cambria", part = "all")
+ft <- align(ft, j = -1, align = "right", part = "footer")
+ft <- padding(ft, padding = 5, part = "footer")
+
+# Basic autofit does not work well with Word, found this code below
+# but it seems to make all columns of equal size (7 inch / number of columns?)
+# Might give unwanted results, so we might want to control this per column.
+
+# Note: 7 inch is the page width in Word
+# We now divide this into 1.5 inch for the first column (the values),
+# and divide the other columns equally among the remaining 5.5 inch.
+# If you only have one or few columns, you might want to reduce the total width below:
+table_width <- 7
+
+# Set width
+ft_out <- ft %>% autofit()
+ft_out <- width(ft_out, j = 1, width = 1.5)
+ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_table))-1))
+
+ft_out
 ```
 
 
