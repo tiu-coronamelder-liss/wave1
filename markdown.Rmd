@@ -4056,21 +4056,9 @@ ft_out
 
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
 ### Affectieve reacties
-In kaart is gebracht in welke mate de CoronaMelder in het algemeen en meer specifiek het ontvangen van een melding een emotionele reaktie opwekt. Bijna een kwart geeft aan de CoronaMelder eng te vinden (`r round((nrow(filter(data, (Beliefs_fear == 'Helemaal mee eens'| Beliefs_fear == 'Mee eens'| Beliefs_fear == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%), en 
-`r round((nrow(filter(data, (Beliefs_fear == 'Neutraal'))) /nrow(data))*100, digits = 1)`% staat hier neutraal tegenover. Een iets groter aandeel zou angstig worden bij het ontvangen van een melding (`r round((nrow(filter(data, (Beliefs_notificationfear == 'Helemaal mee eens'| Beliefs_notificationfear == 'Mee eens'| Beliefs_notificationfear == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%), hier staat `r round((nrow(filter(data, (Beliefs_notificationfear == 'Neutraal'))) /nrow(data))*100, digits = 1)`% neutraal in.
+In kaart is gebracht in welke mate de CoronaMelder in het algemeen en meer specifiek het ontvangen van een melding een emotionele reaktie opwekt. Bijna een kwart geeft aan de CoronaMelder eng te vinden (`r round((nrow(filter(data, (Beliefs_fear == 'Helemaal mee eens'| Beliefs_fear == 'Mee eens'| Beliefs_fear == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%) en 
+`r round((nrow(filter(data, (Beliefs_fear == 'Neutraal'))) /nrow(data))*100, digits = 1)`% staat hier neutraal tegenover. Een iets groter aandeel zou angstig worden bij het ontvangen van een melding (`r round((nrow(filter(data, (Beliefs_notificationfear == 'Helemaal mee eens'| Beliefs_notificationfear == 'Mee eens'| Beliefs_notificationfear == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%) en `r round((nrow(filter(data, (Beliefs_notificationfear == 'Neutraal'))) /nrow(data))*100, digits = 1)`% staat hier neutraal in.
 
 ```{r Affective, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Affectieve reacties", tab.cap="Affectieve reacties"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
