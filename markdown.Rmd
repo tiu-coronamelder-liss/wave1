@@ -1155,13 +1155,6 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 ```
 
-```{r awareness, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Bekendheid met CoronaMelder", tab.cap="Waargenomen ernst en vatbaarheid - Gebruikers"}
-# Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-ggplot(data=data, aes(x = Awareness)) + theme_bw() + xlab(paste(names(table(data$Awareness)))) + ylab(" ") + xlab("Hoe bekend bent u met de CoronaMelder?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(axis.title=element_text(size=10))
-```
-
-
-
 ```{r awarenesslftd, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Bekendheid met de CoronaMelder per leeftijdscategorie"}
 # Awareness op leeftijdscategorie, met ook 'reversed' labels en waarden in de bar chart:
 #ggplot(data=data, aes(fill=Awareness, x=lftdcat)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("15-24", "25-34", "35-44", "45-54", "55-64", "65+")) + coord_flip() + labs(x = "Leeftijdscategorie", y = "", fill = "") + ggtitle("Bekendheid Coronamelder per leeftijdscategorie") + scale_fill_manual(values=my_palette5) + guides(fill = guide_legend(reverse = TRUE))
@@ -1420,9 +1413,11 @@ ft_out
 ### Demografische gegevens naar gebruikersstatus {#demouserstatus}
 Om inzicht te krijgen in welke factoren (demografisch, persoonlijk, sociaal, omgevingsfactoren) samenhangen met het gebruiken van de CoronaMelder worden respondenten die momenteel de CoronaMelder gebruiken vergeleken met de respondenten die de CoronaMelder nooit hebben gebruikt. 
 
-Om dit te onderzoeken wordt voor elke demografische variabele een chi kwadraat toets uitgevoerd. In het geval dat deze toets aangeeft dat de demografische variabele en de gebruikersstatus afhankelijk zijn - oftewel dat een of meerdere van de subgroepen afwijken van het gemiddelde percentage gebruikers - worden er posthoc paarsgewijze chi kwadraattests met FDR correctie uitgevoerd om te bepalen welke groepen significant van elkaar verschillen in percentage gebruikers. In de onderstaande tabel kunnen de resultaten gevonden worden. In de appendix kunnen alle paarsgewijze vergelijkingen gevonden worden voor variabelen die samen hingen met de gebruikersstatus. 
+Om dit te onderzoeken wordt voor elke demografische variabele een chi kwadraat toets uitgevoerd. In het geval dat deze toets aangeeft dat de demografische variabele en de gebruikersstatus afhankelijk zijn - oftewel dat een of meerdere van de subgroepen afwijken van het gemiddelde percentage gebruikers - worden er posthoc paarsgewijze chi kwadraattests met FDR-correctie uitgevoerd om te bepalen welke groepen significant van elkaar verschillen in percentage gebruikers. In de onderstaande tabel kunnen de resultaten gevonden worden. In de appendix kunnen alle paarsgewijze vergelijkingen gevonden worden voor variabelen die samen hingen met de gebruikersstatus. 
 
-Het percentages gebruikers was niet gelijk verdeeld over alle leeftijdscategorieën. Het percentage gebruikers was significant lager bij de 15 - 24 jarigen vergeleken met de 55 - 64 jarigen. 
+Demografische variabelen die niet samenhingen met gebruik waren geslacht, de stedelijkheid van de woonplaats, de dagelijkse bezigheid (bv. loondienst, pensioen), de woonvorm van het huishouden (bv. alleen wonend of met kinderen) en de frequentie waarmee iemand op minder dan 1.5 meter van ouderen en mensen met een kwetsbare gezondheid komt vanwege werk of (privé) zorgtaken. 
+
+Voor de volgende demografische kenmerken was er wel een afhankelijkheid: Het percentages gebruikers was niet gelijk verdeeld over alle leeftijdscategorieën. Het percentage gebruikers was significant lager bij de 15 - 24 jarigen vergeleken met de 55 - 64 jarigen. 
 
 Nog een demografische variabele die samenhing met gebruik was opleidingsniveau. Bij de hoger opgeleiden (ho en wo) was het percentage gebruikers het hoogst. Bij mensen die aleen basisonderwijs of vmbo hebben gevolgd was dit percentage het laagst. Ook netto maandkomen hing samen met gebruik mensen die maandelijks meer dan 3501 eur netto verdienen gebruiken de CoronaMelder het vaakst terwijl dit percentage bij mensen met een lager inkomen een stuk lager is. 
 
@@ -1431,7 +1426,7 @@ Ook burgerlijke staat hing samen met gebruik van de CoronaMelder. Zo wordt de Co
 
 ```{r demobyuserstatus, echo=FALSE, results="asis", tab.cap = "Demografische kenmerken naar gebruikersstatus"} 
 tab.noby <- tableby(user_status ~ geslacht + lftdcat + sted_simplified + belbezig_simplified  + oplmet_simplified + burgstat_simplified + nettocat_simplified + woonvorm + Riskgroup_contact, cat.stats = "countrowpct", data=data_currentvsneveruser) # cat.stats = "countrowpct") for row percentages in stead of column percentages
-summary(tab.noby, pfootnote=TRUE, title="(\\#tab:mytableby2) Demografische kenmerken naar gebruikersstatus")
+summary(tab.noby, title="(\\#tab:mytableby2) Demografische kenmerken naar gebruikersstatus")
 ```
 
 ### Gezondheidsmotivatie en risicoperceptie naar gebruikersstatus

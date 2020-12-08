@@ -47,11 +47,28 @@ FREQUENCIES VARIABLES= Behavior_UTAUT BI1b_UTAUT
 
 * CheckBI1a_UTAUT for only never users.  
 USE ALL.
-COMPUTE filter_$=( ~ SYSMIS(duur)  & (Behavior_UTAUT = 3)).
+COMPUTE filter_$=( ~ SYSMIS(duur)  & (Behavior_UTAUT  3)).
 VARIABLE LABELS filter_$ ' ~ SYSMIS(duur)  & (Behavior_UTAUT = 3) (FILTER)'.
 VALUE LABELS filter_$ 0 'Not Selected' 1 'Selected'.
 FORMATS filter_$ (f1.0).
 FILTER BY filter_$.
 EXECUTE.
+
 FREQUENCIES VARIABLES= Behavior_UTAUT BI1a_UTAUT 
  /ORDER=ANALYSIS.
+
+* For all checks with users vs non users: select only the current and never users and split by  Behavior_UTAUT.
+USE ALL.
+COMPUTE filter_$=( ~ SYSMIS(duur)  & (Behavior_UTAUT ~= 2)).
+VARIABLE LABELS filter_$ ' ~ SYSMIS(duur)  & (Behavior_UTAUT ~= 2) (FILTER)'.
+VALUE LABELS filter_$ 0 'Not Selected' 1 'Selected'.
+FORMATS filter_$ (f1.0).
+FILTER BY filter_$.
+EXECUTE.
+
+CROSSTABS
+  /TABLES=geslacht lftdcat sted belbezig burgstat nettocat oplmet woonvorm Riskgroup_contact BY Behavior_UTAUT
+  /FORMAT=AVALUE TABLES
+  /STATISTICS=CHISQ 
+  /CELLS=COUNT ROW COLUMN 
+  /COUNT ROUND CELL.
