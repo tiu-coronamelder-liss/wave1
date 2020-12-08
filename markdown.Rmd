@@ -293,51 +293,32 @@ Ook werd gevraagd of er wel eens een coronatest bij de respondent was afgenomen.
 
 Van de mensen bij wie al minstens een keer een test was afgenomen (`r  nrow(filter(data, (CoronaInfectionSelfTest == 'Ja, een keer' | CoronaInfectionSelfTest == 'Ja, meerdere keren')))`), gaf  `r  round((nrow(filter(data, (CoronaInfectionSelfTest_1 == 'Ja' | CoronaInfectionSelfTest_2 == 'Ja'))) / nrow(filter(data, (CoronaInfectionSelfTest == 'Ja, een keer' | CoronaInfectionSelfTest == 'Ja, meerdere keren'))))*100, digits = 1)`% aan dat een van deze testen positief was, `r  round((nrow(filter(data, (CoronaInfectionSelfTest_1 == 'Nee' | CoronaInfectionSelfTest_2 == 'Nee'))) / nrow(filter(data, (CoronaInfectionSelfTest == 'Ja, een keer' | CoronaInfectionSelfTest == 'Ja, meerdere keren'))))*100, digits = 1)`% gaf aan dat de test negatief was en de rest (`r  round((nrow(filter(data, (CoronaInfectionSelfTest_1 == 'Weet ik (nog) niet' | CoronaInfectionSelfTest_2 == 'Weet ik (nog) niet'))) / nrow(filter(data, (CoronaInfectionSelfTest == 'Ja, een keer' | CoronaInfectionSelfTest == 'Ja, meerdere keren'))))*100, digits = 1)`%) gaf aan dit (nog) niet te weten. 
 
-In totaal `r round(nrow(filter(data, (CoronaInfectionOther_1 == 'Ja' | CoronaInfectionOther_2 == 'Ja' | CoronaInfectionOther_3 == 'Ja' | CoronaInfectionOther_4 == 'Ja' | CoronaInfectionOther_5 == 'Ja' | CoronaInfectionOther_6 == 'Ja')))/nrow(data)*100, digits = 1)`% gaf aan dat iemand in hun directe omgeving besmet is (geweest)  met het coronavirus.
-
---> To do: In onderstaande grafiek is te zien welke relatie deze personen tot de respondent hadden (grafiek nog netjes maken) (zie figuur \@ref(fig:coronainfectionother)). 
+In totaal `r round(nrow(filter(data, (CoronaInfectionOther_1 == 'Ja' | CoronaInfectionOther_2 == 'Ja' | CoronaInfectionOther_3 == 'Ja' | CoronaInfectionOther_4 == 'Ja' | CoronaInfectionOther_5 == 'Ja' | CoronaInfectionOther_6 == 'Ja')))/nrow(data)*100, digits = 1)`% gaf aan dat iemand in hun directe omgeving besmet is (geweest)  met het coronavirus. In onderstaande grafiek (figuur \@ref(fig:coronainfectionother)) is te zien welke relatie deze personen tot de respondent hadden. In totaal `r round(nrow(filter(data, (CoronaInfectionOther_7 == 'Ja')))/nrow(data)*100, digits = 1)`% gaf aan dat niemand in hun directe omgeving besmet is (geweest)  met het coronavirus en `r round(nrow(filter(data, (CoronaInfectionOther_8 == 'Ja')))/nrow(data)*100, digits = 1)` wist dit niet of wilde dit niet zeggen. 
 
 ```{r coronainfectionother, echo=FALSE, fig.width=7, fig.height=2.5, fig.cap="Relatie geïnfecteerde personen tot de respondent"}
-# Create the plot#LUKT NOG NIET
-# Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
-graph_variablenames = c("CoronaInfectionOther_1", 
-                        "CoronaInfectionOther_2", 
-                        "CoronaInfectionOther_3", 
-                        "CoronaInfectionOther_4",
-                        "CoronaInfectionOther_5",
-                        "CoronaInfectionOther_6",
-                        "CoronaInfectionOther_7",
-                        "CoronaInfectionOther_8")
-graph_questionlabels = c("Ja, mijn partner", 
+# Prepare dataset datachart for plot
+chartdata <- data.frame(var=c("Ja, mijn partner", 
                          "Ja, een of meerdere familieleden", 
                          "Ja, een of meerdere vrienden", 
-                         "Ja, een of meerdere collega’s/studiegenoten",
-                         "Ja, een of meerdere kennissen",
-                         "Anders",
-                         "Nee, niemand",
-                         "Weet ik niet/wil ik niet zeggen"); 
-
-# These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
-color_palette = my_palette7
-
-# Create a dataframe for the plot
-#First only keep the variables you wish to keep. Note: nomem_enc is the participant id
-data_graph_wideformat = select(data, nomem_encr, all_of(graph_variablenames))
-
-#Convert it to long format
-data_graph_longformat = melt(data_graph_wideformat, id.vars = c('nomem_encr'), measure.vars = graph_variablenames)
-
-# Set the correct ordering of the questions (by default the first variable is placed on the bottom)
-data_graph_longformat$variable <- factor(data_graph_longformat$variable,levels = rev(graph_variablenames))
-
-# Also invert the order of the question labels (as default is that the first element of the vector is placed on the bottom)
-graph_questionlabels = rev(graph_questionlabels)
-
-ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette) + scale_x_discrete(labels=stringr::str_wrap(graph_questionlabels, width = 30)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
-
-
-# To check: also create the plot with variable labels
-#ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
+                         "Ja, een of meerdere collega\'s of studiegenoten", 
+                         "Ja, een of meerdere kennissen", 
+                         "Ja, iemand anders"),
+                value=c(round((nrow(filter(data, (CoronaInfectionOther_1 == 'Ja')))/nrow(data))*100, digits = 1),
+                      round((nrow(filter(data, (CoronaInfectionOther_2 == 'Ja')))/nrow(data))*100, digits = 1),
+                      round((nrow(filter(data, (CoronaInfectionOther_3 == 'Ja')))/nrow(data))*100, digits = 1), 
+                      round((nrow(filter(data, (CoronaInfectionOther_4 == 'Ja')))/nrow(data))*100, digits = 1),
+                      round((nrow(filter(data, (CoronaInfectionOther_5 == 'Ja')))/nrow(data))*100, digits = 1),
+                      round((nrow(filter(data, (CoronaInfectionOther_6 == 'Ja')))/nrow(data))*100, digits = 1))
+                )
+# Create the plot
+plot = ggplot(data=chartdata, aes(x=var, y=value)) +
+  geom_bar(stat="identity", fill = "#bdd7e7", color = "#6baed6") +
+  coord_flip() +
+  ylab("Percentage deelnemers (meerdere antwoorden mogelijk)") +
+  xlab("") +
+  theme(plot.margin = margin(0, 0.1, 0, 0)) +
+  theme_bw()
+plot
 
 ```
 
