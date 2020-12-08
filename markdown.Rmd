@@ -3253,7 +3253,9 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 
 ft_out
 ```
+
 In onderstaande grafiek en tabellen zijn de resultaten voor de respondenten die de CoronaMelder momenteel niet gebruiken, te vinden. 
+
 ```{r effortexpectancyusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Eigen effectiviteit onder bij respondenten die de CoronaMelder op dit moment gebruiken", tab.cap="Eigen effectiviteit onder bij respondenten die de CoronaMelder op dit moment gebruiken"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -3792,6 +3794,7 @@ ggdraw(aligned[[2]])
 
 
 # Create the table. Step 1: new data frame containing counts
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(levels(data[[graph_variablenames[1]]]))))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -3814,8 +3817,6 @@ for(idx in 1:length(graph_variablenames)) {
   # Add correct mapping to column headings
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
-
-
 
 
 # Build the basic table
