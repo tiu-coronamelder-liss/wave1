@@ -2456,7 +2456,7 @@ ft_out
 
 Er is ook gevraagd hoeveel procent van de Nederlandse bevolking volgens de respondent de CoronaMelder app zou moeten gebruiken om de verspreiding van het coronavirus tegen te gaan. De meeste respondenten (`r round(nrow(filter(data, Beliefs_ResponseefficasyOther == '76-90%'))/nrow(data)*100, digits = 1)`%) dachten dat 76-90% van de Nederlandse bevolking de CoronaMelder moet gebruiken om de verspreiding van het coronavirus tegen te gaan. In totaal dacht `r round(((nrow(filter(data, Beliefs_ResponseefficasyOther == '51-75%')) + nrow(filter(data, Beliefs_ResponseefficasyOther == '76-90%')) + nrow(filter(data, Beliefs_ResponseefficasyOther == '91-100%')))/nrow(data)*100), digits = 1)`% van de respondenten dat meer dan 50% van de Nederlandse bevolking de CoronaMelder app moet gebruiken om effectief te zijn. Het aandeel respondenten dat aan gaf niet te weten hoeveel mensen de CoronaMelder app zouden moeten gebruiken is `r round(nrow(filter(data, Beliefs_ResponseefficasyOther == 'Weet ik niet'))/nrow(data)*100, digits = 1)`%. 
 
-```{r, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Percentage bevolking dat de CoronaMelder moet gebruiken om verspreiding van het virus tegen te gaan", tab.cap="Percentage bevolking dat de CoronaMelder moet gebruiken om verspreiding van het virus tegen te gaan"}
+```{r, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Percentage van Nederlandse bevolking dat de CoronaMelder moet gebruiken om verspreiding van het virus tegen te gaan", tab.cap="Percentage van Nederlandse bevolking dat de CoronaMelder moet gebruiken om verspreiding van het virus tegen te gaan"}
 # Beliefs_ResponseefficasyOther
 ggplot(data=data, aes(x = Beliefs_ResponseefficasyOther)) +
   theme_bw() +
@@ -6027,7 +6027,7 @@ ft_out
 ```
 
 #### Intentie tot doorgeven GGD-sleutel na positieve test - alleen huidig gebruikers
-Dezelfde bepalingen zijn ook gedaan in alleen de subsample (n = `r nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))`) die momenteel de CoronaMelder gebruikt. Van deze subsample van respondenten die momenteel de CoronaMelder gebruiken had de `r round((nrow(filter(data, (Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')&(Intention_reportinfection == 'Helemaal mee eens'| Intention_reportinfection == 'Mee eens'| Intention_reportinfection == 'Een beetje mee eens'))) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)`%intentie om de GGD sleutels door te geven na een positieve test.  
+Dezelfde bepalingen zijn ook gedaan in alleen de subsample (n = `r nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment'))`) die momenteel de CoronaMelder gebruikt. Van deze subsample van respondenten die momenteel de CoronaMelder gebruiken had `r round((nrow(filter(data, (Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')&(Intention_reportinfection == 'Helemaal mee eens'| Intention_reportinfection == 'Mee eens'| Intention_reportinfection == 'Een beetje mee eens'))) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)`% de  intentie om de GGD sleutel door te geven na een positieve test.  
 
 ``` {r sharekeyscurrentusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Intentie tot doorgeven GGD-sleutel na positieve test - alleen huidig gebruikers", tab.cap="Intentie tot doorgeven GGD-sleutel na positieve test - alleen huidig gebruikers"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -6334,14 +6334,14 @@ Uit literatuuronderzoek bleek dat gedrag ten aanzien van de overige maatregelen 
 
 ## Beoogde effecten
 
-### Intenties om adviezen uit de app op te volgen
+###  Intenties om adviezen uit de app op te volgen
 Een zeer klein aantal respondenten uit de steekproef had daadwerkelijk een melding vanuit de app ontvangen. Uit deze studie kan dus nog niets worden gezegd over in hoeverre men zich houdt aan de geadviseerde gedragsregels. Daarentegen zijn er weldegelijk interessante inzichten opgedaan met betrekking tot de intenties om adviezen uit de melding op te volgen. In de huidige steekproef geeft ongeveer twee derde aan thuis te blijven als een melding dit adviseert. In een eerdere studie uitgezet in de VS, Frankrijk, het Verenigd Koninkrijk en Italië, hadden 9 op de 10 respondenten de intenties om thuis te blijven als de melding dit adviseert (Altmann et al., 2020). In een ander onderzoek onder Duitse respondenten ligt dit percentage echter veel lager: slechts een derde zou in quarantaine gaan als de app hierom vraagt (Blom et al., 2020). Er lijken dus verschillen op te treden tussen landen, maar wellicht is dit verschil ook te verklaren door het moment waarop de vraag gesteld is (d.w.z., aan het begin van de pandemie zoals bij Altmann et al. (2020), of na de eerste piek van besmettingen, zoals bij Blom et al. (2020).). Data van het RIVM wijzen inderdaad uit dat het draagvlak verandert bij verlenging van de maatregelen, maar ook bij een daling in het aantal besmettingen zoals in juni het geval was (RIVM, 2020). De volgende rapportage zal uitwijzen of de positieve intenties onder Nederlandse respondenten ook worden omgezet in gedrag wanneer men een melding ontvangt. Als wordt gekeken naar de intenties van de huidige Corona-Melder gebruikers om thuis te blijven, komt dit percentage wel overeen met de bevindingen van Altman et al. (2020). 
 
 Daarnaast blijkt uit deze studie dat men de juiste intenties heeft wat betreft het opvolgen van geadviseerd gedrag. Zo geeft de ruime meerderheid die (hypothetisch) een waarschuwing van de CoronaMelder ontvangt en géén symptomen heeft, aan thuis te zullen blijven en geen bezoek te zullen ontvangen. Toch zou ook nog ongeveer 1 op de 4 respondenten de huisarts bellen, of bellen om een coronatest aan te vragen. Dit zou te maken kunnen hebben met het feit dat (een deel van) deze mensen kampen met een zwakkere gezondheid, en zich daarom zorgen maken wanneer het coronavirus bij hen geconstateerd wordt. Daarnaast kan hieruit worden afgeleid dat een groot deel huiverig is voor de consequenties van het coronavirus, en graag extra (specialistische) hulp inschakelt. Het is raadzaam om vanuit de GGD nadrukkelijk te communiceren dat het niet de bedoeling is om de huisarts te bellen bij milde klachten, om zo de druk op de huisartsen te verminderen.
 
 Wanneer men (hypothetisch) wel symptomen heeft, zou 3 op de 4 bellen voor een coronatest, en zou ruim 4 op de 5 thuis blijven zolang de melding adviseert. Er is dus nog een aanzienlijk percentage dat zich niet aan de regels zou houden bij klachten. Dit zou gerelateerd kunnen zijn aan de persoonlijke nadelen die men ervaart om te bellen voor een test en thuis te blijven. Daarnaast ziet lang niet iedereen de voordelen in van deze adviezen. Eerder onderzoek toonde aan dat de gepercipieerde voordelen de belangrijkste voorspeller is van adoptie van een contact tracing app onder Nederlanders (Proszowska et al., 2020). Het is aannemelijk dat de gepercipieerde voordelen ook een belangrijke rol spelen bij de intentie tot de opvolging van adviezen. Noodzakelijk is om op de communicatie op de persoonlijke voordelen te richten, zodat de intenties om adviezen van de CoronaMelder op te volgen stijgen. De zelfeffectiviteit blijkt geen barrière te zijn: de overgrote meerderheid acht zichzelf in staat om de adviezen op te volgen.
 
-### Intenties om de GGD-sleutel door te geven
+###  Intenties om de GGD-sleutel door te geven
 De huidige studie biedt inzicht in de intentie van respondenten om de GGD-sleutel door te geven bij een positieve test. Een eerdere studie wees uit dat 38% welwillend was om het testresultaat door te geven wanneer deze positief is (Blom et al., 2020). In de huidige studie ligt dit percentage hoger (62%), merendeel ziet dus de noodzaak in van het doorgeven van de GGD-sleutel. Toch is het wenselijk dat dit percentage stijgt, zeker wanneer rekening wordt gehouden met het feit dat niet iedereen deze intentie om zal zetten tot daadwerkelijk gedrag. In de communicatie naar patiënten zal het belang van de GGD-sleutel doorgeven moeten worden benadrukt. 
 
 ## Onbeoogde effecten: Schijnveiligheid  
@@ -6458,9 +6458,9 @@ pairwiseNominalIndependence(Matriz,
  
 
 # Bijlagen
-Als bijlage kunt u bij dit rapport vinden:
-- Vragenlijst wave 1
-- Vergelijking demografie sample huidig onderzoek, LISS core panel en CBS
+Als bijlage kunt u bij dit rapport vinden:  
+- Vragenlijst wave 1  
+- Vergelijking demografie sample huidig onderzoek, LISS core panel en CBS  
 
 
 
