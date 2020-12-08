@@ -147,5 +147,36 @@ CROSSTABS
   /CELLS=COUNT ROW COLUMN 
   /COUNT ROUND CELL.
 
+* Expected use and value of the CoronaMelder.
+FREQUENCIES VARIABLES= PE1_UTAUT Beliefs_ResponseefficasyOther
+ /ORDER=ANALYSIS.
+CROSSTABS
+  /TABLES= PE1_UTAUT BY Behavior_UTAUT
+  /FORMAT=AVALUE TABLES
+  /STATISTICS=CHISQ 
+  /CELLS=COUNT ROW COLUMN 
+  /COUNT ROUND CELL.
 
+CROSSTABS
+  /TABLES= PE1_UTAUT BY user_status_intention 
+  /FORMAT=AVALUE TABLES
+  /STATISTICS=CHISQ 
+  /CELLS=COUNT ROW COLUMN 
+  /COUNT ROUND CELL.
 
+* ADequacy of technology and societal effects.
+FREQUENCIES VARIABLES= Beliefs_technologyperformance Beliefs_benefiteconomic
+ /ORDER=ANALYSIS.
+CROSSTABS
+  /TABLES= Beliefs_technologyperformance Beliefs_benefiteconomic BY Behavior_UTAUT
+  /FORMAT=AVALUE TABLES
+  /STATISTICS=CHISQ 
+  /CELLS=COUNT ROW COLUMN 
+  /COUNT ROUND CELL.
+
+CROSSTABS
+  /TABLES= Beliefs_technologyperformance Beliefs_benefiteconomic BY user_status_intention 
+  /FORMAT=AVALUE TABLES
+  /STATISTICS=CHISQ 
+  /CELLS=COUNT ROW COLUMN 
+  /COUNT ROUND CELL.
