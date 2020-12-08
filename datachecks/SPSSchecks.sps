@@ -194,7 +194,7 @@ EXECUTE.
 FREQUENCIES VARIABLES= EE1b_UTAUT EE1b_UTAUT EE2b_UTAUT
  /ORDER=ANALYSIS.
 
-* Check EE for only users
+* Check EE for only users.
 USE ALL.
 COMPUTE filter_$=( ~ SYSMIS(duur)  & (Behavior_UTAUT = 1)).
 VARIABLE LABELS filter_$ ' ~ SYSMIS(duur)  & (Behavior_UTAUT = 3) (FILTER)'.
@@ -203,7 +203,7 @@ FORMATS filter_$ (f1.0).
 FILTER BY filter_$.
 EXECUTE.
 
-FREQUENCIES VARIABLES= EE1a_UTAUT EE2a_UTAUT
+FREQUENCIES VARIABLES= EE1a_UTAUT EE2a_UTAUT EE1b_UTAUT EE2b_UTAUT
  /ORDER=ANALYSIS.
 
 * SElf efficasy.
@@ -219,3 +219,29 @@ FREQUENCIES VARIABLES= HBM_selfefficacy_CoronaMelder
  /ORDER=ANALYSIS.
 
 * Tech related barriers. 
+* Use all 1900 again. 
+USE ALL.
+COMPUTE filter_$=( ~ SYSMIS(duur)).
+VARIABLE LABELS filter_$ ' ~ SYSMIS(duur) (FILTER)'.
+VALUE LABELS filter_$ 0 'Not Selected' 1 'Selected'.
+FORMATS filter_$ (f1.0).
+FILTER BY filter_$.
+EXECUTE.
+FREQUENCIES VARIABLES=  FC1_UTAUT FC2_UTAUT HBM_barriers_CoronaMelder
+ /ORDER=ANALYSIS.
+
+CROSSTABS
+  /TABLES= FC1_UTAUT FC2_UTAUT HBM_barriers_CoronaMelder BY Behavior_UTAUT
+  /FORMAT=AVALUE TABLES
+  /STATISTICS=CHISQ 
+  /CELLS=COUNT ROW COLUMN 
+  /COUNT ROUND CELL.
+
+CROSSTABS
+  /TABLES= FC1_UTAUT FC2_UTAUT HBM_barriers_CoronaMelder BY user_status_intention 
+  /FORMAT=AVALUE TABLES
+  /STATISTICS=CHISQ 
+  /CELLS=COUNT ROW COLUMN 
+  /COUNT ROUND CELL.
+
+* 
