@@ -445,9 +445,9 @@ ft_out
 ```
 
 #### Naleven algemene gedragsregels
-In kaart is gebracht in hoeverre de respondenten zich in de afgelopen 2 maanden aan een aantal van de algemene gedragsregels hebben gehouden (zie figuur \@ref(fig:behavioradhgenmeasures)). `r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_handwashing == 'Altijd'| Behavior_AdherenceGeneralMeasures_handwashing == 'Meestal'| Behavior_AdherenceGeneralMeasures_handwashing == 'Vaak'))) /nrow(data))*100, digits = 1)`% gaf aan, regelmatig, vaak of altijd handen te wassen. Ongeveer de helft van de respondenten (`r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_distance == 'Nooit'| Behavior_AdherenceGeneralMeasures_distance == 'Zelden'| Behavior_AdherenceGeneralMeasures_distance == 'Soms'))) /nrow(data))*100, digits = 1)`%) gaf aan nooit, zelden of soms op minder dan 1,5 afstand van mensen buiten het huishouden te zijn geweest. Tot slot gaf `r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Nooit'| Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Zelden'| Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Soms'))) /nrow(data))*100, digits = 1)`% aan nooit, zelden of soms op een plek te zijn geweest waar anderhalve meter afstand houden eigenlijk niet mogelijk was. 
+In kaart is gebracht in hoeverre de respondenten zich in de afgelopen twee maanden aan een aantal van de algemene gedragsregels hebben gehouden (zie figuur \@ref(fig:behavioradhgenmeasures)). `r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_handwashing == 'Altijd'| Behavior_AdherenceGeneralMeasures_handwashing == 'Meestal'| Behavior_AdherenceGeneralMeasures_handwashing == 'Vaak'))) /nrow(data))*100, digits = 1)`% gaf aan, regelmatig, vaak of altijd handen te wassen. Ongeveer de helft van de respondenten (`r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_distance == 'Nooit'| Behavior_AdherenceGeneralMeasures_distance == 'Zelden'| Behavior_AdherenceGeneralMeasures_distance == 'Soms'))) /nrow(data))*100, digits = 1)`%) gaf aan nooit, zelden of soms op minder dan 1,5 afstand van mensen buiten het huishouden te zijn geweest. Tot slot gaf `r round((nrow(filter(data, (Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Nooit'| Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Zelden'| Behavior_AdherenceGeneralMeasures_avoidbusyplaces == 'Soms'))) /nrow(data))*100, digits = 1)`% aan nooit, zelden of soms op een plek te zijn geweest waar anderhalve meter afstand houden eigenlijk niet mogelijk was. 
 
-```{r behavioradhgenmeasures, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Naleving algemene gedragsregels", tab.cap="Naleving algemene gedragsregels"}
+```{r behavioradhgenmeasures, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Naleving algemene gedragsregels", tab.cap="Naleving algemene gedragsregels. In de afgelopen twee maanden, hoe vaak... "}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("Behavior_AdherenceGeneralMeasures_handwashing", 
@@ -456,7 +456,7 @@ graph_variablenames = c("Behavior_AdherenceGeneralMeasures_handwashing",
 graph_questionlabels = c("... hebt u uw handen gewassen?", 
                          "... bent u minder dan op 1,5m afstand geweest van mensen buiten uw huishouden?", 
                          "... bent u op een plek geweest waar het eigenlijk te druk was om 1,5m afstand te houden?"); 
-plot_title = "In de afgelopen 2 maanden, hoe vaak..."
+plot_title = "In de afgelopen twee maanden, hoe vaak..."
 
 # These questions have 7 answer categories: Helemaal mee eens - Helemaal mee oneens. The following color palette should be used:
 color_palette = my_palette7blue
@@ -559,7 +559,7 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 ```
 
-Van alle respondenten gaf `r round(nrow(filter(data, Corona_complaints == "Ja"))/nrow(data)*100, digits =1)`% aan klachten te hebben gehad die passen bij het coronavirus in de afgelopen twee maanden. Onderstaande grafiek (figuur \@ref(fig:coronacomplaintsquarantaine)) laat zien in hoeverre deze respondenten in quarantaine bleven: in totaal gaf `r round((nrow(filter(data, Corona_complaints == "Ja" & (Behavior_AdherenceGeneralMeasures_quarantaine == 'Nooit'| Behavior_AdherenceGeneralMeasures_quarantaine == 'Zelden'| Behavior_AdherenceGeneralMeasures_quarantaine == 'Soms'))) /nrow(filter(data, Corona_complaints == "Ja")))*100, digits = 1)`% nooit, zelden of soms naar buiten te zijn geweest met klachten.
+Van alle respondenten gaf `r round(nrow(filter(data, Corona_complaints == "Ja"))/nrow(data)*100, digits =1)`% aan klachten te hebben gehad die passen bij het coronavirus in de afgelopen twee maanden. Onderstaande grafiek (figuur \@ref(fig:coronacomplaintsquarantaine)) laat zien in hoeverre deze respondenten in quarantaine bleven: in totaal gaf `r round((nrow(filter(data, Corona_complaints == "Ja" & (Behavior_AdherenceGeneralMeasures_quarantaine == 'Nooit'| Behavior_AdherenceGeneralMeasures_quarantaine == 'Zelden'))) /nrow(filter(data, Corona_complaints == "Ja")))*100, digits = 1)`% nooit of zelden naar buiten te zijn geweest met klachten.
 
 ```{r coronacomplaintsquarantaine, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Naleving algemene gedragsregels bij klachten"}
 

@@ -25,4 +25,8 @@ FREQUENCIES VARIABLES=CoronaInfectionSelf CoronaInfectionSelfTest CoronaInfectio
 FREQUENCIES VARIABLES= HBM_PSus_self1 HBM_PSev_other2 
  /ORDER=ANALYSIS.
 
+* Adherence general behavioral measures.
+FREQUENCIES VARIABLES= Intention_AdherenceGeneralMeasures_quarantaine Behavior_AdherenceGeneralMeasures_handwashing Corona_complaints Behavior_AdherenceGeneralMeasures_quarantaine
+ /ORDER=ANALYSIS.
+
 
