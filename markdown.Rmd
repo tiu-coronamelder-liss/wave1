@@ -1430,7 +1430,7 @@ summary(tab.noby, title="(\\#tab:mytableby2) Demografische kenmerken naar gebrui
 ```
 
 ### Gezondheidsmotivatie en risicoperceptie naar gebruikersstatus
-Chi kwadraat toetsen zijn uitgevoerd om te bepalen of het totaal aandeel respondenten dat het eens  (een beetje, eens, helemaal mee eens) is met de stellingen verschilt tussen de huidige gebruikers en degenen die de CoronaMelder nooit gebruikt hebben. Daarnaast is gekeken of de subgroep die de CoronaMelder nooit gebruikt heeft en aangaf neutraal te zijn met betrekking tot toekomstig gebruik verschilt van de huidig gebruikers. 
+Chi kwadraat toetsen zijn uitgevoerd om te bepalen of het totaal aandeel respondenten dat het eens  (een beetje, eens, helemaal mee eens) is met de stellingen die betrekking hebben op gezondheidsmotivatie en risicoperceptie verschilt tussen de huidige gebruikers en degenen die de CoronaMelder nooit gebruikt hebben. Daarnaast is gekeken of de subgroep die de CoronaMelder nooit gebruikt heeft en aangaf neutraal te zijn met betrekking tot toekomstig gebruik verschilt van de huidig gebruikers. 
 ```{r chiHBMsuscself1usernonuser, echo=FALSE}
 # First calculate a proportion for the variable. 
 data$HBM_PSus_self1_agree[(data$HBM_PSus_self1 == 'Helemaal mee eens'| data$HBM_PSus_self1 == 'Mee eens'| data$HBM_PSus_self1 == 'Een beetje mee eens')] <- "Totaal eens"
