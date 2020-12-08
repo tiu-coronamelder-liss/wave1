@@ -371,8 +371,7 @@ ggdraw(baseplot)
 
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -384,6 +383,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -391,8 +395,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -486,8 +490,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -499,6 +502,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -506,8 +514,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -600,8 +608,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = graph_answercategories # For some reason, in this case it does not need to be reverted.
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -613,6 +620,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -620,8 +632,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -716,8 +728,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -729,6 +740,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -736,8 +752,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -836,8 +852,7 @@ ggdraw(aligned[[2]])
 #table(data$Beliefs_Conspiracy1)
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -849,6 +864,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -856,8 +876,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -947,8 +967,7 @@ ggdraw(aligned[[2]])
 
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -960,6 +979,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -967,8 +991,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -1058,8 +1082,7 @@ ggdraw(aligned[[2]])
 
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -1071,15 +1094,16 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
   # Add correct mapping to column headings
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
-
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
 
 # Build the basic table
 ft <- flextable(
@@ -1195,8 +1219,7 @@ ggdraw(aligned[[2]])
 
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -1208,6 +1231,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -1215,8 +1243,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -1310,8 +1338,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -1323,6 +1350,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -1330,8 +1362,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -2348,8 +2380,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -2361,6 +2392,10 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -2368,8 +2403,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -2650,8 +2685,7 @@ ggdraw(aligned[[2]])
 #ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -2663,6 +2697,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -2670,8 +2709,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -2884,8 +2923,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -2897,6 +2935,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -2904,8 +2947,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -3122,8 +3165,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -3135,6 +3177,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -3142,8 +3189,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -3234,8 +3281,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -3247,6 +3293,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -3254,8 +3305,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -3341,8 +3392,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -3354,6 +3404,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -3361,8 +3416,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -3454,8 +3509,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -3467,6 +3521,10 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -3474,8 +3532,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -3723,8 +3781,6 @@ ggdraw(aligned[[2]])
 
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -3736,6 +3792,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -3743,8 +3804,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -4035,8 +4096,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -4048,6 +4108,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -4055,8 +4120,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -4308,8 +4373,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -4321,6 +4385,10 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -4328,8 +4396,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -4596,8 +4664,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -4609,6 +4676,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -4616,8 +4688,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -4898,8 +4970,7 @@ data_graph_longformat$value <- factor(data_graph_longformat$value,levels = graph
 #ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -4911,6 +4982,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -4918,8 +4994,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -5021,8 +5097,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -5034,6 +5109,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -5041,8 +5121,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -5136,8 +5216,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -5149,6 +5228,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -5156,8 +5240,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -5256,8 +5340,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -5269,6 +5352,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -5276,8 +5364,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -5373,8 +5461,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -5386,6 +5473,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+    
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -5393,8 +5485,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -5496,8 +5588,7 @@ ggdraw(aligned[[2]])
 #ggplot(data=data_graph_longformat, aes(fill=value, x=variable)) + theme_bw() + geom_bar(aes(y = (..count..)/sum(..count..)*length(graph_variablenames))) + scale_y_continuous(breaks=seq(0, 1, 0.1), labels=percent_format(accuracy = 1)) + coord_flip() + labs(x = "", y = "", fill = "") + scale_fill_manual(values=color_palette, drop=FALSE, labels=stringr::str_wrap(graph_answercategories, width = 10)) + theme(plot.margin = margin(0, 0, 0, 0), legend.text=element_text(size=8))
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -5509,6 +5600,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -5516,8 +5612,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -5606,8 +5702,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -5619,6 +5714,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -5626,8 +5726,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -5714,8 +5814,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -5727,6 +5826,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -5734,8 +5838,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -5816,8 +5920,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -5829,6 +5932,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -5836,8 +5944,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -5921,8 +6029,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -5934,6 +6041,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -5941,8 +6053,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
@@ -6038,8 +6150,7 @@ aligned <- align_plots(baseplot, theplot, align="v")
 ggdraw(aligned[[2]])
 
 # Create the table. Step 1: new data frame containing counts
-table_answercategories = rev(graph_answercategories)
-data_table = data.frame(table_answercategories)
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(graph_answercategories)))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -6051,6 +6162,11 @@ graph_questionlabels_unrev <- rev(graph_questionlabels)
 # Inefficient loop, but it does a lot for us: add the counts as columns to the dataframe,
 # and add the correct labels for column headings
 for(idx in 1:length(graph_variablenames)) {
+  
+  if (idx == 1) {
+    data_table["table_answercategories"] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[1]
+  }
+  
   # Add to new dataframe
   data_table[graph_variablenames[idx]] <- as.data.frame(table(data_graph_wideformat[graph_variablenames[idx]]))[2]
   
@@ -6058,8 +6174,8 @@ for(idx in 1:length(graph_variablenames)) {
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
 
-# Sort properly -- NOTE: does not work yet?
-data_table$table_answercategories <- factor(data_table$table_answercategories,levels = rev(table_answercategories))
+
+
 
 # Build the basic table
 ft <- flextable(
