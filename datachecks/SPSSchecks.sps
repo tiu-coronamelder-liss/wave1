@@ -37,3 +37,21 @@ FREQUENCIES VARIABLES= Beliefs_Conspiracy2 Beliefs_TrustGovernment
 FREQUENCIES VARIABLES= Awareness
  /ORDER=ANALYSIS.
 
+* Use and intention. 
+FREQUENCIES VARIABLES= Behavior_UTAUT BI1a_UTAUT BI1b_UTAUT
+ /ORDER=ANALYSIS.
+
+* Use and intention. 
+FREQUENCIES VARIABLES= Behavior_UTAUT BI1b_UTAUT
+ /ORDER=ANALYSIS.
+
+* CheckBI1a_UTAUT for only never users.  
+USE ALL.
+COMPUTE filter_$=( ~ SYSMIS(duur)  & (Behavior_UTAUT = 3)).
+VARIABLE LABELS filter_$ ' ~ SYSMIS(duur)  & (Behavior_UTAUT = 3) (FILTER)'.
+VALUE LABELS filter_$ 0 'Not Selected' 1 'Selected'.
+FORMATS filter_$ (f1.0).
+FILTER BY filter_$.
+EXECUTE.
+FREQUENCIES VARIABLES= Behavior_UTAUT BI1a_UTAUT 
+ /ORDER=ANALYSIS.
