@@ -65,7 +65,7 @@ FREQUENCIES VARIABLES= Behavior_UTAUT BI1b_UTAUT
 
 * CheckBI1a_UTAUT for only never users.  
 USE ALL.
-COMPUTE filter_$=( ~ SYSMIS(duur)  & (Behavior_UTAUT  3)).
+COMPUTE filter_$=( ~ SYSMIS(duur)  & (Behavior_UTAUT = 3)).
 VARIABLE LABELS filter_$ ' ~ SYSMIS(duur)  & (Behavior_UTAUT = 3) (FILTER)'.
 VALUE LABELS filter_$ 0 'Not Selected' 1 'Selected'.
 FORMATS filter_$ (f1.0).
@@ -164,7 +164,7 @@ CROSSTABS
   /CELLS=COUNT ROW COLUMN 
   /COUNT ROUND CELL.
 
-* ADequacy of technology and societal effects.
+* Adequacy of technology and societal effects.
 FREQUENCIES VARIABLES= Beliefs_technologyperformance Beliefs_benefiteconomic
  /ORDER=ANALYSIS.
 CROSSTABS
@@ -180,3 +180,42 @@ CROSSTABS
   /STATISTICS=CHISQ 
   /CELLS=COUNT ROW COLUMN 
   /COUNT ROUND CELL.
+
+* Self efficacy and effort expectancy. 
+* Check EE vars for only non users.
+USE ALL.
+COMPUTE filter_$=( ~ SYSMIS(duur)  & (Behavior_UTAUT = 3)).
+VARIABLE LABELS filter_$ ' ~ SYSMIS(duur)  & (Behavior_UTAUT = 3) (FILTER)'.
+VALUE LABELS filter_$ 0 'Not Selected' 1 'Selected'.
+FORMATS filter_$ (f1.0).
+FILTER BY filter_$.
+EXECUTE.
+
+FREQUENCIES VARIABLES= EE1b_UTAUT EE1b_UTAUT EE2b_UTAUT
+ /ORDER=ANALYSIS.
+
+* Check EE for only users
+USE ALL.
+COMPUTE filter_$=( ~ SYSMIS(duur)  & (Behavior_UTAUT = 1)).
+VARIABLE LABELS filter_$ ' ~ SYSMIS(duur)  & (Behavior_UTAUT = 3) (FILTER)'.
+VALUE LABELS filter_$ 0 'Not Selected' 1 'Selected'.
+FORMATS filter_$ (f1.0).
+FILTER BY filter_$.
+EXECUTE.
+
+FREQUENCIES VARIABLES= EE1a_UTAUT EE2a_UTAUT
+ /ORDER=ANALYSIS.
+
+* SElf efficasy.
+* Use all 1900 again. 
+USE ALL.
+COMPUTE filter_$=( ~ SYSMIS(duur)).
+VARIABLE LABELS filter_$ ' ~ SYSMIS(duur) (FILTER)'.
+VALUE LABELS filter_$ 0 'Not Selected' 1 'Selected'.
+FORMATS filter_$ (f1.0).
+FILTER BY filter_$.
+EXECUTE.
+FREQUENCIES VARIABLES= HBM_selfefficacy_CoronaMelder
+ /ORDER=ANALYSIS.
+
+* Tech related barriers. 

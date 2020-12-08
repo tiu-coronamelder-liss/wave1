@@ -3129,11 +3129,15 @@ ft_out
 
 ```
 
-### Verwachte gebruiksvriendelijkheid en zelfeffectiviteit
+### Verwachte gebruiksvriendelijkheid, inspanningsverwachting en zelfeffectiviteit
 
-Eigen effectiviteit is de persoonlijke inschatting van de eigen bekwaamheid om bepaald gedrag uit te kunnen voeren. Bijna de helft van de respondenten was het eens met de stelling dat de CoronaMelder makkelijk te gebruiken is (`r round((nrow(filter(data, (EE2b_UTAUT == 'Helemaal mee eens'| EE2b_UTAUT == 'Mee eens'| EE2b_UTAUT == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%) en een aanzienlijk percentage staat hier neutraal in (`r round((nrow(filter(data, (EE2b_UTAUT == 'Neutraal'))) /nrow(data))*100, digits = 1)`%). Slechts een klein aandeel is het eens met de stelling dat de CoronaMelder veel tijd en energie zal kosten om te gebruiken (`r round((nrow(filter(data, (EE1b_UTAUT == 'Helemaal mee eens'| EE1b_UTAUT == 'Mee eens'| EE1b_UTAUT == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%). Tot slot acht `r round((nrow(filter(data, (HBM_selfefficacy_CoronaMelder == 'Helemaal mee eens'| HBM_selfefficacy_CoronaMelder == 'Mee eens'| HBM_selfefficacy_CoronaMelder == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`% zichzelf in staat de CoronaMelder te gebruiken.
+Gebruiksvriendelijkheid, inspanningsverwachting en zelfeffectiviteit zijn factoren die belangrijk zijn in de adoptie van nieuwe technologie. Opvallend is dat van de mensen die de CoronaMelder nog *niet* gebruiken, 1 op de 5 mensen (`r round((nrow(filter(data, (EE1b_UTAUT == 'Helemaal mee eens'| EE1b_UTAUT == 'Mee eens'| EE1b_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`%) denkt dat het veel tijd en energie kost om deze te gaan gebruiken en een aanzienlijk deel hier neutraal in staat (`r round((nrow(filter(data, (EE1b_UTAUT == 'Neutraal') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`%). Ongeveer de helft (`r round((nrow(filter(data, (EE1b_UTAUT == 'Helemaal mee oneens'| EE1b_UTAUT == 'Oneens'| EE1b_UTAUT == 'Een beetje oneens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`%) is het hier mee oneens.
 
-```{r effortexpectancynonusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Eigen effectiviteit onder bij respondenten die de CoronaMelder op dit moment niet gebruiken", tab.cap="Eigen effectiviteit onder bij respondenten die de CoronaMelder op dit moment niet gebruiken"}
+Daar staat tegenover dat van de mensen die de CoronaMelder al *wel* gebruiken, slechts `r round((nrow(filter(data, (EE1a_UTAUT == 'Helemaal mee eens'| EE1a_UTAUT == 'Mee eens'| EE1a_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)`% aangaf dat het ze veel tijd en energie gekost had. Bijna 9 op de 10 (`r round((nrow(filter(data, (EE1a_UTAUT == 'Helemaal mee oneens'| EE1a_UTAUT == 'Oneens'| EE1a_UTAUT == 'Een beetje oneens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)`%) respondenten gaf aan het niet eens te zijn met deze stelling. 
+
+Hetzelfde patroon was te zien voor de vraag over gebruiksgemak: het merendeel (`r round((nrow(filter(data, (EE2a_UTAUT == 'Helemaal mee eens'| EE2a_UTAUT == 'Mee eens'| EE2a_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)`%) van de respondenten die de CoronaMelder op dit moment gebruiken was het eens met de stelling dat de CoronaMelder makkelijk te gebruiken is. Van degenen die de CoronaMelder nooit hebben gebruikt gaf `r round((nrow(filter(data, (EE2b_UTAUT == 'Helemaal mee eens'| EE2b_UTAUT == 'Mee eens'| EE2b_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`% aan dat hij/zij verwacht dat de CoronaMelder makkelijk te gebruiken is. 
+
+```{r effortexpectancynonusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Inspanningsverwachting en Zelfeffectiviteit bij respondenten die de CoronaMelder op dit moment niet gebruiken", tab.cap="Inspanningsverwachting en Zelfeffectiviteit bij respondenten die de CoronaMelder op dit moment niet gebruiken"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("EE1b_UTAUT", 
@@ -3249,7 +3253,7 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 
 ft_out
 ```
-
+In onderstaande grafiek en tabellen zijn de resultaten voor de respondenten die de CoronaMelder momenteel niet gebruiken, te vinden. 
 ```{r effortexpectancyusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Eigen effectiviteit onder bij respondenten die de CoronaMelder op dit moment gebruiken", tab.cap="Eigen effectiviteit onder bij respondenten die de CoronaMelder op dit moment gebruiken"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -3366,6 +3370,8 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 
 ```
+
+Zelfeffectiviteit is de persoonlijke inschatting van de eigen bekwaamheid om bepaald gedrag uit te kunnen voeren. Er is gevraagd of men zich zelf in staat achtte om de CoronaMelder te gebruiken:`r round((nrow(filter(data, (HBM_selfefficacy_CoronaMelder == 'Helemaal mee eens'| HBM_selfefficacy_CoronaMelder == 'Mee eens'| HBM_selfefficacy_CoronaMelder == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`% acht zichzelf in staat de CoronaMelder te gebruiken. In onderstaande grafiek en tabel zijn de resultaten voor de gehele sample te zien. 
 
 ```{r selfefficacyCM, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Zelfeffectiviteit om CoronaMelder te installeren"}
 
