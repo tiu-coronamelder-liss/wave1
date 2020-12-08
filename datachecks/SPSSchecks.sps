@@ -72,3 +72,19 @@ CROSSTABS
   /STATISTICS=CHISQ 
   /CELLS=COUNT ROW COLUMN 
   /COUNT ROUND CELL.
+
+* Check user status health motivation / suscep / severity.
+CROSSTABS
+  /TABLES=HBM_PSus_self1 HBM_PSus_other2 BY Behavior_UTAUT
+  /FORMAT=AVALUE TABLES
+  /STATISTICS=CHISQ 
+  /CELLS=COUNT ROW COLUMN 
+  /COUNT ROUND CELL.
+
+* Check user status adherence to general measures. 
+CROSSTABS
+  /TABLES= Intention_AdherenceGeneralMeasures_handwashing Behavior_AdherenceGeneralMeasures_avoidbusyplaces BY Behavior_UTAUT
+  /FORMAT=AVALUE TABLES
+  /STATISTICS=CHISQ 
+  /CELLS=COUNT ROW COLUMN 
+  /COUNT ROUND CELL.
