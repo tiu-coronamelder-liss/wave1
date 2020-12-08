@@ -2,7 +2,7 @@
 * This script produces output to check the data and outcomes in the report. 
 * Open data.
 GET
-  FILE='C:\Surfdrive\Temp\L_CoronaMelder_wave1_3p.sav'.
+  FILE='L_CoronaMelder_wave1_3p.sav'.
 DATASET NAME DataSet2 WINDOW=FRONT.
 
 * Remove the 10 participants for which data was not complete.
