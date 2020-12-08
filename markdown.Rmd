@@ -209,7 +209,7 @@ user_totals[5] <- sum(data$user_status_intention == "Nooit gebruikt en wel van p
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
 # Samenvatting {.unlisted .unnumbered}
-## Inleiding {-}
+## Inleiding {.unlisted .unnumbered}
 ## Methode {.unlisted .unnumbered}
 ## Resultaten {.unlisted .unnumbered}
 ## Conclusie {.unlisted .unnumbered}
@@ -231,24 +231,24 @@ De CoronaMelder app is ontwikkeld door het ministerie van Volksgezondheid, Welzi
 
 ## Onderzoeksopzet  
 
-In het kader van de evaluatie van de CoronaMelder wordt er een longitudinaal vragenlijstonderzoek uitgevoerd via het LISS panel (LISSdata.nl) waarbij er over een periode van 5 maanden 4 metingen zullen plaatsvinden. Het doel van dit onderzoek is om, over de tijd, de adoptie van de app en de (intentie tot) opvolging van de in de app gegeven adviezen te onderzoeken en te verklaren. Meer specfifiek gaan we in dit longitudinale onderzoek in op de volgende onderzoeksvragen:
+In het kader van de evaluatie van de CoronaMelder wordt er een longitudinaal vragenlijstonderzoek uitgevoerd via het LISS panel (LISSdata.nl) waarbij er over een periode van 5 maanden 4 metingen zullen plaatsvinden. Het doel van dit onderzoek is om, over de tijd, de adoptie van de app en de (intentie tot) opvolging van de in de app gegeven adviezen te onderzoeken en te verklaren. Meer specifiek gaan we in dit longitudinale onderzoek in op de volgende onderzoeksvragen:
   
 Onderzoeksvraag 1: Wat is de temporele dynamiek van de adoptie van digitale contracttracering in de Nederlandse bevolking en welke factoren (persoonlijk, sociaal, omgevingsfactoren) hebben hierop betrekking? 
   
 Onderzoeksvraag 2: Wat is de temporele dynamiek van de intentie om zich te houden aan de adviezen die worden gecommuniceerd in de digitale contacttracing app CoronaMelder en welke factoren (persoonlijk, sociaal, omgeving, app-gerelateerd) zijn hierop van invloed? 
 
-De huidige rapportage beslaat de data van de eerste meting. De datacollectie (wave 1) van deze rapportage vond plaats tussen 19 oktober en 1 november 2020, 1.5 week na de landelijke lancering op 10 oktober 2020. Vervolgmetingen vinden plaats 1.5 maand na lancering (wave 2: 07-12 t/m 20-12), 3 maanden na lancering (18-01 t/m 31-01) en 5 maanden na lancering (15-03 t/m 29-03). 
+De huidige rapportage beslaat de data van de eerste meting. Hierdoor zijn effecten alleen voor de eerste wave getoond. Effecten over de tijd zullen in volgende rapportages getoond worden. De datacollectie (wave 1) van deze rapportage vond plaats tussen 19 oktober en 1 november 2020, 1.5 week na de landelijke lancering op 10 oktober 2020. Vervolgmetingen vinden plaats 1.5 maand na lancering (wave 2: 07-12 t/m 20-12), 3 maanden na lancering (18-01 t/m 31-01) en 5 maanden na lancering (15-03 t/m 29-03). 
 
 De (9 minuten durende) vragenlijst bevat op elk meetmoment de volgende onderwerpen:   
-- Gebruiksgedrag van CoronaMelder  
-- Technologische factoren die zijn afgeleid van de Unified Theory of Acceptance and Use of Techology (UTAUT): prestatieverwachting, inspanningsverwachting, sociale invloed en gedragsintentie. 
-- COVID-19 en CoronaMelder-gerelateerde percepties en overtuigingen  
-- Overtuigingen over de voordelen en de persoonlijke/maatschappelijke waarde van de CoronaMelder  
-- Misvattingen over Covid-19 en CoronaMelder  
-- Persoonlijke, sociale en omgevingsfactoren   
-- Preventief gedrag / naleving van adviezen en factoren die zijn afgeleid van het Health Belief Model (HBM): Preventief gedrag (afgelopen week en intentie), waargenomen ernst en vatbaarheid, persoonlijke voordelen en barrières, zelfredzaamheid  
+* Gebruiksgedrag van CoronaMelder  
+* Technologische factoren die zijn afgeleid van de Unified Theory of Acceptance and Use of Techology (UTAUT): prestatieverwachting, inspanningsverwachting, sociale invloed en gedragsintentie. 
+* COVID-19 en CoronaMelder-gerelateerde percepties en overtuigingen  
+* Overtuigingen over de voordelen en de persoonlijke/maatschappelijke waarde van de CoronaMelder  
+* Misvattingen over het coronavirus en CoronaMelder  
+* Persoonlijke, sociale en omgevingsfactoren   
+* Preventief gedrag / naleving van adviezen en factoren die zijn afgeleid van het Health Belief Model (HBM): Preventief gedrag (afgelopen week en intentie), waargenomen ernst en vatbaarheid, persoonlijke voordelen en barrières, zelfredzaamheid  
 
-Sommige items zijn aan verandering onderhevig (bijvoorbeeld items over misvattingen over de app of Covid-19 zullen gebaseerd zijn op de meest recente ontwikkelingen en actuele gebeurtenissen in de media). In de bijlage kan de vragenlijst van wave 1 gevonden worden. 
+Sommige items zijn aan verandering onderhevig (bijvoorbeeld items over misvattingen over de app of het coronavirus zullen gebaseerd zijn op de meest recente ontwikkelingen en actuele gebeurtenissen in de media). In de bijlage kan de vragenlijst van wave 1 gevonden worden. 
 
 ## Beschrijving panel
 Het LISS panel is bij uitstek geschikt voor onderzoek waarbij een goede vertegenwoordiging van de Nederlandse bevolking van groot belang is. Het LISS panel is een probability-based (geen zelfselectie) panel dat iedere maand vragenlijsten invullen via internet. De adressensteekproeven voor de werving en de bijwervingen zijn getrokken uit het populatieregister in samenwerking met het CBS. Indien een huishouden niet beschikt over een breedbandverbinding en/of computer, dan stelt CentERdata de benodigde apparatuur in bruikleen beschikbaar om alsnog mee te kunnen doen aan het panel. Hiermee onderscheidt het LISS panel zich van andere online panels, waar niet-internetters ontbreken en waar panelleden de gelegenheid hebben om zichzelf aan te melden.  
@@ -256,6 +256,9 @@ Het LISS panel is bij uitstek geschikt voor onderzoek waarbij een goede vertegen
 Panelleden ontvangen € 7,50 voor een vragenlijst met een invultijd van dertig minuten. Omdat het veldwerk standaard bijna een maand duurt en men twee herinneringen krijgt, is iedereen (van oud tot jong, werkend of niet werkend en/of tijdelijk afwezig) in de gelegenheid de vragenlijsten in te vullen.
 
 ## Huidige rapportage: Meting 1 
+
+Datum van dataverzameling: 19 oktober 2020 – 1 november 2020.
+
 Steekproef meting 1: Een aselecte steekproef van LISS-panelleden van 16 jaar en ouder die ook de LISS-kernvragenlijst ‘Health’ (afgenomen in november en december 2019) en de vragenlijst over het coronavirus (afgenomen in het LISS panel maart 2020) hebben ingevuld.  
 
 Responsoverzicht | 
@@ -266,9 +269,7 @@ Respons | 1.910 (91,3%)
   Compleet | 1.900 (90,8%)  
   Incompleet | 10 (0,5%)  
 
-Datum van dataverzameling: 19 oktober 2020 – 1 november 2020.
-
-In de resultaten sectie worden de uitkomsten getoond van de 1900 respondenten waarbij de data compleet was. Ook word er een overzicht van de karakteristieken van de steekproef getoond. In de bijlage kan een vergelijking van de demografische samenstelling van de steekproef in vergelijking met die van de Nederlandse bevolking (op basis van gegevens van het CBS) gevonden worden. 
+In de resultaten sectie worden de uitkomsten getoond van de 1900 respondenten waarvan de data compleet was. Ook wordt er een overzicht van de karakteristieken van de steekproef getoond. In de bijlage kan een vergelijking van de demografische samenstelling van de steekproef in vergelijking met die van de Nederlandse bevolking (op basis van gegevens van het CBS) gevonden worden. 
 
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
@@ -277,7 +278,7 @@ In de resultaten sectie worden de uitkomsten getoond van de 1900 respondenten wa
 # Resultaten
 ## Karakteristieken van de steekproef
 ### Demografische factoren
-Aan dit onderzoek hebben `r nrow(data)` (gemiddelde leeftijd in jaren: `r round(mean(data$leeftijd), digits = 1)`, standaarddeviatie: `r round(sd(data$leeftijd), digits = 1)`, range: `r min(data$leeftijd)`-`r max(data$leeftijd)`); `r round((nrow(filter(data, geslacht == 'Vrouw'))/nrow(data))*100, digits = 2)`% vrouw) respondenten deelgenomen. De demografische statistieken zijn te vinden in de onderstaande tabel. 
+Aan dit onderzoek hebben `r nrow(data)` (gemiddelde leeftijd in jaren: `r round(mean(data$leeftijd), digits = 1)`, standaarddeviatie: `r round(sd(data$leeftijd), digits = 1)`, range: `r min(data$leeftijd)`-`r max(data$leeftijd)`); `r round((nrow(filter(data, geslacht == 'Vrouw'))/nrow(data))*100, digits = 2)`% vrouw) respondenten deelgenomen. De demografische kenmerken zijn te vinden in de onderstaande tabel. 
 
 ```{r, echo=FALSE, results="asis"} 
 tab.noby <- tableby(~ geslacht + lftdcat + sted_simplified + belbezig_simplified + oplmet_simplified + burgstat_simplified + nettocat_simplified + woonvorm + Riskgroup_contact, data=data)
