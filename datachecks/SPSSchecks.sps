@@ -6,19 +6,23 @@ GET
 DATASET NAME DataSet2 WINDOW=FRONT.
 
 * Remove the 10 participants for which data was not complete.
+USE ALL.
+COMPUTE filter_$=( ~ SYSMIS(duur)).
+VARIABLE LABELS filter_$ ' ~ SYSMIS(duur) (FILTER)'.
+VALUE LABELS filter_$ 0 'Not Selected' 1 'Selected'.
+FORMATS filter_$ (f1.0).
+FILTER BY filter_$.
+EXECUTE.
 
-
-* Get frequencies of demographics.
-FREQUENCIES VARIABLES=geslacht leeftijd lftdcat burgstat sted nettocat oplmet
+* Demographics.
+FREQUENCIES VARIABLES=geslacht lftdcat sted belbezig burgstat nettocat oplmet woonvorm Riskgroup_contact
   /ORDER=ANALYSIS.
 
+* Health motivation.
+FREQUENCIES VARIABLES=CoronaInfectionSelf CoronaInfectionSelfTest CoronaInfectionSelfTest_1 CoronaInfectionSelfTest_2 
+ /ORDER=ANALYSIS.
 
-EXAMINE VARIABLES=geslacht leeftijd lftdcat burgstat sted nettocat oplmet BY Behavior_UTAUT
-  /PLOT BOXPLOT STEMLEAF
-  /COMPARE GROUPS
-  /STATISTICS DESCRIPTIVES
-  /CINTERVAL 95
-  /MISSING LISTWISE
-  /NOTOTAL.
+FREQUENCIES VARIABLES= HBM_PSus_self1 HBM_PSev_other2 
+ /ORDER=ANALYSIS.
 
 
