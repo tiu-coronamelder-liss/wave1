@@ -267,15 +267,17 @@ FREQUENCIES VARIABLES=  SI1_UTAUT SI2_UTAUT Beliefs_civicduty Beliefs_AppAdoptio
  /ORDER=ANALYSIS.
 
 CROSSTABS
-  /TABLES= Beliefs_fear Beliefs_notificationfear BY Behavior_UTAUT
+  /TABLES= SI1_UTAUT SI2_UTAUT Beliefs_civicduty Beliefs_AppAdoption BY Behavior_UTAUT
   /FORMAT=AVALUE TABLES
   /STATISTICS=CHISQ 
   /CELLS=COUNT ROW COLUMN 
   /COUNT ROUND CELL.
 
 CROSSTABS
-  /TABLES= Beliefs_fear Beliefs_notificationfear BY user_status_intention 
+  /TABLES= SI1_UTAUT SI2_UTAUT Beliefs_civicduty Beliefs_AppAdoption BY user_status_intention 
   /FORMAT=AVALUE TABLES
   /STATISTICS=CHISQ 
   /CELLS=COUNT ROW COLUMN 
   /COUNT ROUND CELL.
+
+*

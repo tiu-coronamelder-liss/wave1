@@ -4442,14 +4442,13 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 ```
 
-Er werd ook gevraagd aan de respondenten hoeveel procent van de NEderlandse bevolking zij dachten dat de CoronaMelder gebruikt. De meeste respondenten (`r round((nrow(filter(data, (Beliefs_AppAdoption == '26-50%'))) /nrow(data))*100, digits = 1)`%) dachten dat tussen de 26 en 50% van de bevolking de CoronaMelder gebruikt, gevolgd door de categorie van 11-25% (`r round((nrow(filter(data, (Beliefs_AppAdoption == '11-25%'))) /nrow(data))*100, digits = 1)`%).
+Er werd ook gevraagd aan de respondenten hoeveel procent van de NEderlandse bevolking zij dachten dat de CoronaMelder gebruikt. De meeste respondenten (`r round((nrow(filter(data, (Beliefs_AppAdoption == '26-50%'))) /nrow(data))*100, digits = 1)`%) dachten dat tussen de 26 en 50% van de bevolking de CoronaMelder gebruikt, gevolgd door de categorie van 11 tot 25% (`r round((nrow(filter(data, (Beliefs_AppAdoption == '11-25%'))) /nrow(data))*100, digits = 1)`%).
 
 
-```{r Beliefsappadoption, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Percentage bevolking dat volgens de respondent de CoronaMelder gebruikt"}
-ggplot(data=data, aes(x = Beliefs_AppAdoption)) + theme_bw() + xlab(paste(names(table(data$Beliefs_AppAdoption)))) + ylab(" ") + xlab("Hoeveel procent van de Nederlandse bevolking denkt u dat de CoronaMelder gebruikt?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(axis.title=element_text(size=10))
+```{r Beliefsappadoption, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Percentage Nederlandse bevolking dat volgens de respondent de CoronaMelder gebruikt"}
+ggplot(data=data, aes(x = Beliefs_AppAdoption)) + theme_bw() + xlab(paste(names(table(data$Beliefs_AppAdoption)))) + ylab(" ") + xlab("") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(axis.title=element_text(size=10))
 
 ```
-
 
 
 #### Sociale invloeden naar gebruikersstatus
