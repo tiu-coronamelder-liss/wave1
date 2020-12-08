@@ -1155,13 +1155,6 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 ```
 
-```{r awareness, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Bekendheid met CoronaMelder", tab.cap="Waargenomen ernst en vatbaarheid - Gebruikers"}
-# Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-ggplot(data=data, aes(x = Awareness)) + theme_bw() + xlab(paste(names(table(data$Awareness)))) + ylab(" ") + xlab("Hoe bekend bent u met de CoronaMelder?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(axis.title=element_text(size=10))
-```
-
-
-
 ```{r awarenesslftd, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Bekendheid met de CoronaMelder per leeftijdscategorie"}
 # Awareness op leeftijdscategorie, met ook 'reversed' labels en waarden in de bar chart:
 #ggplot(data=data, aes(fill=Awareness, x=lftdcat)) + geom_bar(position=position_fill(reverse = TRUE), aes(y = (..count..)/sum(..count..))) + scale_y_continuous(labels=percent) + scale_x_discrete(labels=c("15-24", "25-34", "35-44", "45-54", "55-64", "65+")) + coord_flip() + labs(x = "Leeftijdscategorie", y = "", fill = "") + ggtitle("Bekendheid Coronamelder per leeftijdscategorie") + scale_fill_manual(values=my_palette5) + guides(fill = guide_legend(reverse = TRUE))
