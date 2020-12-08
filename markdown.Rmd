@@ -3797,6 +3797,7 @@ ggdraw(aligned[[2]])
 
 
 # Create the table. Step 1: new data frame containing counts
+data_table = data.frame(matrix(0, ncol = 0, nrow = length(levels(data[[graph_variablenames[1]]]))))
 
 # We need one extra (empty) column label for the row with the possible values
 table_questionlabels = list()
@@ -3819,8 +3820,6 @@ for(idx in 1:length(graph_variablenames)) {
   # Add correct mapping to column headings
   table_questionlabels[graph_variablenames[idx]] <- graph_questionlabels_unrev[idx]
 }
-
-
 
 
 # Build the basic table
