@@ -294,7 +294,7 @@ Ook werd gevraagd of er wel eens een coronatest bij de respondent was afgenomen.
 
 Van de mensen bij wie al minstens een keer een test was afgenomen (`r  nrow(filter(data, (CoronaInfectionSelfTest == 'Ja, een keer' | CoronaInfectionSelfTest == 'Ja, meerdere keren')))`), gaf  `r  round((nrow(filter(data, (CoronaInfectionSelfTest_1 == 'Ja' | CoronaInfectionSelfTest_2 == 'Ja'))) / nrow(filter(data, (CoronaInfectionSelfTest == 'Ja, een keer' | CoronaInfectionSelfTest == 'Ja, meerdere keren'))))*100, digits = 1)`% aan dat een van deze testen positief was, `r  round((nrow(filter(data, (CoronaInfectionSelfTest_1 == 'Nee' | CoronaInfectionSelfTest_2 == 'Nee'))) / nrow(filter(data, (CoronaInfectionSelfTest == 'Ja, een keer' | CoronaInfectionSelfTest == 'Ja, meerdere keren'))))*100, digits = 1)`% gaf aan dat de test negatief was en de rest (`r  round((nrow(filter(data, (CoronaInfectionSelfTest_1 == 'Weet ik (nog) niet' | CoronaInfectionSelfTest_2 == 'Weet ik (nog) niet'))) / nrow(filter(data, (CoronaInfectionSelfTest == 'Ja, een keer' | CoronaInfectionSelfTest == 'Ja, meerdere keren'))))*100, digits = 1)`%) gaf aan dit (nog) niet te weten. 
 
-In totaal `r round(nrow(filter(data, (CoronaInfectionOther_1 == 'Ja' | CoronaInfectionOther_2 == 'Ja' | CoronaInfectionOther_3 == 'Ja' | CoronaInfectionOther_4 == 'Ja' | CoronaInfectionOther_5 == 'Ja' | CoronaInfectionOther_6 == 'Ja')))/nrow(data)*100, digits = 1)`% gaf aan dat iemand in hun directe omgeving besmet is (geweest)  met het coronavirus. In onderstaande grafiek (figuur \@ref(fig:coronainfectionother) is te zien welke relatie deze personen tot de respondent hadden. In totaal `r round(nrow(filter(data, (CoronaInfectionOther_7 == 'Ja')))/nrow(data)*100, digits = 1)`% gaf aan dat niemand in hun directe omgeving besmet is (geweest)  met het coronavirus en `r round(nrow(filter(data, (CoronaInfectionOther_8 == 'Ja')))/nrow(data)*100, digits = 1)` wist dit niet of wilde dit niet zeggen. 
+In totaal `r round(nrow(filter(data, (CoronaInfectionOther_1 == 'Ja' | CoronaInfectionOther_2 == 'Ja' | CoronaInfectionOther_3 == 'Ja' | CoronaInfectionOther_4 == 'Ja' | CoronaInfectionOther_5 == 'Ja' | CoronaInfectionOther_6 == 'Ja')))/nrow(data)*100, digits = 1)`% gaf aan dat iemand in hun directe omgeving besmet is (geweest)  met het coronavirus. In onderstaande grafiek (figuur \@ref(fig:coronainfectionother) is te zien welke relatie deze personen tot de respondent hadden. In totaal `r round(nrow(filter(data, (CoronaInfectionOther_7 == 'Ja')))/nrow(data)*100, digits = 1)`% gaf aan dat niemand in hun directe omgeving besmet is (geweest)  met het coronavirus en `r round(nrow(filter(data, (CoronaInfectionOther_8 == 'Ja')))/nrow(data)*100, digits = 1)`% wist dit niet of wilde dit niet zeggen. 
 
 ```{r coronainfectionother, echo=FALSE, fig.width=7, fig.height=2.5, fig.cap="Relatie geïnfecteerde personen tot de respondent"}
 # Prepare dataset datachart for plot
@@ -314,6 +314,9 @@ chartdata <- data.frame(var=c("Ja, mijn partner",
 # Create the plot
 plot = ggplot(data=chartdata, aes(x=var, y=value)) +
   geom_bar(stat="identity", fill = "#bdd7e7", color = "#6baed6") +
+  geom_text(aes(x=var, y=value, ymax=value, label=value, 
+                hjust=ifelse(sign(value)>0, 1, 0)), 
+            position = position_dodge(width=1)) +
   coord_flip() +
   ylab("Percentage deelnemers (meerdere antwoorden mogelijk)") +
   xlab("") +
@@ -2455,11 +2458,21 @@ Er is ook gevraagd hoeveel procent van de Nederlandse bevolking volgens de respo
 
 ```{r, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Percentage bevolking dat de CoronaMelder moet gebruiken om verspreiding van het virus tegen te gaan"}
 # Beliefs_ResponseefficasyOther
-ggplot(data=data, aes(x = Beliefs_ResponseefficasyOther)) + theme_bw() + xlab(paste(names(table(data$Beliefs_ResponseefficasyOther)))) + ylab(" ") + xlab(" ") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(,axis.title=element_text(size=10))
+ggplot(data=data, aes(x = Beliefs_ResponseefficasyOther)) +
+  theme_bw() +
+  xlab(paste(names(table(data$Beliefs_ResponseefficasyOther)))) + 
+  ylab(" ") + 
+  xlab(" ") + 
+  geom_bar(fill = "#bdd7e7", color = "#6baed6") + 
+  theme(plot.margin = margin(0, 0.1, 0, 0)) + 
+  theme(axis.title=element_text(size=10))
+
 
 ```
 
 #### Verwachte effectiviteit CoronaMelder naar gebruikersstatus
+
+Om te onderzoeken of de verwachte effectiviteit een rol speelt in adoptie, is gekeken of er verschillen waren in verwachte effectiviteit naar gebruikersstatus. 
 ```{r chiPE1utautusernonuser, echo=FALSE}
 # First calculate a proportion for the variable. 
 data$PE1_UTAUT_agree[(data$PE1_UTAUT == 'Helemaal mee eens'| data$PE1_UTAUT == 'Mee eens'| data$PE1_UTAUT == 'Een beetje mee eens')] <- "Totaal eens"

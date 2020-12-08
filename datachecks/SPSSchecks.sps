@@ -14,6 +14,24 @@ FORMATS filter_$ (f1.0).
 FILTER BY filter_$.
 EXECUTE.
 
+* Create new variable user status to check the R script. 
+* Check user status finegrained.
+compute user_status_intention = 1. 
+if (Behavior_UTAUT = 1) user_status_intention = 1.
+if((Behavior_UTAUT =3) & ((BI1a_UTAUT = 1) | (BI1a_UTAUT = 2) | (BI1a_UTAUT = 3))) user_status_intention = 2.
+if (Behavior_UTAUT =3) & ((BI1a_UTAUT = 4)) user_status_intention = 3.
+if (Behavior_UTAUT =3) & ((BI1a_UTAUT = 5) | (BI1a_UTAUT = 6) | (BI1a_UTAUT = 7)) user_status_intention = 4.
+if (Behavior_UTAUT =4) user_status_intention = 5.
+execute.
+
+value labels user_status_intention 
+1 'Gebruiker'
+2 'Nooit gebruikt en niet van plan'
+3 'Nooit gebruikt en neutraal'
+4 'Nooit gebruikt en wel van plan'
+5 'Voormalig gebruiker'.
+execute.
+
 * Demographics.
 FREQUENCIES VARIABLES=geslacht lftdcat sted belbezig burgstat nettocat oplmet woonvorm Riskgroup_contact
   /ORDER=ANALYSIS.
@@ -88,3 +106,46 @@ CROSSTABS
   /STATISTICS=CHISQ 
   /CELLS=COUNT ROW COLUMN 
   /COUNT ROUND CELL.
+
+* Check user status general statements conspiracy trust. 
+CROSSTABS
+  /TABLES= Beliefs_Conspiracy2 Beliefs_TrustGovernment BY Behavior_UTAUT
+  /FORMAT=AVALUE TABLES
+  /STATISTICS=CHISQ 
+  /CELLS=COUNT ROW COLUMN 
+  /COUNT ROUND CELL.
+
+* Use all 1900 again. 
+USE ALL.
+COMPUTE filter_$=( ~ SYSMIS(duur)).
+VARIABLE LABELS filter_$ ' ~ SYSMIS(duur) (FILTER)'.
+VALUE LABELS filter_$ 0 'Not Selected' 1 'Selected'.
+FORMATS filter_$ (f1.0).
+FILTER BY filter_$.
+EXECUTE.
+CROSSTABS
+  /TABLES= Beliefs_Conspiracy2 Beliefs_TrustGovernment BY user_status_intention 
+  /FORMAT=AVALUE TABLES
+  /STATISTICS=CHISQ 
+  /CELLS=COUNT ROW COLUMN 
+  /COUNT ROUND CELL.
+
+* Expected use and value of the CoronaMelder.
+FREQUENCIES VARIABLES= PE1_UTAUT Beliefs_ResponseefficasyOther
+ /ORDER=ANALYSIS.
+CROSSTABS
+  /TABLES= PE1_UTAUT BY Behavior_UTAUT
+  /FORMAT=AVALUE TABLES
+  /STATISTICS=CHISQ 
+  /CELLS=COUNT ROW COLUMN 
+  /COUNT ROUND CELL.
+
+CROSSTABS
+  /TABLES= PE1_UTAUT BY user_status_intention 
+  /FORMAT=AVALUE TABLES
+  /STATISTICS=CHISQ 
+  /CELLS=COUNT ROW COLUMN 
+  /COUNT ROUND CELL.
+
+
+
