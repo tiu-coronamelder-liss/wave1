@@ -262,4 +262,20 @@ CROSSTABS
   /CELLS=COUNT ROW COLUMN 
   /COUNT ROUND CELL.
 
-* 
+* *Social influences.
+FREQUENCIES VARIABLES=  SI1_UTAUT SI2_UTAUT Beliefs_civicduty Beliefs_AppAdoption
+ /ORDER=ANALYSIS.
+
+CROSSTABS
+  /TABLES= Beliefs_fear Beliefs_notificationfear BY Behavior_UTAUT
+  /FORMAT=AVALUE TABLES
+  /STATISTICS=CHISQ 
+  /CELLS=COUNT ROW COLUMN 
+  /COUNT ROUND CELL.
+
+CROSSTABS
+  /TABLES= Beliefs_fear Beliefs_notificationfear BY user_status_intention 
+  /FORMAT=AVALUE TABLES
+  /STATISTICS=CHISQ 
+  /CELLS=COUNT ROW COLUMN 
+  /COUNT ROUND CELL.

@@ -3137,7 +3137,7 @@ Daar staat tegenover dat van de mensen die de CoronaMelder al *wel* gebruiken, s
 
 Hetzelfde patroon was te zien voor de vraag over gebruiksgemak: het merendeel (`r round((nrow(filter(data, (EE2a_UTAUT == 'Helemaal mee eens'| EE2a_UTAUT == 'Mee eens'| EE2a_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')) /nrow(filter(data, Behavior_UTAUT == 'Ik gebruik de CoronaMelder app op dit moment')))*100, digits = 1)`%) van de respondenten die de CoronaMelder op dit moment gebruiken was het eens met de stelling dat de CoronaMelder makkelijk te gebruiken is. Van degenen die de CoronaMelder nooit hebben gebruikt gaf `r round((nrow(filter(data, (EE2b_UTAUT == 'Helemaal mee eens'| EE2b_UTAUT == 'Mee eens'| EE2b_UTAUT == 'Een beetje mee eens') & Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')) /nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app nooit gebruikt')))*100, digits = 1)`% aan dat hij/zij verwacht dat de CoronaMelder makkelijk te gebruiken is. 
 
-```{r effortexpectancynonusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Inspanningsverwachting en Zelfeffectiviteit bij respondenten die de CoronaMelder op dit moment niet gebruiken", tab.cap="Inspanningsverwachting en Zelfeffectiviteit bij respondenten die de CoronaMelder op dit moment niet gebruiken"}
+```{r effortexpectancynonusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Inspanningsverwachting en zelfeffectiviteit bij respondenten die de CoronaMelder op dit moment niet gebruiken", tab.cap="Inspanningsverwachting en zelfeffectiviteit bij respondenten die de CoronaMelder op dit moment niet gebruiken"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("EE1b_UTAUT", 
@@ -3256,7 +3256,7 @@ ft_out
 
 In onderstaande grafiek en tabellen zijn de resultaten voor de respondenten die de CoronaMelder momenteel niet gebruiken, te vinden. 
 
-```{r effortexpectancyusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Eigen effectiviteit onder bij respondenten die de CoronaMelder op dit moment gebruiken", tab.cap="Eigen effectiviteit onder bij respondenten die de CoronaMelder op dit moment gebruiken"}
+```{r effortexpectancyusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Zelfeffectiviteit bij respondenten die de CoronaMelder op dit moment gebruiken", tab.cap="Zelfeffectiviteit bij respondenten die de CoronaMelder op dit moment gebruiken"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("EE1a_UTAUT", 
@@ -3375,7 +3375,7 @@ ft_out
 
 Zelfeffectiviteit is de persoonlijke inschatting van de eigen bekwaamheid om bepaald gedrag uit te kunnen voeren. Er is gevraagd of men zich zelf in staat achtte om de CoronaMelder te gebruiken:`r round((nrow(filter(data, (HBM_selfefficacy_CoronaMelder == 'Helemaal mee eens'| HBM_selfefficacy_CoronaMelder == 'Mee eens'| HBM_selfefficacy_CoronaMelder == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`% acht zichzelf in staat de CoronaMelder te gebruiken. In onderstaande grafiek en tabel zijn de resultaten voor de gehele sample te zien. 
 
-```{r selfefficacyCM, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Zelfeffectiviteit om CoronaMelder te installeren"}
+```{r selfefficacyCM, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Zelfeffectiviteit om CoronaMelder te gebruiken", tab.cap="Zelfeffectiviteit om CoronaMelder te gebruiken"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("HBM_selfefficacy_CoronaMelder")
@@ -4325,16 +4325,9 @@ ft_out
 
 
 ### Sociale invloeden
-Om de sociale invloeden in kaart te brengen is gevraagd naar descriptieve en injunctieve normen en is gevraagd om een indicatie te geven van welk percentage van de Nederlandse bevolking de CoronaMelder gebruikt. Opvallend is dat een relatief laag percentage mensen het eens is met de stelling dat veel mensen in hun omgeving de CoronaMelder gebruiken (`r round((nrow(filter(data, (SI1_UTAUT == 'Helemaal mee eens'| SI1_UTAUT == 'Mee eens'| SI1_UTAUT == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%). Dit kan liggen aan het feit dat gebruik van de CoronaMelder redelijk onzichtbaar is (in tegenstelling tot het gebruik van bijvoorbeeld een mondkapje). Daarnaast staat een groot percentage neutraal tegenover deze stelling (`r round((nrow(filter(data, (SI1_UTAUT == 'Neutraal'))) /nrow(data))*100, digits = 1)`%), wat zou kunnen betekenen dat men hier niet van op de hoogte is.
+Om de sociale invloeden in kaart te brengen is gevraagd naar descriptieve en injunctieve normen en is gevraagd om een indicatie te geven van welk percentage van de Nederlandse bevolking de CoronaMelder gebruikt. Opvallend is dat een relatief laag percentage (`r round((nrow(filter(data, (SI1_UTAUT == 'Helemaal mee eens'| SI1_UTAUT == 'Mee eens'| SI1_UTAUT == 'Een beetje mee eens'))) /nrow(data))*100, digits = 1)`%) van de respondenten het eens is met de stelling dat veel mensen in hun omgeving de CoronaMelder gebruiken. Daarnaast staat een groot percentage neutraal tegenover deze stelling (`r round((nrow(filter(data, (SI1_UTAUT == 'Neutraal'))) /nrow(data))*100, digits = 1)`%).
 
-Ook de injunctieve norm is nauwelijks aanwezig, bijna de helft is het oneeens met de stelling 'Mensen in mijn directe omgeving vinden dat ik de CoronaMelder moet gebruiken' (`r round((nrow(filter(data, (SI2_UTAUT == 'Helemaal mee oneens'| SI2_UTAUT == 'Oneens'| SI2_UTAUT == 'Een beetje oneens'))) /nrow(data))*100, digits = 1)`%), en ook een aanzienlijk percentage staat hier neutraal in (`r round((nrow(filter(data, (SI2_UTAUT == 'Neutraal'))) /nrow(data))*100, digits = 1)`%). Van de respondenten is `r round((nrow(filter(data, (Beliefs_civicduty == 'Helemaal mee eens'| Beliefs_civicduty == 'Mee eens'| Beliefs_civicduty == 'Een beetje mee eens')))))`% het eens met de stelling dat de CoronaMelder je een goede burger maakt.
-
-
-```{r Beliefsappadoption, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Percentage bevolking dat volgens de respondent de CoronaMelder gebruikt"}
-ggplot(data=data, aes(x = Beliefs_AppAdoption)) + theme_bw() + xlab(paste(names(table(data$Beliefs_AppAdoption)))) + ylab(" ") + xlab("Hoeveel procent van de Nederlandse bevolking denkt u dat de CoronaMelder gebruikt?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(,axis.title=element_text(size=10))
-
-```
-
+Ook de injunctieve norm is nauwelijks aanwezig, bijna de helft is het oneens met de stelling 'Mensen in mijn directe omgeving vinden dat ik de CoronaMelder moet gebruiken' (`r round((nrow(filter(data, (SI2_UTAUT == 'Helemaal mee oneens'| SI2_UTAUT == 'Oneens'| SI2_UTAUT == 'Een beetje oneens'))) /nrow(data))*100, digits = 1)`%), en ook een aanzienlijk percentage staat hier neutraal in (`r round((nrow(filter(data, (SI2_UTAUT == 'Neutraal'))) /nrow(data))*100, digits = 1)`%). Van de respondenten is `r round((nrow(filter(data, (Beliefs_civicduty == 'Helemaal mee oneens'| Beliefs_civicduty == 'Oneens'| Beliefs_civicduty == 'Een beetje oneens'))) /nrow(data))*100, digits = 1)`% het eens met de stelling dat de CoronaMelder je een goede burger maakt.
 
 ```{r Socialnormscivicduty, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Sociale normen", tab.cap="Sociale normen"}
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -4448,6 +4441,16 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 
 ft_out
 ```
+
+Er werd ook gevraagd aan de respondenten hoeveel procent van de NEderlandse bevolking zij dachten dat de CoronaMelder gebruikt. De meeste respondenten (`r round((nrow(filter(data, (Beliefs_AppAdoption == '26-50%'))) /nrow(data))*100, digits = 1)`%) dachten dat tussen de 26 en 50% van de bevolking de CoronaMelder gebruikt, gevolgd door de categorie van 11-25% (`r round((nrow(filter(data, (Beliefs_AppAdoption == '11-25%'))) /nrow(data))*100, digits = 1)`%).
+
+
+```{r Beliefsappadoption, echo=FALSE, fig.width=5.5, fig.height=3, fig.cap="Percentage bevolking dat volgens de respondent de CoronaMelder gebruikt"}
+ggplot(data=data, aes(x = Beliefs_AppAdoption)) + theme_bw() + xlab(paste(names(table(data$Beliefs_AppAdoption)))) + ylab(" ") + xlab("Hoeveel procent van de Nederlandse bevolking denkt u dat de CoronaMelder gebruikt?") + geom_bar(fill = "#bdd7e7", color = "#6baed6") + theme(plot.margin = margin(0, 0.1, 0, 0)) + theme(axis.title=element_text(size=10))
+
+```
+
+
 
 #### Sociale invloeden naar gebruikersstatus
 Chi kwadraat toetsen zijn uitgevoerd om te bepalen of het totaal aandeel respondenten dat het eens  (een beetje, eens, helemaal mee eens) is met de stellingen verschilt tussen de huidige gebruikers en degenen die de CoronaMelder nooit gebruikt hebben. Daarnaast is gekeken of de subgroep die de CoronaMelder nooit gebruikt heeft en aangaf neutraal te zijn met betrekking tot toekomstig gebruik verschilt van de huidig gebruikers. 
