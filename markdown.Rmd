@@ -3253,9 +3253,7 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 
 ft_out
 ```
-
 In onderstaande grafiek en tabellen zijn de resultaten voor de respondenten die de CoronaMelder momenteel niet gebruiken, te vinden. 
-
 ```{r effortexpectancyusers, echo=FALSE, fig.width=7, fig.height=2, fig.cap="Eigen effectiviteit onder bij respondenten die de CoronaMelder op dit moment gebruiken", tab.cap="Eigen effectiviteit onder bij respondenten die de CoronaMelder op dit moment gebruiken"}
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
@@ -3751,9 +3749,6 @@ ft_out <- width(ft_out, j = -1, width = (table_width-1.5)/(length(colnames(data_
 ft_out
 
 ```
-
-
-
 
 
 ### Persoonlijke voor- en nadelen van gebruik en verplichting tot gebruik
