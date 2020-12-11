@@ -21,7 +21,7 @@ if (Behavior_UTAUT = 1) user_status_intention = 1.
 if((Behavior_UTAUT =3) & ((BI1a_UTAUT = 1) | (BI1a_UTAUT = 2) | (BI1a_UTAUT = 3))) user_status_intention = 2.
 if (Behavior_UTAUT =3) & ((BI1a_UTAUT = 4)) user_status_intention = 3.
 if (Behavior_UTAUT =3) & ((BI1a_UTAUT = 5) | (BI1a_UTAUT = 6) | (BI1a_UTAUT = 7)) user_status_intention = 4.
-if (Behavior_UTAUT =4) user_status_intention = 5.
+if (Behavior_UTAUT =2) user_status_intention = 5.
 execute.
 
 value labels user_status_intention 
@@ -31,6 +31,10 @@ value labels user_status_intention
 4 'Nooit gebruikt en wel van plan'
 5 'Voormalig gebruiker'.
 execute.
+
+* Frequency user status intention.
+FREQUENCIES VARIABLES=user_status_intention
+  /ORDER=ANALYSIS.
 
 * Demographics.
 FREQUENCIES VARIABLES=geslacht lftdcat sted belbezig burgstat nettocat oplmet woonvorm Riskgroup_contact
@@ -87,7 +91,6 @@ EXECUTE.
 CROSSTABS
   /TABLES=geslacht lftdcat sted belbezig burgstat nettocat oplmet woonvorm Riskgroup_contact BY Behavior_UTAUT
   /FORMAT=AVALUE TABLES
-  /STATISTICS=CHISQ 
   /CELLS=COUNT ROW COLUMN 
   /COUNT ROUND CELL.
 
