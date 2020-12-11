@@ -226,6 +226,8 @@ Verschillende persoonlijke, sociale en omgevingsfactoren die samenhangen met het
 
 **Doorgeven GGD sleutel bij positieve test** Een overgroot deel van de gebruikers van de CoronaMelder gaf aan de GGD sleutel door te gaan geven indien men positief getest wordt op het coronavirus. Voor de effectiviteit van de CoronaMelder is het wel van belang dat deze intentie omgezet wordt in daadwerkelijk gedrag. 
 
+**Onbeoogde effecten: schijnveiligheid** De overgrote meerderheid gelooft niet dat de andere maatregelen niet meer in acht hoeven worden genomen wanneer men CoronaMelder geïnstalleerd heeft dus het lijkt niet waarschijnlijk dat schijnveiligheid optreedt. 
+
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -4672,9 +4674,11 @@ De chi kwadraat toets (X²(`r chisqtest$parameter`) = `r round(chisqtest$statist
 
 # Order in which you would like to have the items appear (first = top, last = bottom) in the horizontal bar chart
 graph_variablenames = c("SI1_UTAUT", 
-                        "SI2_UTAUT")                     
+                        "SI2_UTAUT", 
+                        "Beliefs_civicduty")                     
 graph_questionlabels = c("Veel mensen in mijn omgeving gebruiken de CoronaMelder app", 
-                         "Mensen in mijn directe omgeving vinden dat ik de CoronaMelder app moet gebruiken") 
+                         "Mensen in mijn directe omgeving vinden dat ik de CoronaMelder app moet gebruiken", 
+                         "Het gebruiken van de CoronaMelder maakt je een goed burger") 
 
 # Which values do we want to include in the table cells?
 include_vars = c("Helemaal mee eens", "Mee eens", "Een beetje mee eens")
