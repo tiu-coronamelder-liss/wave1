@@ -244,6 +244,24 @@ CROSSTABS
   /CELLS=COUNT ROW COLUMN 
   /COUNT ROUND CELL.
 
+* Voluntariness. 
+FREQUENCIES VARIABLES=  Beliefs_voluntariness
+ /ORDER=ANALYSIS.
+
+CROSSTABS
+  /TABLES= Beliefs_voluntariness BY Behavior_UTAUT
+  /FORMAT=AVALUE TABLES
+  /STATISTICS=CHISQ 
+  /CELLS=COUNT ROW COLUMN 
+  /COUNT ROUND CELL.
+
+CROSSTABS
+  /TABLES= Beliefs_voluntariness BY user_status_intention 
+  /FORMAT=AVALUE TABLES
+  /STATISTICS=CHISQ 
+  /CELLS=COUNT ROW COLUMN 
+  /COUNT ROUND CELL.
+
 * Affective responses. 
 FREQUENCIES VARIABLES=  Beliefs_fear Beliefs_notificationfear
  /ORDER=ANALYSIS.
