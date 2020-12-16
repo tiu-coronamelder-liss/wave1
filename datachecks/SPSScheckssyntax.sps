@@ -230,18 +230,18 @@ VALUE LABELS filter_$ 0 'Not Selected' 1 'Selected'.
 FORMATS filter_$ (f1.0).
 FILTER BY filter_$.
 EXECUTE.
-FREQUENCIES VARIABLES=  FC1_UTAUT FC2_UTAUT HBM_barriers_CoronaMelder
+FREQUENCIES VARIABLES=  FC1_UTAUT FC2_UTAUT DS_Mobile1 DS_Mobile2 HBM_barriers_CoronaMelder
  /ORDER=ANALYSIS.
 
 CROSSTABS
-  /TABLES= FC1_UTAUT FC2_UTAUT HBM_barriers_CoronaMelder BY Behavior_UTAUT
+  /TABLES= FC1_UTAUT FC2_UTAUT DS_Mobile1 DS_Mobile2 HBM_barriers_CoronaMelder BY Behavior_UTAUT
   /FORMAT=AVALUE TABLES
   /STATISTICS=CHISQ 
   /CELLS=COUNT ROW COLUMN 
   /COUNT ROUND CELL.
 
 CROSSTABS
-  /TABLES= FC1_UTAUT FC2_UTAUT HBM_barriers_CoronaMelder BY user_status_intention 
+  /TABLES= FC1_UTAUT FC2_UTAUT DS_Mobile1 DS_Mobile2 HBM_barriers_CoronaMelder BY user_status_intention 
   /FORMAT=AVALUE TABLES
   /STATISTICS=CHISQ 
   /CELLS=COUNT ROW COLUMN 
