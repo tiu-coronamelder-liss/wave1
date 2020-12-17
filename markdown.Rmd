@@ -1423,7 +1423,7 @@ ft_out
 
 ## Vergelijking gebruikers en niet gebruikers
 ### Demografische gegevens naar gebruikersstatus {#demouserstatus}
-Om inzicht te krijgen in welke factoren (demografisch, persoonlijk, sociaal, omgevingsfactoren) samenhangen met het gebruiken van de CoronaMelder worden respondenten die momenteel de CoronaMelder gebruiken vergeleken met de respondenten die de CoronaMelder nooit hebben gebruikt. 
+Om inzicht te krijgen in welke factoren (demografisch, persoonlijk, sociaal, omgevingsfactoren) samenhangen met het gebruiken van de CoronaMelder worden respondenten die momenteel de CoronaMelder gebruiken vergeleken met de respondenten die de CoronaMelder nooit hebben gebruikt. Omdat slechts een zeer laag aantal (n = `r nrow(filter(data, Behavior_UTAUT == 'Ik heb de CoronaMelder app in het verleden wel gebruikt maar op dit moment niet meer'))`) aangaf de CoronaMelder in het verleden gebruikt te hebben maar nu niet meer, zijn deze deelnemers in onderstaande analyses buiten beschouwing gelaten. 
 
 Om dit te onderzoeken wordt voor elke demografische variabele een chi kwadraat toets uitgevoerd. In het geval dat deze toets aangeeft dat de demografische variabele en de gebruikersstatus afhankelijk zijn - oftewel dat een of meerdere van de subgroepen afwijken van het gemiddelde percentage gebruikers - worden er posthoc paarsgewijze chi kwadraattests met FDR-correctie uitgevoerd om te bepalen welke groepen significant van elkaar verschillen in percentage gebruikers. In de onderstaande tabel kunnen de resultaten gevonden worden. In de appendix kunnen alle paarsgewijze vergelijkingen gevonden worden voor variabelen die samen hingen met de gebruikersstatus. 
 
@@ -1436,9 +1436,9 @@ Nog een demografische variabele die samenhing met gebruik was opleidingsniveau. 
 Ook burgerlijke staat hing samen met gebruik van de CoronaMelder. Zo wordt de CoronaMelder minder vaak gebruikt door weduwen en weduwnaars en het vaakst door gehuwden. 
 
 
-```{r demobyuserstatus, echo=FALSE, results="asis", tab.cap = "Demografische kenmerken naar gebruikersstatus"} 
+```{r demobyuserstatus, echo=FALSE, results="asis", tab.cap = "Demografische kenmerken naar gebruikersstatus. Huidig gebruikers vergeleken met mensen die de CoronaMelder nooit hebben gebruikt."} 
 tab.noby <- tableby(user_status ~ geslacht + lftdcat + sted_simplified + belbezig_simplified  + oplmet_simplified + burgstat_simplified + nettocat_simplified + woonvorm + Riskgroup_contact, cat.stats = "countrowpct", data=data_currentvsneveruser) # cat.stats = "countrowpct") for row percentages in stead of column percentages
-summary(tab.noby, title="(\\#tab:mytableby2) Demografische kenmerken naar gebruikersstatus")
+summary(tab.noby, title="(\\#tab:mytableby2) Demografische kenmerken naar gebruikersstatus.Huidig gebruikers vergeleken met mensen die de CoronaMelder nooit hebben gebruikt.")
 ```
 
 ### Gezondheidsmotivatie en risicoperceptie naar gebruikersstatus
