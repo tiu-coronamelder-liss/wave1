@@ -204,8 +204,6 @@ user_totals[4] <- sum(data$user_status_intention == "Nooit gebruikt en neutraal"
 # Non user -- planning to use
 user_totals[5] <- sum(data$user_status_intention == "Nooit gebruikt en wel van plan")
 
-# Small test by Jan to test the Git repository move
-
 ```
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
