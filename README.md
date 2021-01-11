@@ -11,7 +11,7 @@ Het onderzoek is uitgevoerd door dr. ir. L.N. van der Laan, N.E. van der Waal, M
 ## Instructies
 Het analysescript is een R Markdown bestand, wat direct heeft geleid tot de rapportage zoals deze is gepubliceerd. Het bevat niet alleen de grafieken, tabellen en statistische analyses maar ook de begeleidende tekst. Het script is getest in R Studio versie 1.3.1093 (Windows), met R versie 4.0.3. Het script maakt gebruik van diverse externe libraries die via R Studio eenvoudig te installeren zijn. Het uitvoeren van het script (‘knitten’) leidt uiteindelijk tot een Word-document.
  
-**Let op:** Het databestand is niet aanwezig in deze repository, dus het is niet mogelijk om het gehele analyseproces daadwerkelijk uit te voeren. De data zal, in lijn met de procedures van CentERdata op termijn beschikbaar komen via [https://www.lissdata.nl/]. Het hoofddoel van deze repository is om de analyses transparant en inzichtelijk te maken.
+**Let op:** Het databestand is niet aanwezig in deze repository, dus het is niet mogelijk om het gehele analyseproces daadwerkelijk uit te voeren. De data zal, in lijn met de procedures van CentERdata op termijn beschikbaar komen via <https://www.lissdata.nl/>. Het hoofddoel van deze repository is om de analyses transparant en inzichtelijk te maken.
 
 ## Licentie
 De intellectuele eigendomsrechten op dit werk rusten bij Tilburg University.
